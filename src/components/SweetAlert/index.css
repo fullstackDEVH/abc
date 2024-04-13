@@ -1,0 +1,43 @@
+
+
+.title-class {
+    font-family: "Noto Sans", sans-serif !important;
+}
+.input-class {
+    font-family: "Noto Sans", sans-serif !important;
+}
+
+.confirm-button-class {
+    background-color: #1f68d4 !important;
+    font-family: "Noto Sans", sans-serif !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 5px !important;
+    width: 80px !important;
+    height: 30px !important;
+    cursor: pointer !important;
+    transition: all 0.3s !important;
+}
+
+.confirm-button-class:hover {
+    background-color: #1f67d4ac !important;
+}
+
+.cancel-button-class {
+    font-family: "Noto Sans", sans-serif !important;
+    color: rgba(0,0,0,0.88) !important;
+    border: 1px solid rgba(0, 0, 0, 0.88);
+    border-radius: 5px !important;
+    width: 80px !important;
+    height: 30px !important;
+    cursor: pointer !important;
+    transition: all 0.3s !important;
+}
+
+.cancel-button-class:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.action-class {
+    gap: 5px !important;
+}

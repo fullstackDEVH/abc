@@ -1,4 +1,4 @@
-import useGetAccessToken from "../../hooks/useAuthenticate"
+import useGetAccessToken from "@/hooks/useAuthenticate"
 
 const useGetMeInfo = () => {
     const token = useGetAccessToken();
