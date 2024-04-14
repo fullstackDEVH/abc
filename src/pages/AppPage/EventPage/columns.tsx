@@ -17,12 +17,12 @@ export const getColumns = (
   return [
     {
       title: "",
-      dataIndex: "image_url",
-      key: "image_url",
+      dataIndex: "processed_image_url",
+      key: "processed_image_url",
       width: "12%",
-      render: (image_url: string) => (
+      render: (processed_image_url: string) => (
         <img
-          src={image_url ? image_url : defaultScreenshot}
+          src={processed_image_url ? processed_image_url : defaultScreenshot}
           alt="image_url"
           style={{ width: "100%" }}
         />
@@ -74,13 +74,19 @@ export const getColumns = (
           <Button
             type="primary"
             icon={<EditOutlined />}
-            onClick={() => handleEdit(record)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEdit(record)
+            }}
           />
           <Button
             type="primary"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(record)
+            }}
           />
         </div>
       ),

@@ -1,24 +1,25 @@
 import {
   DeleteOutlined,
   DownloadOutlined,
-  SearchOutlined,
 } from "@ant-design/icons";
-import { Typography, Input, Button, Table, Select, DatePicker } from "antd";
+import { Typography, Button, Table, Select, DatePicker } from "antd";
 import { Key, useState } from "react";
 import { SweetAlertResult } from "sweetalert2";
 import fireSwal from "@/components/SweetAlert";
-import { Event } from "@/models/event";
+import { Event, EventStatus } from "@/models/event";
 import { useGetListEvent } from "@/services/event/useGetListEvent";
 import { useGetListCamera } from "@/services/camera/useGetListCamera";
 import { EventTypeList, ModalModeType } from "@/constants";
 import { getColumns } from "./columns";
 import { useGetListArea } from "@/services/area/useGetListArea";
+import EventGallery from "./gallery";
 
 const { RangePicker } = DatePicker;
 const EventPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [filterCamera, setFilterCamera] = useState<string[]>([]);
+  const [filterStatus, setFilterStatus] = useState<EventStatus[]>([]);
   const [filterArea, setFilterArea] = useState<string[]>([]);
   const [filterEventType, setFilterEventType] = useState<string[]>([]);
   const [modeModal, setModeModal] = useState<ModalModeType>(null);
@@ -26,6 +27,7 @@ const EventPage = () => {
     page: 1,
     pagesize: 10,
     cameras: filterCamera,
+    status: filterStatus,
     event_time: [],
     event_type: filterEventType,
     last_id: "",
@@ -101,6 +103,7 @@ const EventPage = () => {
   console.log(modeModal, selectedEvent);
   return (
     <div>
+      {selectedEvent && modeModal === "info" && <EventGallery events={eventData.data?.data as Event[]} toggle={() => {setSelectedEvent(null)}} selectedEvent={selectedEvent} />}
       <div className="flex justify-between bg-white p-0 ">
         <Typography.Title className="p-3 px-6" level={3}>
           Events Management
@@ -146,6 +149,17 @@ const EventPage = () => {
             allowClear
             showSearch
             maxTagCount="responsive"
+            options={["OPEN", "VERIFIED", "CLOSED"].map((status) => ({value: status, label: status}))}
+            placeholder="Status ..."
+            onChange={(value) => setFilterStatus(value as EventStatus[])}
+          />
+          <Select
+            className="w-1/6 h-full truncate"
+            size="middle"
+            mode="multiple"
+            allowClear
+            showSearch
+            maxTagCount="responsive"
             options={listArea.data?.data.map((camera) => ({
               label: camera.name,
               value: camera.id,
@@ -168,7 +182,7 @@ const EventPage = () => {
             onChange={(value) => setFilterCamera(value as string[])}
           />
 
-          <RangePicker showTime />
+          <RangePicker className="w-1/3" showTime />
         </div>
       </div>
       <Table
@@ -177,6 +191,11 @@ const EventPage = () => {
         rowKey="id"
         columns={getColumns(handleView, handleEdit, handleDelete)}
         rowSelection={rowSelection}
+        onRow={(record) => {
+          return {
+            onClick: () => handleView(record),
+          }
+        }}
       />
     </div>
   );

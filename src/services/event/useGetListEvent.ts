@@ -1,15 +1,15 @@
-import { ListEventResponse } from "@/models/event";
+import { EventStatus, ListEventResponse } from "@/models/event";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
 const useGetListEventQuery = (
-    page: number, pagesize: number, cameras: string[],
+    page: number, pagesize: number, cameras: string[], status: EventStatus[],
     event_time: Date[], event_type: string[], last_id: string
-) => ["getListCameras", page, pagesize, cameras,
+) => ["getListCameras", page, pagesize, cameras, status,
         event_time, event_type, last_id];
 
 export const useGetListEvent = (
     params: {
-        page: number, pagesize: number, cameras: string[],
+        page: number, pagesize: number, cameras: string[], status: EventStatus[],
         event_time: Date[], event_type: string[], last_id: string
     },
     queryOptions?: UseQueryOptions<ListEventResponse, Error>
@@ -17,7 +17,7 @@ export const useGetListEvent = (
     // GET Authentication
 
     const getListCameraKey = useGetListEventQuery(
-        params.page, params.pagesize, params.cameras,
+        params.page, params.pagesize, params.cameras, params.status,
         params.event_time, params.event_type, params.last_id
     );
     const response = useQuery<ListEventResponse, Error>(
@@ -49,7 +49,7 @@ export const useGetListEvent = (
                             },
                             status: "OPEN",
                             image_url: "",
-                            processed_image_url: "",
+                            processed_image_url: "https://picsum.photos/id/1018/1000/600/",
                             event_time: new Date(),
                             updated_at: new Date(),
                             created_at: new Date(),
@@ -76,7 +76,7 @@ export const useGetListEvent = (
                             },
                             status: "VERIFIED",
                             image_url: "",
-                            processed_image_url: "",
+                            processed_image_url: "https://picsum.photos/id/1015/1000/600/",
                             event_time: new Date(),
                             updated_at: new Date(),
                             created_at: new Date(),
@@ -103,7 +103,7 @@ export const useGetListEvent = (
                             },
                             status: "ARCHIVE",
                             image_url: "",
-                            processed_image_url: "",
+                            processed_image_url: "https://picsum.photos/id/1019/1000/600/",
                             event_time: new Date(),
                             updated_at: new Date(),
                             created_at: new Date(),
