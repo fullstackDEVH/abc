@@ -28,7 +28,7 @@ export const getColumns = (handleEdit: AreaActionFn, handleDelete: AreaActionFn)
       render: (date: Date) => dayjs(date).format("DD MMM YYYY HH:mm"),
     },
     {
-      title: "Action",
+      title: "",
       dataIndex: "id",
       key: "id",
       width: "12%",
