@@ -1,4 +1,4 @@
-import { StorageKey } from "../constants";
+import { StorageKey } from "@/constants";
 
 const useGetAccessToken = () => {
     const token = localStorage.getItem(StorageKey.accessToken);
