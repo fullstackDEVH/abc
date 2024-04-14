@@ -22,6 +22,9 @@ const EventGallery: React.FC<EventGalleryProps> = ({
     if (events?.length > 0) {
       setCurrentEvent(events[0]);
     }
+    if (selectedEvent) {
+      setCurrentEvent(selectedEvent);
+    }
   }, [events, selectedEvent]);
 
   const handleChangeSlide = (index: number) => {
