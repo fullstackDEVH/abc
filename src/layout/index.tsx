@@ -76,7 +76,7 @@ const AppLayout: FC = () => {
             <Outlet />
           </Content>
           <Footer className="text-right p-2 artice-font">
-            E-MagicEyes &copy; {new Date().getFullYear()} Created by XXX
+            E-MagicEyes &copy; {new Date().getFullYear()} Created by Rye
           </Footer>
         </Layout>
       </Layout>

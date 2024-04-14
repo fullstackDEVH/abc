@@ -27,7 +27,7 @@ const CameraPage = () => {
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [selectedCamera, setSelectedCamera] = useState<Camera | null>(null);
-  const [modeModal, setModeModal] = useState<ModalModeType>('create');
+  const [modeModal, setModeModal] = useState<ModalModeType>(null);
   const rowSelection = {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
@@ -104,7 +104,7 @@ const CameraPage = () => {
         <Typography.Title className="p-3 px-5" level={3}>
           Camera Management
         </Typography.Title>
-        <div className="content-center p-2 space-x-1">
+        <div className="content-center p-2 px-6 space-x-1">
           {selectedRowKeys.length > 0 && (
             <Button
               type="primary"
@@ -132,11 +132,12 @@ const CameraPage = () => {
         </div>
       </div>
       <div className="p-2 px-5">
-        <div className="flex justify-end w-full pr-2 space-x-2">
+        <div className="flex justify-end w-full space-x-2">
           <Select
             className="w-1/5 h-full truncate"
             size="middle"
             mode="multiple"
+            allowClear
             showSearch
             maxTagCount="responsive"
             options={listArea.data?.data.map((area) => ({
