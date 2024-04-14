@@ -35,7 +35,8 @@
 }
 
 .cancel-button-class:hover {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    color: #1f68d4 !important;
+    border: 1px solid #1f68d4;
 }
 
 .action-class {

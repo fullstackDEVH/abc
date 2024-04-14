@@ -1,3 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.ant-table-thead .ant-table-cell {
+    background-color: #bab9b9c2 !important;
+  }
