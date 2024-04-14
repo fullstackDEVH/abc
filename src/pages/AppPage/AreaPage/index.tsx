@@ -12,42 +12,13 @@ import { Key, useState } from "react";
 import { SweetAlertResult } from "sweetalert2";
 import fireSwal from "@/components/SweetAlert";
 import AreaDetailModal from "./detail";
-
-const mockData: Area[] = [
-  {
-    id: "1",
-    name: "Area 1",
-    address: "Address 1",
-    updated_at: new Date(),
-    created_at: new Date(),
-  },
-  {
-    id: "2",
-    name: "Area 2",
-    address: "Address 2",
-    updated_at: new Date(),
-    created_at: new Date(),
-  },
-  {
-    id: "3",
-    name: "Area 3",
-    address: "Address 3",
-    updated_at: new Date(),
-    created_at: new Date(),
-  },
-  {
-    id: "4",
-    name: "Area 4",
-    address: "Address 4",
-    updated_at: new Date(),
-    created_at: new Date(),
-  },
-];
+import { useGetListArea } from "@/services/area/useGetListArea";
 
 const AreaPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [selectedArea, setSelectedArea] = useState<Area | null>(null);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const areaData = useGetListArea({ page: 1, pagesize: 10, searchVal: "" })
 
   const rowSelection = {
     selectedRowKeys,
@@ -148,7 +119,7 @@ const AreaPage = () => {
       </div>
       <Table
         className="p-2 px-5"
-        dataSource={mockData}
+        dataSource={areaData?.data?.data || []}
         rowKey="id"
         columns={getColumns(handleEdit, handleDelete)}
         rowSelection={rowSelection}

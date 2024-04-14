@@ -1,4 +1,5 @@
 import { Area } from "@/models/area";
+import { useCreateAreaMutation } from "@/services/area/useCreateArea";
 import { Form, Input, Modal } from "antd";
 import { FC } from "react";
 
@@ -8,11 +9,25 @@ type AreaModalProps = {
 };
 const AreaDetailModal: FC<AreaModalProps> = (props) => {
   const { toggle, area } = props;
+  const createAreaMutation = useCreateAreaMutation();
   const [form] = Form.useForm();
 
   const onFinish = (values: Area) => {
     console.log(values);
+    createAreaMutation.mutateAsync(values,
+      {
+        onSuccess: () => {
+          alert("Create area success");
+          toggle();
+        },
+        onError: () => {
+          alert("Create area failed");
+        }
+      }
+    )
   };
+
+
 
   return (
     <Modal
