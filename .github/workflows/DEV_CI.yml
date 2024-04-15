@@ -1,9 +1,12 @@
-name: CI/CD Pipeline for Web
+name: DEV CI Pipeline for Web
 
 on:
   push:
     branches:
       - '*'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - '!master'   # excludes master
 
 jobs:
   lint_and_build:
