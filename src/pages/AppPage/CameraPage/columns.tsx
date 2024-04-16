@@ -23,7 +23,7 @@ export const getColumns = (
         <img
           src={screenshot_url ? screenshot_url : defaultScreenshot}
           alt="screenshot"
-          style={{ width: "100%" }}
+          className="shadow-2xl w-full rounded-lg"
         />
       ),
     },
@@ -66,16 +66,19 @@ export const getColumns = (
         <div className="space-x-2" key={index}>
           <Button
             type="primary"
+            size="small"
             icon={<EyeOutlined />}
             onClick={() => handleView(record)}
           />
           <Button
             type="primary"
+            size="small"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           />
           <Button
             type="primary"
+            size="small"
             danger
             icon={<DeleteOutlined />}
             onClick={() => handleDelete(record)}

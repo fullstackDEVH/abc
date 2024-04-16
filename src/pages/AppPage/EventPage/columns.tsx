@@ -16,15 +16,24 @@ export const getColumns = (
 ): ColumnsType<Event> => {
   return [
     {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      width: "10%",
+      render: (status: EventStatus) => (
+        <Tag color={status === "VERIFIED" ? "green" :  status === "OPEN" ? "orange" : "default"}>{status}</Tag>
+      ),
+    },
+    {
       title: "",
       dataIndex: "processed_image_url",
       key: "processed_image_url",
-      width: "12%",
+      width: "15%",
       render: (processed_image_url: string) => (
         <img
           src={processed_image_url ? processed_image_url : defaultScreenshot}
           alt="image_url"
-          style={{ width: "100%" }}
+          className="shadow-2xl w-full rounded-lg"
         />
       ),
     },
@@ -32,30 +41,22 @@ export const getColumns = (
       title: "Event type",
       dataIndex: "event_type",
       key: "event_type",
-      width: "15%",
+      width: "10%",
       render: (event_type: string) => (<Tag color="blue">{event_type}</Tag>)
     },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: "15%",
-      render: (status: EventStatus) => (
-        <Tag color={status === "VERIFIED" ? "green" :  status === "OPEN" ? "orange" : "default"}>{status}</Tag>
-      ),
-    },
+    
     {
       title: "Camera",
       dataIndex: "camera",
       key: "camera",
-      width: "20%",
+      width: "30%",
       render: (camera: Camera) => `${camera.name} - ${(camera.area as Area).name}`,
     },
     {
         title: "Event Time",
         dataIndex: "event_time",
         key: "event_time",
-        width: "15%",
+        width: "17%",
         render: (date: Date) => dayjs(date).format("DD MMM YYYY HH:mm"),
     },
     {
@@ -68,11 +69,13 @@ export const getColumns = (
         <div className="space-x-2" key={index}>
           <Button
             type="primary"
+            size="small"
             icon={<EyeOutlined />}
             onClick={() => handleView(record)}
           />
           <Button
             type="primary"
+            size="small"
             icon={<EditOutlined />}
             onClick={(e) => {
               e.stopPropagation();
@@ -81,6 +84,7 @@ export const getColumns = (
           />
           <Button
             type="primary"
+            size="small"
             danger
             icon={<DeleteOutlined />}
             onClick={(e) => {

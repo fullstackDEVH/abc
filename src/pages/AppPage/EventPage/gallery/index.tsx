@@ -66,7 +66,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({
           />
         </Col>
         <Col span={8} className="px-1 pl-5">
-          <div className="p-3 pl-5 h-full shadow-2xl">
+          <div className="p-3 pl-5 h-full shadow-2xl rounded-lg">
             <div className="mb-4">
               <div className="mb-1 text-xs text-slate-400 italic">Time</div>
               <div>

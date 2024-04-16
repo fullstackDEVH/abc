@@ -37,11 +37,13 @@ export const getColumns = (handleEdit: AreaActionFn, handleDelete: AreaActionFn)
         <div className="space-x-2" key={index}>
           <Button
             type="primary"
+            size="small"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           />
           <Button
             type="primary"
+            size="small"
             danger
             icon={<DeleteOutlined />}
             onClick={() => handleDelete(record)}

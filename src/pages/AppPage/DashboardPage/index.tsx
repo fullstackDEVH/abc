@@ -5,7 +5,6 @@ const DashboardPage = () => {
       <Typography.Title
         className="p-2 pl-3"
         level={3}
-        // style={{ backgroundColor: colorBgContainer }}
       >
         Dashboard
       </Typography.Title>

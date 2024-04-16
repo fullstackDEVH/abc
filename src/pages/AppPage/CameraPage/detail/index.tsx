@@ -141,7 +141,7 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
                 }}
               >
                 <Image
-                  className={mode === "info" ? "": "image"}
+                  className={`rounded-lg ${mode === "info" ? "": "image"}`}
                   preview={false}
                   src={getImageURL(watchScreenshot)}
                 />
