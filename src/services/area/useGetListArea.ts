@@ -7,46 +7,14 @@ export const useGetListArea = (
     params: { page: number, pagesize: number, searchVal: string },
     queryOptions?: UseQueryOptions<ListAreaResponse, Error>
 ) => {
-    // GET Authentication
-
+    // TODO: GET Authentication
     const getListAreaKey = useGetListAreaQuery(params.page, params.pagesize, params.searchVal);
     const response = useQuery<ListAreaResponse, Error>(
         {
             queryKey: getListAreaKey,
             queryFn: async () => {
-                return {
-                    total: 4,
-                    data: [
-                        {
-                            id: "1",
-                            name: "Area 1",
-                            address: "Address 1",
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                        {
-                            id: "2",
-                            name: "Area 2",
-                            address: "Address 2",
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                        {
-                            id: "3",
-                            name: "Area 3",
-                            address: "Address 3",
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                        {
-                            id: "4",
-                            name: "Area 4",
-                            address: "Address 4",
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                    ]
-                }
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/areas?page=${params.page}&pagesize=${params.pagesize}&search=${params.searchVal}`)
+                return res.json();
             },
             ...queryOptions,
         }
