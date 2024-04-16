@@ -8,5 +8,5 @@ build-image:
 push-image:
 	${DOCKER_BIN} push $(REGISTRY_NAME)/$(APP_NAME):$(GIT_SHA_FETCH)
 
-make-test:
+test:
 	echo "Test"
