@@ -1,15 +1,15 @@
-import { CreataAreaRequest } from "@/models/area"
 import { useMutation } from "@tanstack/react-query"
 
-export const useCreateAreaMutation = () => {
+export const useDeleteAreaMutation = () => {
     const mutation = useMutation({
-        mutationFn: async (data: CreataAreaRequest) => {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/areas`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
+        mutationFn: async (ids: string[]) => {
+            let params = ''
+            ids.forEach(id => params += `area_ids=${id}&`)
+            console.log(params)
+            params = params.slice(0, -1); 
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/areas?${params}`, {
+                method: 'DELETE',
+                
             })
             if (!res.ok) {
                 const errMsg = await res.json();

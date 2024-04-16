@@ -160,9 +160,9 @@ const EventPage = () => {
             allowClear
             showSearch
             maxTagCount="responsive"
-            options={listArea.data?.data.map((camera) => ({
-              label: camera.name,
-              value: camera.id,
+            options={listArea.data?.data.map((area) => ({
+              label: area.name,
+              value: area._id,
             }))}
             placeholder="Areas ..."
             onChange={(value) => setFilterArea(value as string[])}

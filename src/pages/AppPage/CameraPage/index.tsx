@@ -142,7 +142,7 @@ const CameraPage = () => {
             maxTagCount="responsive"
             options={listArea.data?.data.map((area) => ({
               label: area.name,
-              value: area.id,
+              value: area._id,
             }))}
             placeholder="Areas ..."
             onChange={(value) => setSelectedArea(value as string[])}

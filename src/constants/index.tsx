@@ -6,6 +6,9 @@ export type ModalModeType = 'create' | 'info' | 'edit' | null;
 
 export type CameraStatus = 'ONLINE' | 'OFFLINE';
 
+export type ApiErrorMsg = {
+  detail: string;
+};
 export const EventTypeList = [
   {
     id: "CM01",
