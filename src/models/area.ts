@@ -1,5 +1,5 @@
 export type Area = {
-    id: string;
+    _id: string;
     name: string;
     address: string;
     updated_at: Date;
@@ -14,4 +14,9 @@ export type ListAreaResponse = {
 export type CreataAreaRequest = {
     name: string;
     address: string;
+}
+
+export type UpdateAreaRequest = {
+    id: string;
+    body: Area;
 }

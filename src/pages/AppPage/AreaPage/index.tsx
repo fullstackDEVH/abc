@@ -6,20 +6,27 @@ import {
   SearchOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Typography, Input, Button, Table } from "antd";
+import { Typography, Input, Button, Table, message } from "antd";
 import { getColumns } from "./columns";
 import { Key, useState } from "react";
 import { SweetAlertResult } from "sweetalert2";
 import fireSwal from "@/components/SweetAlert";
 import AreaDetailModal from "./detail";
 import { useGetListArea } from "@/services/area/useGetListArea";
+import useDebounce from "@/hooks/useDebound";
+import { useDeleteAreaMutation } from "@/services/area/useDeleteArea";
 
 const AreaPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [selectedArea, setSelectedArea] = useState<Area | null>(null);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const areaData = useGetListArea({ page: 1, pagesize: 10, searchVal: "" })
-
+  const [page, setPage] = useState(1);
+  const [pagesize, setPageSize] = useState(10);
+  const [searchVal, setSearchVal] = useState<string>("");
+  const searchValDebounce = useDebounce(searchVal, 500); 
+  const areaData = useGetListArea({ page, pagesize, searchVal: searchValDebounce })
+  const deleteAreaMutation = useDeleteAreaMutation();
+  const [messageApi, contextHolder] = message.useMessage();
   const rowSelection = {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
@@ -37,14 +44,27 @@ const AreaPage = () => {
       icon: "warning",
     }).then((result: SweetAlertResult) => {
       if (result.isConfirmed) {
-        setSelectedRowKeys([]);        
-        fireSwal({
-          title: "Deleted!",
-          showCancelButton: false,
-          text: `${selectedRowKeys.length} item${
-            selectedRowKeys.length > 1 ? "s" : ""
-          } has been deleted.`,
-          icon: "success",
+        deleteAreaMutation.mutateAsync(selectedRowKeys as string[], {
+          onSuccess: () => {
+            setSelectedRowKeys([]);
+            areaData.refetch();
+            fireSwal({
+              title: "Deleted!",
+              showCancelButton: false,
+              text: `${selectedRowKeys.length} item${
+                selectedRowKeys.length > 1 ? "s" : ""
+              } has been deleted.`,
+              icon: "success",
+            });
+          },
+          onError: (err) => {
+            fireSwal({
+              title: "Error!",
+              showCancelButton: false,
+              text: err.message,
+              icon: "error",
+            });
+          }
         });
       }
     });
@@ -57,11 +77,25 @@ const AreaPage = () => {
       icon: "warning",
     }).then((result: SweetAlertResult) => {
       if (result.isConfirmed) {
-        fireSwal({
-          title: "Deleted!",
-          showCancelButton: false,
-          text: `${record.name} has been deleted.`,
-          icon: "success",
+        deleteAreaMutation.mutateAsync([record._id], {
+          onSuccess: () => {
+            setSelectedRowKeys([]);
+            areaData.refetch();
+            fireSwal({
+              title: "Deleted!",
+              showCancelButton: false,
+              text: `${record.name} has been deleted.`,
+              icon: "success",
+            });
+          },
+          onError: (err) => {
+            fireSwal({
+              title: "Error!",
+              showCancelButton: false,
+              text: err.message,
+              icon: "error",
+            });
+          }
         });
       }
     });
@@ -80,11 +114,13 @@ const AreaPage = () => {
   const handleCloseModal = () => {
     setIsOpenModal(false);
     setSelectedArea(null);
+    areaData.refetch();
   }
 
   return (
     <div>
-    {isOpenModal && <AreaDetailModal area={selectedArea} toggle={handleCloseModal}/>}
+      {contextHolder}
+    {isOpenModal && <AreaDetailModal messageApi={messageApi} area={selectedArea} toggle={handleCloseModal}/>}
       <div className="flex justify-between bg-white p-0 ">
         <Typography.Title className="p-3 px-6" level={3}>
           Area Management
@@ -113,6 +149,8 @@ const AreaPage = () => {
             className="flex p-1 w-1/5"
             placeholder="Search ..."
             size="middle"
+            value={searchVal}
+            onChange={(e) => setSearchVal(e.target.value)}
             prefix={<SearchOutlined className="flex p-1" />}
           />
         </div>
@@ -120,9 +158,20 @@ const AreaPage = () => {
       <Table
         className="p-2 px-5"
         dataSource={areaData?.data?.data || []}
-        rowKey="id"
+        rowKey="_id"
         columns={getColumns(handleEdit, handleDelete)}
         rowSelection={rowSelection}
+        pagination={{
+          total: areaData?.data?.total || 0,
+          pageSize: pagesize,
+          current: page,
+          pageSizeOptions: ["10", "20", "50"],
+          showSizeChanger: false,
+          onChange(page, pageSize) {
+              setPage(page);
+              setPageSize(pageSize);
+          },
+        }}
       />
     </div>
   );

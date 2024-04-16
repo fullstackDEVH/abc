@@ -38,7 +38,7 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
     ...camera,
     area: camera?.area
       ? {
-          value: (camera?.area as Area)?.id,
+          value: (camera?.area as Area)?._id,
           label: (camera?.area as Area)?.name,
         }
       : "",
@@ -113,7 +113,7 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
                 disabled={mode === "info"}
                 options={areaList.data?.data.map((area) => ({
                   label: area.name,
-                  value: area.id,
+                  value: area._id,
                 }))}
               />
             </Form.Item>
