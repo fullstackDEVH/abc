@@ -96,13 +96,18 @@ const EventGallery: React.FC<EventGalleryProps> = ({
             <hr className="mb-2"/>
             <div className="mb-4">
               <div className="mb-1 text-xs text-slate-400 italic">Category</div>
-              <div>{currentEvent?.event_type || "--"}</div>
               <Tag color="green">{currentEvent?.event_type}</Tag>
+            </div>
+            <div className="mb-4">
+              <div className="mb-1 text-xs text-slate-400 italic">Business</div>
+              <div>
+                  {EventTypeList.find((e) => e.id === currentEvent?.event_type)?.name}
+              </div>
             </div>
             <div>
               <div className="mb-1 text-xs text-slate-400 italic">Description</div>
               <div>
-                  This is description of event type
+                  {EventTypeList.find((e) => e.id === currentEvent?.event_type)?.label}
               </div>
             </div>
           </div>

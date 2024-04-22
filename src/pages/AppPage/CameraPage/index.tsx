@@ -18,8 +18,6 @@ import { ModalModeType } from "@/constants";
 import useDebounce from "@/hooks/useDebound";
 import { useDeleteCameraMutation } from "@/services/camera/useDeleteCamera";
 import toast from "react-hot-toast";
-// import AsyncSelect from "@/components/async-select";
-// import Select from "react-select";
 
 const CameraPage = () => {
   const listArea = useGetListArea({ page: 1, pagesize: 10, searchVal: "" });

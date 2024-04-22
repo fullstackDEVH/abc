@@ -14,14 +14,15 @@ export const defaultImage = "/images/default-img.gif"
 
 export const EventTypeList = [
   {
-    id: "CM01",
-    name: "CM01",
-    label: "CM01",
+    id: "MANU01",
+    name: "Intrusion detection",
+    label: "Warning when a person comes into restrict zone",
   },
   {
-    id: "CM02",
-    name: "CM02",
-    label: "CM02",
+    id: "MANU02",
+    name: "Personal protective equipment PPE/Uniform compliance",
+    label: "- Warning when a person is missing PPE/uniform \n\
+    - Ensure the use of Personal Protective Equipment (PPE)/uniform when entering designated areas",
   },
   {
     id: "CM03",

@@ -4,7 +4,7 @@ import { Button, Image, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import defaultScreenshot from "@/assets/images/screenshot.jpeg";
-import { Event, EventStatus } from "@/models/event";
+import { Event } from "@/models/event";
 import { Camera } from "@/models/camera";
 import noImage from "@/assets/images/no_image.jpeg";
 
@@ -17,20 +17,11 @@ export const getColumns = (
 ): ColumnsType<Event> => {
   return [
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: "10%",
-      render: (status: EventStatus) => (
-        <Tag color={status === "VERIFIED" ? "green" :  status === "OPEN" ? "orange" : "default"}>{status}</Tag>
-      ),
-    },
-    {
       title: "",
       dataIndex: "processed_image_url",
       align: "center",
       key: "processed_image_url",
-      width: "15%",
+      width: "20%",
       render: (processed_image_url: string) => (
         <Image
           preview={false}
@@ -46,7 +37,7 @@ export const getColumns = (
       title: "Event type",
       dataIndex: "event_type",
       key: "event_type",
-      width: "10%",
+      width: "15%",
       render: (event_type: string) => (<Tag color="blue">{event_type}</Tag>)
     },
     
