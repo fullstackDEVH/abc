@@ -1,5 +1,6 @@
 import { ListCameraResponse } from "@/models/camera";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const useGetListCameraQuery = (page: number, pagesize: number, areas: string[], searchVal: string) => ["getListCameras", page, pagesize, areas, searchVal];
 
@@ -14,79 +15,17 @@ export const useGetListCamera = (
         {
             queryKey: getListCameraKey,
             queryFn: async () => {
-                return {
-                    total: 4,
-                    data: [
-                        {
-                            id: "cam1",
-                            name: "Camera 1",
-                            url: "",
-                            screenshot_url: "",
-                            status: "ONLINE",
-                            roi_list: [],
-                            area: {
-                                id: "area_1",
-                                name: "Area 1",
-                                address: "Address 1",
-                                updated_at: new Date(),
-                                created_at: new Date(),
-                            },
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                        {
-                            id: "cam2",
-                            name: "Camera 2",
-                            url: "",
-                            screenshot_url: "",
-                            status: "OFFLINE",
-                            roi_list: [],
-                            area: {
-                                id: "area_1",
-                                name: "Area 1",
-                                address: "Address 1",
-                                updated_at: new Date(),
-                                created_at: new Date(),
-                            },
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                        {
-                            id: "cam3",
-                            name: "Camera 3",
-                            url: "",
-                            screenshot_url: "",
-                            status: "ONLINE",
-                            roi_list: [],
-                            area: {
-                                id: "area_2",
-                                name: "Area 2",
-                                address: "Address 2",
-                                updated_at: new Date(),
-                                created_at: new Date(),
-                            },
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                        {
-                            id: "cam4",
-                            name: "Camera 4",
-                            url: "",
-                            screenshot_url: "",
-                            status: "ONLINE",
-                            roi_list: [],
-                            area: {
-                                id: "area_2",
-                                name: "Area 2",
-                                address: "Address 2",
-                                updated_at: new Date(),
-                                created_at: new Date(),
-                            },
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                    ]
+                let queryUrl = `page=${params.page}&pagesize=${params.pagesize}&q=${params.searchVal}`
+                if (params.areas.length > 0) {
+                    params.areas.forEach(area => queryUrl += `&areas=${area}`)
                 }
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/cameras?${queryUrl}`)
+                if (!res.ok) {
+                    const errMsg = await res.json();
+                    toast.error(errMsg?.detail || errMsg);
+                    return null
+                }
+                return res.json();
             },
             ...queryOptions,
         }

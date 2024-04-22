@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 
 type AreaActionFn = (record: Area) => void;
 
-export const getColumns = (handleEdit: AreaActionFn, handleDelete: AreaActionFn): ColumnsType<Area> => {
+export const getColumns = (handleEdit: AreaActionFn, handleDelete: (ids: string[]) => void): ColumnsType<Area> => {
   return [
     {
       title: "Name",
@@ -46,7 +46,7 @@ export const getColumns = (handleEdit: AreaActionFn, handleDelete: AreaActionFn)
             size="small"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record)}
+            onClick={() => handleDelete([record._id])}
           />
         </div>
       ),

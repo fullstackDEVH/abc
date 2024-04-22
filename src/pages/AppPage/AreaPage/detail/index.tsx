@@ -3,18 +3,17 @@ import { useCreateAreaMutation } from "@/services/area/useCreateArea";
 import swalFire from "@/components/SweetAlert";
 import { Form, Input, Modal } from "antd";
 import { FC } from "react";
-import { MessageInstance } from "antd/es/message/interface";
 import { ModalModeType } from "@/constants";
 import { useUpdateAreaMutation } from "@/services/area/useUpdateArea";
+import toast from "react-hot-toast";
 
 
 type AreaModalProps = {
   toggle: () => void;
   area: Area | null;
-  messageApi: MessageInstance
 };
 const AreaDetailModal: FC<AreaModalProps> = (props) => {
-  const { toggle, area, messageApi } = props;
+  const { toggle, area } = props;
   const createAreaMutation = useCreateAreaMutation();
   const updateAreaMutation = useUpdateAreaMutation();
   const [form] = Form.useForm();
@@ -35,17 +34,11 @@ const AreaDetailModal: FC<AreaModalProps> = (props) => {
           createAreaMutation.mutateAsync(values,
             {
               onSuccess: async() => {
-                messageApi.open({
-                  type: 'success',
-                  content: `Area ${values.name} created`,
-                });
+                toast.success(`Area ${values.name} created`);
                 toggle();
               },
               onError: (err) => {
-                messageApi.open({
-                  type: 'error',
-                  content: err.message,
-                });
+                toast.error(err.message);
               }
             }
           )
@@ -53,17 +46,11 @@ const AreaDetailModal: FC<AreaModalProps> = (props) => {
           updateAreaMutation.mutateAsync({id: area?._id as string, body: values},
             {
               onSuccess: async() => {
-                messageApi.open({
-                  type: 'success',
-                  content: `Area ${values.name} updated`,
-                });
+                toast.success(`Area ${values.name} updated`);
                 toggle();
               },
               onError: (err) => {
-                messageApi.open({
-                  type: 'error',
-                  content: err.message,
-                });
+                toast.error(err.message);
               }
             }
           )

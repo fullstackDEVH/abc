@@ -7,7 +7,7 @@ import {
   SearchOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Button, Input, Select, Table, Typography } from "antd";
+import { Button, Input, Table, Typography, Select } from "antd";
 import { Key, useState } from "react";
 import fireSwal from "@/components/SweetAlert";
 import { getColumns } from "./columns";
@@ -15,16 +15,26 @@ import { SweetAlertResult } from "sweetalert2";
 import { Camera } from "@/models/camera";
 import CameraDetailModal from "./detail";
 import { ModalModeType } from "@/constants";
+import useDebounce from "@/hooks/useDebound";
+import { useDeleteCameraMutation } from "@/services/camera/useDeleteCamera";
+import toast from "react-hot-toast";
+// import AsyncSelect from "@/components/async-select";
+// import Select from "react-select";
 
 const CameraPage = () => {
   const listArea = useGetListArea({ page: 1, pagesize: 10, searchVal: "" });
-  const [selectedArea, setSelectedArea] = useState<string[]>([]); // [1
+  const [selectedArea, setSelectedArea] = useState<string[]>([]);
+  const [page, setPage] = useState(1);
+  const [pagesize, setPageSize] = useState(10);
+  const [searchVal, setSearchVal] = useState<string>("");
+  const searchValDebounce = useDebounce(searchVal, 500);
   const listCamera = useGetListCamera({
-    page: 1,
-    pagesize: 10,
+    page,
+    pagesize,
     areas: selectedArea,
-    searchVal: "",
+    searchVal: searchValDebounce,
   });
+  const deleteCameraMutation = useDeleteCameraMutation();
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [selectedCamera, setSelectedCamera] = useState<Camera | null>(null);
   const [modeModal, setModeModal] = useState<ModalModeType>(null);
@@ -33,43 +43,31 @@ const CameraPage = () => {
     onChange: setSelectedRowKeys,
   };
 
-  const handleDeletes = () => {
-    if (selectedRowKeys.length == 0) {
+  console.log(selectedArea)
+
+  const handleDeletes = (deleteIds: string[]) => {
+    if (deleteIds.length == 0) {
       return;
     }
     fireSwal({
       title: "Are you sure?",
-      text: `Delete ${selectedRowKeys.length} item${
-        selectedRowKeys.length > 1 ? "s" : ""
+      text: `Delete ${deleteIds.length} item${
+        deleteIds.length > 1 ? "s" : ""
       }?`,
       icon: "warning",
     }).then((result: SweetAlertResult) => {
       if (result.isConfirmed) {
-        setSelectedRowKeys([]);
-        fireSwal({
-          title: "Deleted!",
-          showCancelButton: false,
-          text: `${selectedRowKeys.length} item${
-            selectedRowKeys.length > 1 ? "s" : ""
-          } has been deleted.`,
-          icon: "success",
-        });
-      }
-    });
-  };
-
-  const handleDelete = (record: Camera) => {
-    fireSwal({
-      title: "Are you sure?",
-      text: `Delete ${record.name}?`,
-      icon: "warning",
-    }).then((result: SweetAlertResult) => {
-      if (result.isConfirmed) {
-        fireSwal({
-          title: "Deleted!",
-          showCancelButton: false,
-          text: `${record.name} has been deleted.`,
-          icon: "success",
+        deleteCameraMutation.mutateAsync(deleteIds, {
+          onSuccess: () => {
+            setSelectedRowKeys([]);
+            listCamera.refetch();
+            toast.success(`${deleteIds.length} item${
+              deleteIds.length > 1 ? "s" : ""
+            } has been deleted.`);
+          },
+          onError: (err) => {
+            toast.error(err.message);
+          }
         });
       }
     });
@@ -93,6 +91,7 @@ const CameraPage = () => {
   const handleCloseModal = () => {
     setModeModal(null);
     setSelectedCamera(null);
+    listCamera.refetch();
   };
 
   return (
@@ -110,7 +109,7 @@ const CameraPage = () => {
               type="primary"
               danger
               icon={<DeleteOutlined />}
-              onClick={handleDeletes}
+              onClick={() => handleDeletes(selectedRowKeys as string[])}
             >
               Delete {selectedRowKeys.length} item
               {selectedRowKeys.length > 1 ? "s" : ""}
@@ -140,27 +139,41 @@ const CameraPage = () => {
             allowClear
             showSearch
             maxTagCount="responsive"
-            options={listArea.data?.data.map((area) => ({
+            options={listArea.data?.data?.map((area) => ({
               label: area.name,
               value: area._id,
             }))}
             placeholder="Areas ..."
             onChange={(value) => setSelectedArea(value as string[])}
           />
+          {/* <AsyncSelect /> */}
           <Input
             className="w-1/5 p-1"
             placeholder="Search ..."
             size="middle"
             prefix={<SearchOutlined className="flex p-1" />}
+            value={searchVal}
+            onChange={(e) => setSearchVal(e.target.value)}
           />
         </div>
       </div>
       <Table
         className="p-2 px-5"
         dataSource={listCamera?.data?.data || []}
-        rowKey="id"
-        columns={getColumns(handleView, handleEdit, handleDelete)}
+        rowKey="_id"
+        columns={getColumns(handleView, handleEdit, handleDeletes)}
         rowSelection={rowSelection}
+        pagination={{
+          total: listCamera?.data?.total || 0,
+          pageSize: pagesize,
+          current: page,
+          pageSizeOptions: ["10", "20", "50"],
+          showSizeChanger: false,
+          onChange(page, pageSize) {
+              setPage(page);
+              setPageSize(pageSize);
+          },
+        }}
       />
     </div>
   );

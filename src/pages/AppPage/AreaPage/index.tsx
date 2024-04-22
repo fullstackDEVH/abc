@@ -6,7 +6,7 @@ import {
   SearchOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Typography, Input, Button, Table, message } from "antd";
+import { Typography, Input, Button, Table } from "antd";
 import { getColumns } from "./columns";
 import { Key, useState } from "react";
 import { SweetAlertResult } from "sweetalert2";
@@ -15,6 +15,7 @@ import AreaDetailModal from "./detail";
 import { useGetListArea } from "@/services/area/useGetListArea";
 import useDebounce from "@/hooks/useDebound";
 import { useDeleteAreaMutation } from "@/services/area/useDeleteArea";
+import toast from "react-hot-toast";
 
 const AreaPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
@@ -26,80 +27,40 @@ const AreaPage = () => {
   const searchValDebounce = useDebounce(searchVal, 500); 
   const areaData = useGetListArea({ page, pagesize, searchVal: searchValDebounce })
   const deleteAreaMutation = useDeleteAreaMutation();
-  const [messageApi, contextHolder] = message.useMessage();
+
   const rowSelection = {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
   };
 
-  const handleDeletes = () => {
-    if (selectedRowKeys.length == 0) {
+  const handleDeletes = (deleteIds: string[]) => {
+    if (deleteIds.length == 0) {
       return;
     }
     fireSwal({
       title: "Are you sure?",
-      text: `Delete ${selectedRowKeys.length} item${
-        selectedRowKeys.length > 1 ? "s" : ""
+      text: `Delete ${deleteIds.length} item${
+        deleteIds.length > 1 ? "s" : ""
       }?`,
       icon: "warning",
     }).then((result: SweetAlertResult) => {
       if (result.isConfirmed) {
-        deleteAreaMutation.mutateAsync(selectedRowKeys as string[], {
+        deleteAreaMutation.mutateAsync(deleteIds, {
           onSuccess: () => {
             setSelectedRowKeys([]);
             areaData.refetch();
-            fireSwal({
-              title: "Deleted!",
-              showCancelButton: false,
-              text: `${selectedRowKeys.length} item${
-                selectedRowKeys.length > 1 ? "s" : ""
-              } has been deleted.`,
-              icon: "success",
-            });
+            toast.success(`${deleteIds.length} item${
+              deleteIds.length > 1 ? "s" : ""
+            } has been deleted.`);
           },
           onError: (err) => {
-            fireSwal({
-              title: "Error!",
-              showCancelButton: false,
-              text: err.message,
-              icon: "error",
-            });
+            toast.error(err.message);
           }
         });
       }
     });
   };
 
-  const handleDelete = (record: Area) => {
-    fireSwal({
-      title: "Are you sure?",
-      text: `Delete ${record.name}?`,
-      icon: "warning",
-    }).then((result: SweetAlertResult) => {
-      if (result.isConfirmed) {
-        deleteAreaMutation.mutateAsync([record._id], {
-          onSuccess: () => {
-            setSelectedRowKeys([]);
-            areaData.refetch();
-            fireSwal({
-              title: "Deleted!",
-              showCancelButton: false,
-              text: `${record.name} has been deleted.`,
-              icon: "success",
-            });
-          },
-          onError: (err) => {
-            fireSwal({
-              title: "Error!",
-              showCancelButton: false,
-              text: err.message,
-              icon: "error",
-            });
-          }
-        });
-      }
-    });
-  };
 
   const handleEdit = (record: Area) => {
     setIsOpenModal(true);
@@ -119,15 +80,14 @@ const AreaPage = () => {
 
   return (
     <div>
-      {contextHolder}
-    {isOpenModal && <AreaDetailModal messageApi={messageApi} area={selectedArea} toggle={handleCloseModal}/>}
+    {isOpenModal && <AreaDetailModal area={selectedArea} toggle={handleCloseModal}/>}
       <div className="flex justify-between bg-white p-0 ">
         <Typography.Title className="p-3 px-6" level={3}>
           Area Management
         </Typography.Title>
         <div className="content-center p-2 px-6 space-x-1">
           {selectedRowKeys.length > 0 && (
-            <Button type="primary" danger icon={<DeleteOutlined />} onClick={handleDeletes}>
+            <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDeletes(selectedRowKeys as string[])}>
               Delete {selectedRowKeys.length} item
               {selectedRowKeys.length > 1 ? "s" : ""}
             </Button>
@@ -159,7 +119,7 @@ const AreaPage = () => {
         className="p-2 px-5"
         dataSource={areaData?.data?.data || []}
         rowKey="_id"
-        columns={getColumns(handleEdit, handleDelete)}
+        columns={getColumns(handleEdit, handleDeletes)}
         rowSelection={rowSelection}
         pagination={{
           total: areaData?.data?.total || 0,

@@ -1,4 +1,4 @@
-import { ModalModeType } from "@/constants";
+import { ModalModeType, defaultImage } from "@/constants";
 import { Area } from "@/models/area";
 import { Camera } from "@/models/camera";
 import { useGetListArea } from "@/services/area/useGetListArea";
@@ -19,6 +19,10 @@ import {
   Upload,
 } from "antd";
 import { FC } from "react";
+import swalFire from "@/components/SweetAlert";
+import { useCreateCameraMutation } from "@/services/camera/useCreateCamera";
+import { useUpdateCameraMutation } from "@/services/camera/useUpdateCamera";
+import toast from "react-hot-toast";
 
 type CameraModalProps = {
   toggle: () => void;
@@ -29,9 +33,48 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
   const { toggle, camera, mode } = props;
   const [form] = Form.useForm();
   const areaList = useGetListArea({ page: 1, pagesize: 10, searchVal: "" });
+  const watchScreenshot = Form.useWatch("screenshot_url", form);
+  const createCameraMutation = useCreateCameraMutation();
+  const updateCameraMutation = useUpdateCameraMutation();
 
-  const onFinish = (values: Area) => {
-    console.log(values);
+  const onFinish = (values: Camera) => {
+    let mode: ModalModeType = "create";
+    if (camera) {
+      mode = "edit";
+    }
+    swalFire({
+      title: "Are you sure?",
+      text: `${mode === "create" ? "Create" : "Update"} ${values.name}?`,
+      icon: "warning",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (mode === "create") {
+          createCameraMutation.mutateAsync(values,
+            {
+              onSuccess: async() => {
+                toast.success(`Camera ${values.name} created`);
+                toggle();
+              },
+              onError: (err) => {
+                toast.error(err.message);
+              }
+            }
+          )
+        } else {
+          updateCameraMutation.mutateAsync({id: camera?._id as string, body: values},
+            {
+              onSuccess: async() => {
+                toast.success(`Camera ${values.name} updated`);
+                toggle();
+              },
+              onError: (err) => {
+                toast.error(err.message);
+              }
+            }
+          )
+        }
+      }
+    });
   };
 
   const initValue: Camera = {
@@ -44,13 +87,15 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
       : "",
   } as Camera;
 
-  const watchScreenshot = Form.useWatch("screenshot_url", form);
-  console.log(watchScreenshot);
+  
   const getImageURL = (file: File | string) => {
     if (!file) {
       return defaultScreenshot;
     }
     if (typeof file === "string") {
+      if (file === defaultImage) {
+        return defaultScreenshot;
+      }
       return file;
     }
     return URL.createObjectURL(file);

@@ -1,17 +1,19 @@
 import { Area } from "@/models/area";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Tag } from "antd";
+import { Button, Image, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import defaultScreenshot from "@/assets/images/screenshot.jpeg";
 import { Camera } from "@/models/camera";
+import { defaultImage } from "@/constants";
+import noImage from "@/assets/images/no_image.jpeg";
 
 type CameraActionFn = (record: Camera) => void;
 
 export const getColumns = (
   handleView: CameraActionFn,
   handleEdit: CameraActionFn,
-  handleDelete: CameraActionFn
+  handleDeletes: (ids: string[]) => void,
 ): ColumnsType<Camera> => {
   return [
     {
@@ -19,9 +21,11 @@ export const getColumns = (
       dataIndex: "screenshot_url",
       key: "screenshot_url",
       width: "12%",
+      
       render: (screenshot_url: string) => (
-        <img
-          src={screenshot_url ? screenshot_url : defaultScreenshot}
+        <Image
+          fallback={noImage}
+          src={screenshot_url && screenshot_url !== defaultImage ? screenshot_url : defaultScreenshot}
           alt="screenshot"
           className="shadow-2xl w-full rounded-lg"
         />
@@ -81,7 +85,7 @@ export const getColumns = (
             size="small"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record)}
+            onClick={() => handleDeletes([record._id])}
           />
         </div>
       ),

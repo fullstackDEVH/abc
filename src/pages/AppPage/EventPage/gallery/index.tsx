@@ -1,10 +1,11 @@
 import { EventTypeList } from "@/constants";
 import { Area } from "@/models/area";
 import { Event } from "@/models/event";
-import { Col, Modal, Row, Tag, Typography } from "antd";
+import { Col, Image, Modal, Row, Tag, Typography } from "antd";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import Gallery from "react-image-gallery";
+import noImage from "@/assets/images/no_image.jpeg";
 
 type EventGalleryProps = {
   events: Event[];
@@ -44,6 +45,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({
       <Row>
         <Col span={16}>
           <Gallery
+            onErrorImageURL={noImage}
             items={
               events?.map((event) => ({
                 ...event,
@@ -63,10 +65,18 @@ const EventGallery: React.FC<EventGalleryProps> = ({
             showFullscreenButton={false}
             showPlayButton={false}
             onBeforeSlide={handleChangeSlide}
+            renderItem={(item) => (
+              <Image 
+                src={item.original} 
+                fallback={noImage}
+                alt={item.original} 
+                className="w-full h-full object-cover"
+              />
+            )}
           />
         </Col>
         <Col span={8} className="px-1 pl-5">
-          <div className="p-3 pl-5 h-full shadow-2xl rounded-lg">
+          <div className="p-3 pl-5 shadow-2xl rounded-lg">
             <div className="mb-4">
               <div className="mb-1 text-xs text-slate-400 italic">Time</div>
               <div>
@@ -87,11 +97,12 @@ const EventGallery: React.FC<EventGalleryProps> = ({
             <div className="mb-4">
               <div className="mb-1 text-xs text-slate-400 italic">Category</div>
               <div>{currentEvent?.event_type || "--"}</div>
+              <Tag color="green">{currentEvent?.event_type}</Tag>
             </div>
             <div>
-              <div className="mb-1 text-xs text-slate-400 italic">Status</div>
+              <div className="mb-1 text-xs text-slate-400 italic">Description</div>
               <div>
-              <Tag color={currentEvent?.status === "VERIFIED" ? "green" :  currentEvent?.status === "OPEN" ? "orange" : "default"}>{currentEvent?.status}</Tag>
+                  This is description of event type
               </div>
             </div>
           </div>

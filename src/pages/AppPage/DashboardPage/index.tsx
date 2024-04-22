@@ -8,7 +8,7 @@ const DashboardPage = () => {
       >
         Dashboard
       </Typography.Title>
-      <div className="p-1 pl-4">XXXX</div>
+      <div className="p-1 pl-4">Comming soon</div>
     </div>
   );
 };

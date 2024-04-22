@@ -9,6 +9,9 @@ export type CameraStatus = 'ONLINE' | 'OFFLINE';
 export type ApiErrorMsg = {
   detail: string;
 };
+
+export const defaultImage = "/images/default-img.gif"
+
 export const EventTypeList = [
   {
     id: "CM01",

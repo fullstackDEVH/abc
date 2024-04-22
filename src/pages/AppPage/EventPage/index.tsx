@@ -176,7 +176,7 @@ const EventPage = () => {
             maxTagCount="responsive"
             options={listCamera.data?.data.map((camera) => ({
               label: camera.name,
-              value: camera.id,
+              value: camera._id,
             }))}
             placeholder="Cameras ..."
             onChange={(value) => setFilterCamera(value as string[])}

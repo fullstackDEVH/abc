@@ -1,11 +1,12 @@
 import { Area } from "@/models/area";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Tag } from "antd";
+import { Button, Image, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import defaultScreenshot from "@/assets/images/screenshot.jpeg";
 import { Event, EventStatus } from "@/models/event";
 import { Camera } from "@/models/camera";
+import noImage from "@/assets/images/no_image.jpeg";
 
 type EventActionFn = (record: Event) => void;
 
@@ -27,10 +28,14 @@ export const getColumns = (
     {
       title: "",
       dataIndex: "processed_image_url",
+      align: "center",
       key: "processed_image_url",
       width: "15%",
       render: (processed_image_url: string) => (
-        <img
+        <Image
+          preview={false}
+          height={100}
+          fallback={noImage}
           src={processed_image_url ? processed_image_url : defaultScreenshot}
           alt="image_url"
           className="shadow-2xl w-full rounded-lg"

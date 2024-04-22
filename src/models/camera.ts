@@ -3,7 +3,7 @@ import { Area } from "./area";
 import { DefaultOptionType } from "antd/es/select";
 
 export type Camera = {
-    id: string;
+    _id: string;
     name: string;
     url: string;
     screenshot_url: string | File | null;
@@ -17,4 +17,9 @@ export type Camera = {
 export type ListCameraResponse = {
     total: number;
     data: Camera[];
+};
+
+export type UpdateCameraRequest = {
+    id: string;
+    body: Camera;
 };

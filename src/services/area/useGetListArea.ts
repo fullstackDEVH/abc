@@ -1,5 +1,6 @@
 import { ListAreaResponse } from "@/models/area";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const useGetListAreaQuery = (page: number, pagesize: number, searchVal: string) => ["getListAreas", page, pagesize, searchVal];
 
@@ -13,16 +14,23 @@ export const useGetListArea = (
         {
             queryKey: getListAreaKey,
             queryFn: async () => {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/areas?page=${params.page}&pagesize=${params.pagesize}&search=${params.searchVal}`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/areas?page=${params.page}&pagesize=${params.pagesize}&q=${params.searchVal}`)
+                if (!res.ok) {
+                    const errMsg = await res.json();
+                    toast.error(errMsg?.detail || errMsg);
+                    return null
+                }
                 return res.json();
             },
             ...queryOptions,
         }
     );
+    console.log(response.dataUpdatedAt)
     return {
         data: response.data,
         isFetching: response.isFetching,
         refetch: response.refetch,
+        useGetQuery: useGetListAreaQuery,
     };
 
 };

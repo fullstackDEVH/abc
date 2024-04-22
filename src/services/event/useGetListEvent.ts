@@ -1,5 +1,6 @@
 import { EventStatus, ListEventResponse } from "@/models/event";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const useGetListEventQuery = (
     page: number, pagesize: number, cameras: string[], status: EventStatus[],
@@ -24,92 +25,29 @@ export const useGetListEvent = (
         {
             queryKey: getListCameraKey,
             queryFn: async () => {
-                return {
-                    total: 4,
-                    data: [
-                        {
-                            id: "event1",
-                            event_type: "CM01",
-                            camera: {
-                                id: "cam1",
-                                name: "Camera 1",
-                                url: "",
-                                screenshot_url: "",
-                                status: "ONLINE",
-                                roi_list: [],
-                                area: {
-                                    id: "area_1",
-                                    name: "Area 1",
-                                    address: "Address 1",
-                                    updated_at: new Date(),
-                                    created_at: new Date(),
-                                },
-                                updated_at: new Date(),
-                                created_at: new Date(),
-                            },
-                            status: "OPEN",
-                            image_url: "",
-                            processed_image_url: "https://picsum.photos/id/1018/1000/600/",
-                            event_time: new Date(),
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                        {
-                            id: "event2",
-                            event_type: "CM02",
-                            camera: {
-                                id: "cam2",
-                                name: "Camera 2",
-                                url: "",
-                                screenshot_url: "",
-                                status: "OFFLINE",
-                                roi_list: [],
-                                area: {
-                                    id: "area_1",
-                                    name: "Area 1",
-                                    address: "Address 1",
-                                    updated_at: new Date(),
-                                    created_at: new Date(),
-                                },
-                                updated_at: new Date(),
-                                created_at: new Date(),
-                            },
-                            status: "VERIFIED",
-                            image_url: "",
-                            processed_image_url: "https://picsum.photos/id/1015/1000/600/",
-                            event_time: new Date(),
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                        {
-                            id: "event3",
-                            event_type: "CM03",
-                            camera: {
-                                id: "cam3",
-                                name: "Camera 3",
-                                url: "",
-                                screenshot_url: "",
-                                status: "ONLINE",
-                                roi_list: [],
-                                area: {
-                                    id: "area_2",
-                                    name: "Area 2",
-                                    address: "Address 2",
-                                    updated_at: new Date(),
-                                    created_at: new Date(),
-                                },
-                                updated_at: new Date(),
-                                created_at: new Date(),
-                            },
-                            status: "ARCHIVE",
-                            image_url: "",
-                            processed_image_url: "https://picsum.photos/id/1019/1000/600/",
-                            event_time: new Date(),
-                            updated_at: new Date(),
-                            created_at: new Date(),
-                        },
-                    ]
+                let queryUrl = `page=${params.page}&pagesize=${params.pagesize}`
+                if (params.cameras.length > 0) {
+                    params.cameras.forEach(camera => queryUrl += `&cameras=${camera}`)
                 }
+                if (params.status.length > 0) {
+                    params.status.forEach(status => queryUrl += `&status=${status}`)
+                }
+                if (params.event_time.length > 0) {
+                    params.event_time.forEach(event_time => queryUrl += `&event_time=${event_time}`)
+                }
+                if (params.event_type.length > 0) {
+                    params.event_type.forEach(event_type => queryUrl += `&event_type=${event_type}`)
+                }
+                if (params.last_id) {
+                    queryUrl += `&last_id=${params.last_id}`
+                }
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/events?${queryUrl}`)
+                if (!res.ok) {
+                    const errMsg = await res.json();
+                    toast.error(errMsg?.detail || errMsg);
+                    return null
+                }
+                return res.json();
             },
             ...queryOptions,
         }
