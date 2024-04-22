@@ -1,6 +1,7 @@
 import {
   DeleteOutlined,
   DownloadOutlined,
+  ReloadOutlined,
 } from "@ant-design/icons";
 import { Typography, Button, Table, Select, DatePicker } from "antd";
 import { Key, useState } from "react";
@@ -120,6 +121,10 @@ const EventPage = () => {
               {selectedRowKeys.length > 1 ? "s" : ""}
             </Button>
           )}
+
+          <Button type="primary" icon={<ReloadOutlined />} onClick={() => eventData.refetch()}>
+            Refresh
+          </Button>
 
           <Button type="primary" icon={<DownloadOutlined />}>
             Export
