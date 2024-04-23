@@ -11,25 +11,29 @@ type EventGalleryProps = {
   events: Event[];
   selectedEvent: Event | null;
   toggle: () => void;
+  loadMore: (currEvent: Event) => void;
 };
 
 const EventGallery: React.FC<EventGalleryProps> = ({
   events,
   toggle,
   selectedEvent,
+  loadMore,
 }) => {
   const [currentEvent, setCurrentEvent] = useState<Event | null>(selectedEvent);
   useEffect(() => {
-    if (events?.length > 0) {
-      setCurrentEvent(events[0]);
-    }
     if (selectedEvent) {
       setCurrentEvent(selectedEvent);
+    } else if (events?.length > 0) {
+      setCurrentEvent(events[0]);
     }
+   
   }, [events, selectedEvent]);
 
   const handleChangeSlide = (index: number) => {
-    console.log(index);
+    if (index === events.length - 1) {
+      loadMore(events[index]);
+    }
     setCurrentEvent(events[index]);
   };
 

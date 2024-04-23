@@ -102,7 +102,19 @@ const EventPage = () => {
 
   return (
     <div>
-      {selectedEvent && modeModal === "info" && <EventGallery events={(eventData.data as any)?.data as Event[]} toggle={() => {setSelectedEvent(null)}} selectedEvent={selectedEvent} />}
+      {selectedEvent && modeModal === "info" && (
+        <EventGallery
+          events={eventData.data?.pages.map((page) => page.data).flat() || []}
+          toggle={() => {
+            setSelectedEvent(null);
+          }}
+          selectedEvent={selectedEvent}
+          loadMore={(event: Event) => {
+            setSelectedEvent(event);
+            eventData.fetchNextPage();
+          }}
+        />
+      )}
       <div className="flex justify-between bg-white p-0 ">
         <Typography.Title className="p-3 px-6" level={3}>
           Events Management
@@ -120,11 +132,13 @@ const EventPage = () => {
             </Button>
           )}
 
-          <Button type="primary" icon={<ReloadOutlined />} onClick={() => eventData.refetch()}>
+          <Button
+            type="primary"
+            icon={<ReloadOutlined />}
+            onClick={() => eventData.refetch()}
+          >
             Refresh
           </Button>
-
-
 
           <Button type="primary" icon={<DownloadOutlined />}>
             Export
@@ -188,14 +202,15 @@ const EventPage = () => {
         onRow={(record) => {
           return {
             onClick: () => handleView(record),
-          }
+          };
         }}
-        scroll={{ y: "calc(100vh - 300px)"}} 
+        scroll={{ y: "calc(100vh - 300px)" }}
         onScroll={(event: any) => {
-          const maxScroll = event.target.scrollHeight - event.target.clientHeight
-          const currentScroll = event.target.scrollTop
+          const maxScroll =
+            event.target.scrollHeight - event.target.clientHeight;
+          const currentScroll = event.target.scrollTop;
           if (currentScroll >= maxScroll - 10) {
-            eventData.fetchNextPage()
+            eventData.fetchNextPage();
           }
         }}
         pagination={false}
