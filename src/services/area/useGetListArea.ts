@@ -25,7 +25,6 @@ export const useGetListArea = (
             ...queryOptions,
         }
     );
-    console.log(response.dataUpdatedAt)
     return {
         data: response.data,
         isFetching: response.isFetching,

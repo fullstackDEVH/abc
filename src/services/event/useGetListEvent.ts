@@ -1,31 +1,35 @@
-import { EventStatus, ListEventResponse } from "@/models/event";
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { EventStatus, Event } from "@/models/event";
+import { useInfiniteQuery, UseInfiniteQueryOptions } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const useGetListEventQuery = (
-    page: number, pagesize: number, cameras: string[], status: EventStatus[],
+    cameras: string[], status: EventStatus[],
     event_time: Date[], event_type: string[], last_id: string
-) => ["getListCameras", page, pagesize, cameras, status,
+) => ["getListCameras", cameras, status,
         event_time, event_type, last_id];
 
 export const useGetListEvent = (
     params: {
-        page: number, pagesize: number, cameras: string[], status: EventStatus[],
+        cameras: string[], status: EventStatus[],
         event_time: Date[], event_type: string[], last_id: string
     },
-    queryOptions?: UseQueryOptions<ListEventResponse, Error>
+    queryOptions?: UseInfiniteQueryOptions<any, Error>
 ) => {
     // GET Authentication
 
     const getListCameraKey = useGetListEventQuery(
-        params.page, params.pagesize, params.cameras, params.status,
+        params.cameras, params.status,
         params.event_time, params.event_type, params.last_id
     );
-    const response = useQuery<ListEventResponse, Error>(
+    const response = useInfiniteQuery<any, Error>(
         {
             queryKey: getListCameraKey,
-            queryFn: async () => {
-                let queryUrl = `page=${params.page}&pagesize=${params.pagesize}`
+            queryFn: async ({pageParam}) => {
+                
+                let queryUrl = `page=1&pagesize=10`
+                if (pageParam) {
+                    queryUrl += `&last_id=${pageParam}`
+                }
                 if (params.cameras.length > 0) {
                     params.cameras.forEach(camera => queryUrl += `&cameras=${camera}`)
                 }
@@ -49,6 +53,11 @@ export const useGetListEvent = (
                 }
                 return res.json();
             },
+            initialPageParam: 0,
+            
+            getNextPageParam: (lastPage) => {
+                return (lastPage?.data[lastPage.data.length - 1] as Event)?._id
+            },
             ...queryOptions,
         }
     );
@@ -56,6 +65,7 @@ export const useGetListEvent = (
         data: response.data,
         isFetching: response.isFetching,
         refetch: response.refetch,
+        fetchNextPage: response.fetchNextPage
     };
 
 };

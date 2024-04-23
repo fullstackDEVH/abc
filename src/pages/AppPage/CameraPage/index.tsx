@@ -41,8 +41,6 @@ const CameraPage = () => {
     onChange: setSelectedRowKeys,
   };
 
-  console.log(selectedArea)
-
   const handleDeletes = (deleteIds: string[]) => {
     if (deleteIds.length == 0) {
       return;

@@ -2,7 +2,7 @@ import { Camera } from "./camera";
 
 export type EventStatus = 'OPEN' | 'VERIFIED' | 'ARCHIVE';
 export type Event = {
-    id: string;
+    _id: string;
     event_type: string;
     status: EventStatus;
     image_url: string;

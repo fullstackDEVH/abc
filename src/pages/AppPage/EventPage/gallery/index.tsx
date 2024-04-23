@@ -39,7 +39,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({
         {currentEvent
           ? EventTypeList.find(
               (e) => e.id === (currentEvent as Event)?.event_type
-            )?.label
+            )?.name
           : ""}
       </Typography.Title>
       <Row>
@@ -56,7 +56,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({
             startIndex={
               events && currentEvent
                 ? events?.findIndex((e) => {
-                    return e.id === currentEvent.id;
+                    return e._id === currentEvent._id;
                   })
                 : 0
             }
@@ -68,6 +68,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({
             renderItem={(item) => (
               <Image 
                 src={item.original} 
+                preview={false}
                 fallback={noImage}
                 alt={item.original} 
                 className="w-full h-full object-cover"

@@ -7,7 +7,7 @@ import { Typography, Button, Table, Select, DatePicker } from "antd";
 import { Key, useState } from "react";
 import { SweetAlertResult } from "sweetalert2";
 import fireSwal from "@/components/SweetAlert";
-import { Event, EventStatus } from "@/models/event";
+import { Event } from "@/models/event";
 import { useGetListEvent } from "@/services/event/useGetListEvent";
 import { useGetListCamera } from "@/services/camera/useGetListCamera";
 import { EventTypeList, ModalModeType } from "@/constants";
@@ -19,16 +19,14 @@ const { RangePicker } = DatePicker;
 const EventPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  // const [page, setPage] = useState(1);
   const [filterCamera, setFilterCamera] = useState<string[]>([]);
-  const [filterStatus, setFilterStatus] = useState<EventStatus[]>([]);
   const [filterArea, setFilterArea] = useState<string[]>([]);
   const [filterEventType, setFilterEventType] = useState<string[]>([]);
   const [modeModal, setModeModal] = useState<ModalModeType>(null);
   const eventData = useGetListEvent({
-    page: 1,
-    pagesize: 10,
     cameras: filterCamera,
-    status: filterStatus,
+    status: [],
     event_time: [],
     event_type: filterEventType,
     last_id: "",
@@ -101,10 +99,10 @@ const EventPage = () => {
       }
     });
   };
-  console.log(modeModal, selectedEvent);
+
   return (
     <div>
-      {selectedEvent && modeModal === "info" && <EventGallery events={eventData.data?.data as Event[]} toggle={() => {setSelectedEvent(null)}} selectedEvent={selectedEvent} />}
+      {selectedEvent && modeModal === "info" && <EventGallery events={(eventData.data as any)?.data as Event[]} toggle={() => {setSelectedEvent(null)}} selectedEvent={selectedEvent} />}
       <div className="flex justify-between bg-white p-0 ">
         <Typography.Title className="p-3 px-6" level={3}>
           Events Management
@@ -126,6 +124,8 @@ const EventPage = () => {
             Refresh
           </Button>
 
+
+
           <Button type="primary" icon={<DownloadOutlined />}>
             Export
           </Button>
@@ -146,17 +146,6 @@ const EventPage = () => {
             }))}
             placeholder="Event types ..."
             onChange={(value) => setFilterEventType(value as string[])}
-          />
-          <Select
-            className="w-1/6 h-full truncate"
-            size="middle"
-            mode="multiple"
-            allowClear
-            showSearch
-            maxTagCount="responsive"
-            options={["OPEN", "VERIFIED", "CLOSED"].map((status) => ({value: status, label: status}))}
-            placeholder="Status ..."
-            onChange={(value) => setFilterStatus(value as EventStatus[])}
           />
           <Select
             className="w-1/6 h-full truncate"
@@ -192,8 +181,8 @@ const EventPage = () => {
       </div>
       <Table
         className="p-2 px-5"
-        dataSource={eventData?.data?.data || []}
-        rowKey="id"
+        dataSource={eventData.data?.pages.map((page) => page.data).flat() || []}
+        rowKey="_id"
         columns={getColumns(handleView, handleEdit, handleDelete)}
         rowSelection={rowSelection}
         onRow={(record) => {
@@ -201,6 +190,26 @@ const EventPage = () => {
             onClick: () => handleView(record),
           }
         }}
+        scroll={{ y: "calc(100vh - 300px)"}} 
+        onScroll={(event: any) => {
+          const maxScroll = event.target.scrollHeight - event.target.clientHeight
+          const currentScroll = event.target.scrollTop
+          if (currentScroll >= maxScroll - 10) {
+            eventData.fetchNextPage()
+          }
+        }}
+        pagination={false}
+        // pagination={{
+        //   total: eventData?.data?.total || 0,
+        //   pageSize: pagesize,
+        //   current: page,
+        //   pageSizeOptions: ["10", "20", "50"],
+        //   showSizeChanger: false,
+        //   onChange(page, pageSize) {
+        //       setPage(page);
+        //       setPageSize(pageSize);
+        //   },
+        // }}
       />
     </div>
   );
