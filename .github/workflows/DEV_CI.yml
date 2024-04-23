@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_API_URL: "http://47.128.81.230:8004/api/v1"
-      TARGET: "/home/ec2-user/.deploy//home/ec2-user/.deploy/RainScales/mge_be/deployment"
+      TARGET: "/home/ec2-user/.deploy/RainScales/mge_be/deployment/"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
