@@ -9,7 +9,7 @@ jobs:
   lint_and_build:
     runs-on: ubuntu-latest
     env:
-      VITE_API_URL: "http://47.128.81.230:8004/api/v1"
+      VITE_API_URL: "http://47.128.81.230:8004"
       TARGET: "/home/ec2-user/.deploy/RainScales/mge_be/deployment/"
     steps:
       - name: Checkout code
