@@ -7,7 +7,7 @@ export const useDeleteAreaMutation = () => {
             ids.forEach(id => params += `area_ids=${id}&`)
             console.log(params)
             params = params.slice(0, -1); 
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/areas?${params}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/areas?${params}`, {
                 method: 'DELETE',
                 
             })

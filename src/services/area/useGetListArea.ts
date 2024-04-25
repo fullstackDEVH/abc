@@ -14,7 +14,7 @@ export const useGetListArea = (
         {
             queryKey: getListAreaKey,
             queryFn: async () => {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/areas?page=${params.page}&pagesize=${params.pagesize}&q=${params.searchVal}`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/areas?page=${params.page}&pagesize=${params.pagesize}&q=${params.searchVal}`)
                 if (!res.ok) {
                     const errMsg = await res.json();
                     toast.error(errMsg?.detail || errMsg);

@@ -3,13 +3,14 @@ import { Area } from "@/models/area";
 import { Event } from "@/models/event";
 import { Col, Image, Modal, Row, Tag, Typography } from "antd";
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Gallery from "react-image-gallery";
 import noImage from "@/assets/images/no_image.jpeg";
 
 type EventGalleryProps = {
   events: Event[];
-  selectedEvent: Event | null;
+  currentEvent: Event;
+  setCurrentEvent: (event: Event) => void;
   toggle: () => void;
   loadMore: (currEvent: Event) => void;
 };
@@ -17,18 +18,10 @@ type EventGalleryProps = {
 const EventGallery: React.FC<EventGalleryProps> = ({
   events,
   toggle,
-  selectedEvent,
+  currentEvent,
+  setCurrentEvent,
   loadMore,
 }) => {
-  const [currentEvent, setCurrentEvent] = useState<Event | null>(selectedEvent);
-  useEffect(() => {
-    if (selectedEvent) {
-      setCurrentEvent(selectedEvent);
-    } else if (events?.length > 0) {
-      setCurrentEvent(events[0]);
-    }
-   
-  }, [events, selectedEvent]);
 
   const handleChangeSlide = (index: number) => {
     if (index === events.length - 1) {
@@ -67,6 +60,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({
             infinite={false}
             showIndex={true}
             showFullscreenButton={false}
+            lazyLoad={true}
             showPlayButton={false}
             onBeforeSlide={handleChangeSlide}
             renderItem={(item) => (

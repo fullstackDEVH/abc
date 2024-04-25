@@ -19,7 +19,7 @@ export const useGetListCamera = (
                 if (params.areas.length > 0) {
                     params.areas.forEach(area => queryUrl += `&areas=${area}`)
                 }
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/cameras?${queryUrl}`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/cameras?${queryUrl}`)
                 if (!res.ok) {
                     const errMsg = await res.json();
                     toast.error(errMsg?.detail || errMsg);
