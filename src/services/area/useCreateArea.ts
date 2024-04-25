@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query"
 export const useCreateAreaMutation = () => {
     const mutation = useMutation({
         mutationFn: async (data: CreataAreaRequest) => {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/areas`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/areas`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

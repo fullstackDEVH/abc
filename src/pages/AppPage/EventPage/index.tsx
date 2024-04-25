@@ -4,7 +4,7 @@ import {
   ReloadOutlined,
 } from "@ant-design/icons";
 import { Typography, Button, Table, Select, DatePicker } from "antd";
-import { Key, useState } from "react";
+import { Key, useEffect, useMemo, useState } from "react";
 import { SweetAlertResult } from "sweetalert2";
 import fireSwal from "@/components/SweetAlert";
 import { Event } from "@/models/event";
@@ -14,16 +14,28 @@ import { EventTypeList, ModalModeType } from "@/constants";
 import { getColumns } from "./columns";
 import { useGetListArea } from "@/services/area/useGetListArea";
 import EventGallery from "./gallery";
+import useEventSocket from "@/services/event/useEventSocket";
 
 const { RangePicker } = DatePicker;
 const EventPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  // const [page, setPage] = useState(1);
+  const socket = useEventSocket();
   const [filterCamera, setFilterCamera] = useState<string[]>([]);
   const [filterArea, setFilterArea] = useState<string[]>([]);
   const [filterEventType, setFilterEventType] = useState<string[]>([]);
   const [modeModal, setModeModal] = useState<ModalModeType>(null);
+  const [socketEvent, setSocketEvent] = useState<Event | null>(null);
+  const [listEvent, setListEvent] = useState<Event[]>([]);
+
+  useEffect(() => {
+    socket.connect();
+    socket.on("emagic-event", handleSocketEvent);
+    return () => {
+      socket?.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const eventData = useGetListEvent({
     cameras: filterCamera,
     status: [],
@@ -47,6 +59,29 @@ const EventPage = () => {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
   };
+
+  const handleSocketEvent = (data: string) => {
+    const event = JSON.parse(data);
+    setSocketEvent(event);
+  }
+
+  useMemo(() => {
+    if (eventData?.data?.pages) {
+      const listEvent = eventData.data.pages.map((page) => page.data).flat();
+      setListEvent(listEvent);
+    }
+  }, [eventData?.data?.pages]);
+
+  useMemo(() => {
+    if (socketEvent) {
+      const newListEvent = [socketEvent, ...listEvent]
+      if (selectedEvent) {
+        setSelectedEvent(newListEvent.find((event) => event._id === selectedEvent._id) || null);
+      }
+      setListEvent(newListEvent);
+      setSocketEvent(null);
+    }
+  }, [socketEvent, listEvent, selectedEvent]);
 
   const handleView = (record: Event) => {
     setModeModal("info");
@@ -104,11 +139,12 @@ const EventPage = () => {
     <div>
       {selectedEvent && modeModal === "info" && (
         <EventGallery
-          events={eventData.data?.pages.map((page) => page.data).flat() || []}
+          events={listEvent}
           toggle={() => {
             setSelectedEvent(null);
           }}
-          selectedEvent={selectedEvent}
+          currentEvent={selectedEvent}
+          setCurrentEvent={setSelectedEvent}
           loadMore={(event: Event) => {
             setSelectedEvent(event);
             eventData.fetchNextPage();
@@ -195,7 +231,7 @@ const EventPage = () => {
       </div>
       <Table
         className="p-2 px-5"
-        dataSource={eventData.data?.pages.map((page) => page.data).flat() || []}
+        dataSource={listEvent}
         rowKey="_id"
         columns={getColumns(handleView, handleEdit, handleDelete)}
         rowSelection={rowSelection}

@@ -45,7 +45,7 @@ export const useGetListEvent = (
                 if (params.last_id) {
                     queryUrl += `&last_id=${params.last_id}`
                 }
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/events?${queryUrl}`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/events?${queryUrl}`)
                 if (!res.ok) {
                     const errMsg = await res.json();
                     toast.error(errMsg?.detail || errMsg);
