@@ -1,0 +1,11 @@
+.text_title_css {
+    @apply text-[#475467] group-hover:text-[#058DF4] transition-colors text-base font-semibold;
+}
+
+.text_dropdow_css {
+    @apply text-[#475467] group-hover/item:text-[#058DF4] transition-colors text-base font-semibold;
+}
+
+.popup_shadow {
+    box-shadow: 0px 12px 16px -4px #10182814;
+}

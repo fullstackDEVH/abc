@@ -9,4 +9,8 @@ export enum RoutePath {
   Areas = "/areas",
   NotFound = "/404",
   Forbidden = "/403",
+
+  // admin site
+  Tenants = "/admin/tenants",
+  Staff = "/admin/staff",
 }
