@@ -68,14 +68,12 @@ const AppLayout: FC = () => {
         </div>
       </Header>
       <Layout>
-        <Layout>
-          <Content className="h-full p-2 overflow-auto">
-            <Outlet />
-          </Content>
-          <Footer className="text-right p-2 artice-font">
-            E-MagicEyes &copy; {new Date().getFullYear()} Created by Rye
-          </Footer>
-        </Layout>
+        <Content className="h-full p-2 overflow-auto">
+          <Outlet />
+        </Content>
+        <Footer className="text-right p-2 artice-font">
+          E-MagicEyes &copy; {new Date().getFullYear()} Created by Rye
+        </Footer>
       </Layout>
     </Layout>
   );

@@ -1,0 +1,15 @@
+.ant-modal-content .ant-modal-header .ant-modal-title {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: center;
+}
+
+.ant-form-item .css-dev-only-do-not-override-17hpjfn {
+    margin-bottom: 4px !important;
+}
+
+:where(.css-dev-only-do-not-override-17hpjfn).ant-form-item {
+    margin-bottom: 0;
+}
+
