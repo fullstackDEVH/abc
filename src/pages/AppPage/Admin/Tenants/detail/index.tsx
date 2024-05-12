@@ -1,7 +1,18 @@
 import "./index.css";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { Form, FormProps, Input, Modal, Typography } from "antd";
+import {
+  Form,
+  Input,
+  Modal,
+  Upload,
+  FormProps,
+  Typography,
+  UploadFile,
+  UploadProps,
+} from "antd";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+import CloudUploadIcon from "@/assets/logo/cloud-upload.svg";
 
 // components
 import swalFire from "@/components/SweetAlert";
@@ -33,12 +44,39 @@ const validateMessages = {
   },
 };
 
+const { Dragger } = Upload;
+
 const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
   const createTenentMutation = useCreateTenantMutation();
   const updateTenantMutation = useUpdateTenantMutation();
   const [form] = Form.useForm();
 
+  const [fileList, setFileList] = useState<UploadFile[]>();
+
+  const props: UploadProps = {
+    accept: ".png,.jpeg",
+    onRemove: (file) => {
+      const index = (fileList ?? []).indexOf(file);
+      const newFileList = (fileList ?? []).slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
+    beforeUpload: (file) => {
+      const allowedFileTypes = ["image/png", "image/jpeg"];
+      const isAllowedType = allowedFileTypes.includes(file.type);
+      if (!isAllowedType)
+        toast.error("Invalid file type. Please upload PNG or JPG image.");
+
+      return isAllowedType ? false : Upload.LIST_IGNORE;
+    },
+    maxCount: 1,
+  };
+
   const onFinish: FormProps<Tenant>["onFinish"] = (values: Tenant) => {
+    if ("logo" in values) {
+      delete values["logo" as keyof Tenant];
+    }
+
     swalFire({
       title: `Are you sure ${tenant ? "update" : "create"} tenant ?`,
       text: `${tenant ? "Update" : "Create"} ${values.name}?`,
@@ -85,25 +123,28 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
       className="inter_font"
       title={tenant ? "Update Tenant" : `Create Tenant`}
       open={true}
-      width="400px"
+      width="613px"
       onOk={form.submit}
       maskClosable={false}
       onCancel={() => onClose()}
       footer={(_, { OkBtn, CancelBtn }) => (
-        <div className="flex_center gap-3">
+        <div className="flex justify-center items-end gap-6 h-[80px] border-t-2 border-[#f1f5f9]">
           <CancelBtn />
           <OkBtn />
         </div>
       )}
       okButtonProps={{
         disabled: false,
-        className: "w-full h-[44px] font-semibold text-base",
+        className:
+          "w-full h-[56px] font-semibold text-base text-white bg-[#0E2259]",
       }}
       cancelButtonProps={{
         disabled: false,
-        className: "w-full h-[44px] font-semibold text-base text-[#344054]",
+        className:
+          "w-full h-[56px] font-semibold text-base text-white bg-[#493CE7]",
       }}
-      okText="Confirm"
+      okText="SUBMIT"
+      cancelText="CANCEL"
     >
       <Form
         form={form}
@@ -113,17 +154,53 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
         initialValues={{ ...tenant }}
         validateMessages={validateMessages}
       >
-        <Form.Item>
+        {!tenant ? (
+          <Form.Item
+            name="logo"
+            className="p-[16px] mb-0"
+            rules={[
+              {
+                required: true,
+                message: "logo is required!",
+              },
+            ]}
+          >
+            <Dragger
+              height={200}
+              multiple={false}
+              listType="picture"
+              {...props}
+            >
+              <div className="flex_center flex-col gap-4">
+                <img
+                  src={CloudUploadIcon}
+                  alt="CloudUploadIcon"
+                  width={56}
+                  height={56}
+                />
+                <p className="text-base leading-[19.36px] text-[#64748B]">
+                  Click or drag file to this area to upload
+                </p>
+              </div>
+            </Dragger>
+          </Form.Item>
+        ) : null}
+
+        <Form.Item className={`${tenant ? "mt-4" : ""}`}>
           <Typography.Title
             level={5}
-            className="inter_font !font-medium !text-sm !text-[#344054]"
+            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
           >
-            Name
+            Company Name
           </Typography.Title>
-          <Form.Item name="name" rules={[{ required: true, whitespace: true }]}>
+          <Form.Item
+            className="mb-0"
+            name="name"
+            rules={[{ required: true, whitespace: true }]}
+          >
             <Input
-              placeholder="Enter your name"
-              className="h-[44px] rounded-lg inter_font"
+              placeholder="Enter your company name"
+              className="rounded-lg inter_font"
             />
           </Form.Item>
         </Form.Item>
@@ -131,17 +208,40 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
         <Form.Item>
           <Typography.Title
             level={5}
-            className="inter_font !font-medium !text-sm !text-[#344054]"
+            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
           >
-            Contact
+            Website
           </Typography.Title>
           <Form.Item
+            className="mb-0"
+            name="website"
+            rules={[
+              { required: true, whitespace: true },
+              { type: "url", warningOnly: true },
+            ]}
+          >
+            <Input
+              placeholder="Enter your website"
+              className="rounded-lg inter_font"
+            />
+          </Form.Item>
+        </Form.Item>
+
+        <Form.Item>
+          <Typography.Title
+            level={5}
+            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
+          >
+            Contact Person
+          </Typography.Title>
+          <Form.Item
+            className="mb-0"
             name="contact"
             rules={[{ required: true, whitespace: true }]}
           >
             <Input
-              placeholder="Enter your contact"
-              className="h-[44px] rounded-lg inter_font"
+              placeholder="Enter your contact person"
+              className="rounded-lg inter_font"
             />
           </Form.Item>
         </Form.Item>
@@ -149,17 +249,18 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
         <Form.Item>
           <Typography.Title
             level={5}
-            className="inter_font !font-medium !text-sm !text-[#344054]"
+            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
           >
             Email
           </Typography.Title>
           <Form.Item
+            className="mb-0"
             name="email"
             rules={[{ required: true, type: "email", whitespace: true }]}
           >
             <Input
               placeholder="Enter your email"
-              className="h-[44px] rounded-lg inter_font"
+              className="rounded-lg inter_font"
             />
           </Form.Item>
         </Form.Item>
@@ -167,29 +268,12 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
         <Form.Item>
           <Typography.Title
             level={5}
-            className="inter_font !font-medium !text-sm !text-[#344054]"
-          >
-            Website
-          </Typography.Title>
-          <Form.Item
-            name="website"
-            rules={[{ whitespace: true }, { type: "url", warningOnly: true }]}
-          >
-            <Input
-              placeholder="Enter your website"
-              className="h-[44px] rounded-lg inter_font"
-            />
-          </Form.Item>
-        </Form.Item>
-
-        <Form.Item>
-          <Typography.Title
-            level={5}
-            className="inter_font !font-medium !text-sm !text-[#344054]"
+            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
           >
             Phone number
           </Typography.Title>
           <Form.Item
+            className="mb-0"
             name="phone"
             rules={[
               {
@@ -205,7 +289,7 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
           >
             <Input
               placeholder="Enter your phone number"
-              className="h-[44px] rounded-lg inter_font"
+              className="rounded-lg inter_font"
             />
           </Form.Item>
         </Form.Item>
