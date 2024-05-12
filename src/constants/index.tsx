@@ -32,7 +32,7 @@ export const EventTypeList = [
   },
 ];
 
-export const DATA_ADMIN = {
+export const MenuAdmin = {
   DATA_TENANTS: [
     {
       name: "Tenant list",

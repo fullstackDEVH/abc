@@ -52,7 +52,7 @@ const TenantDetail = ({ tenant, onClose }: IProps) => {
           });
         } else {
           updateTenantMutation.mutateAsync(
-            { id: tenant?._id as string, body: values },
+            { id: `${tenant?.id}` as string, body: values },
             {
               onSuccess: async () => {
                 toast.success(`Tenant ${values.name} updated`);

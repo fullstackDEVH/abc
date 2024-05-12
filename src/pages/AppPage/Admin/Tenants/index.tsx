@@ -7,6 +7,7 @@ import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 
 // components
 import TenantDetail from "./detail";
+import Loading from "@/components/Loading";
 import fireSwal from "@/components/SweetAlert";
 
 // declarations supports
@@ -24,54 +25,6 @@ import usePopupMultiple from "@/hooks/useMultiplesPopup";
 // services
 import { useGetListTenants } from "@/services/admin/tenants/useGetListTenant";
 import { useDeleteTenantMutation } from "@/services/admin/tenants/useDeleteTenant";
-
-const fakeTenants: Tenant[] = [
-  {
-    _id: "1cxzczxc",
-    name: "ABC Company",
-    website: "https://www.abc.com",
-    contact_person: "John Doe",
-    email: "john.doe@abc.com",
-    address: "123 Main Street, City, Country 123 Main Street, City, Country",
-    phone_number: "123-456-7890",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    _id: "2czxczxc3",
-    name: "XYZ Corporation",
-    website: "https://www.xyzcorp.com",
-    contact_person: "Jane Smith",
-    email: "jane.smith@xyzcorp.com",
-    address: "456 Elm Street, City, Country",
-    phone_number: "987-654-3210",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    _id: "2czxczxc2",
-    name: "XYZ Corporation",
-    website: "https://www.xyzcorp.com",
-    contact_person: "Jane Smith",
-    email: "jane.smith@xyzcorp.com",
-    address: "456 Elm Street, City, Country",
-    phone_number: "987-654-3210",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    _id: "2czxczxc1",
-    name: "XYZ Corporation",
-    website: "https://www.xyzcorp.com",
-    contact_person: "Jane Smith",
-    email: "jane.smith@xyzcorp.com",
-    address: "456 Elm Street, City, Country",
-    phone_number: "987-654-3210",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  // Thêm các giá trị khác nếu cần
-];
 
 const TenantsPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
@@ -100,7 +53,7 @@ const TenantsPage = () => {
     if (deleteIds.length == 0) {
       return;
     }
-    
+
     fireSwal({
       title: "Are you sure?",
       text: `Delete ${deleteIds.length} item${
@@ -139,6 +92,7 @@ const TenantsPage = () => {
 
   return (
     <>
+      {tenantsData.isFetching ? <Loading /> : null}
       {isOpen && typePopup && ["create", "edit"].includes(typePopup) ? (
         <TenantDetail
           tenant={selectedTenant}
@@ -190,14 +144,14 @@ const TenantsPage = () => {
 
           {/* table */}
           <Table
-            dataSource={fakeTenants || []}
+            dataSource={tenantsData.data?.data || []}
             columns={getColumnsTenant(handleEdit, handleDeletes)}
             rowSelection={rowSelection}
-            rowKey={"_id"}
+            rowKey={"id"}
             scroll={{ x: 1100 }}
             pagination={{
               position: ["bottomCenter"],
-              total: 5 || 0,
+              total: tenantsData.data?.total || 0,
               pageSize: pagesize,
               current: page,
               pageSizeOptions: ["10", "20", "50"],

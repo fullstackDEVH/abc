@@ -6,7 +6,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Dropdown from "@/components/Dropdown/index";
 
 // declarations supports
-import { DATA_ADMIN } from "@/constants";
+import { MenuAdmin } from "@/constants";
 import { RoutePath } from "@/routes/path";
 
 // icons
@@ -33,11 +33,11 @@ const AdminLayout: FC = () => {
           <div className="flex gap-6">
             <Dropdown
               title="Tenant management"
-              dataVisible={DATA_ADMIN.DATA_TENANTS}
+              dataVisible={MenuAdmin.DATA_TENANTS}
             />
             <Dropdown
               title="Staff management"
-              dataVisible={DATA_ADMIN.DATA_STAFF}
+              dataVisible={MenuAdmin.DATA_STAFF}
             />
           </div>
 

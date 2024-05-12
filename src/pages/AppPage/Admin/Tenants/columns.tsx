@@ -15,8 +15,8 @@ export const getColumnsTenant = (
 ): ColumnsType<Tenant> => {
   return [
     {
-      title: "ID",
-      dataIndex: "_id",
+      title: "No",
+      dataIndex: "id",
       width: "5%",
       fixed: "left",
       ellipsis: {
@@ -55,22 +55,20 @@ export const getColumnsTenant = (
       ellipsis: {
         showTitle: true,
       },
-      render: (_, { name }) => (
-        <div className="text-[#475467] text-sm inter_font">{name}</div>
+      render: (_, { website }) => (
+        <div className="text-[#475467] text-sm inter_font">{website}</div>
       ),
     },
     {
       title: "Contact person",
-      dataIndex: "contact_person",
-      key: "contact_person",
+      dataIndex: "contact",
+      key: "contact",
       width: "19%",
       ellipsis: {
         showTitle: true,
       },
-      render: (_, { contact_person }) => (
-        <div className="text-[#101828] text-sm inter_font">
-          {contact_person}
-        </div>
+      render: (_, { contact }) => (
+        <div className="text-[#101828] text-sm inter_font">{contact}</div>
       ),
     },
     {
@@ -87,14 +85,14 @@ export const getColumnsTenant = (
     },
     {
       title: "Phone number",
-      dataIndex: "phone_number",
-      key: "phone_number",
+      dataIndex: "phone",
+      key: "phone",
       width: "15%",
       ellipsis: {
         showTitle: true,
       },
-      render: (_, { phone_number }) => (
-        <div className="text-[#101828] text-sm inter_font">{phone_number}</div>
+      render: (_, { phone }) => (
+        <div className="text-[#101828] text-sm inter_font">{phone}</div>
       ),
     },
     {
@@ -107,7 +105,7 @@ export const getColumnsTenant = (
         <div className="flex_center gap-1" key={index}>
           <div
             className="p-[10px] cursor-pointer group/trash"
-            onClick={() => handleDelete([record._id])}
+            onClick={() => handleDelete([`${record.id}`])}
           >
             <img
               className="group-hover/trash:translate-y-[-3px] transition-transform"

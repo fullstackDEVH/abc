@@ -1,11 +1,11 @@
 export type Tenant = {
-  _id: string;
+  id: number;
   name: string;
   website: string;
-  contact_person: string;
+  contact: string;
+  logo: string;
   email: string;
-  address: string;
-  phone_number: string;
+  phone: string;
   updated_at: Date;
   created_at: Date;
 };
@@ -16,7 +16,11 @@ export type ListTenantResponse = {
 };
 export type CreataTenantRequest = {
   name: string;
-  address: string;
+  contact: string;
+  email: string;
+  phone: string;
+  logo?: string;
+  website?: string;
 };
 
 export type UpdateTenantRequest = {
