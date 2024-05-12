@@ -22,7 +22,7 @@ export const getColumnsTenant = (
       ellipsis: {
         showTitle: true,
       },
-      render: (_, {}, index) => (
+      render: (_, __, index) => (
         <div className="text-[#101828] text-sm inter_font">{index + 1}</div>
       ),
     },
