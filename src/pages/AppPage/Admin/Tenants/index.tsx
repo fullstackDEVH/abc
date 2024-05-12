@@ -43,7 +43,7 @@ const TenantsPage = () => {
   });
 
   const deleteTenantMutation = useDeleteTenantMutation();
-
+  
   const rowSelection = {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
@@ -97,6 +97,7 @@ const TenantsPage = () => {
         <TenantDetail
           tenant={selectedTenant}
           onClose={() => handleClosePopup()}
+          onRefreshTenants={tenantsData.refetch}
         />
       ) : null}
       <div className="p-8 inter_font">
