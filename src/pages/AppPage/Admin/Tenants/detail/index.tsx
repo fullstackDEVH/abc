@@ -97,8 +97,8 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
           createTenentMutation.mutateAsync(dataRequest, {
             onSuccess: async () => {
               toast.success(`Tenant ${dataRequest.name} created`);
-              onClose();
               onRefreshTenants();
+              onClose();
             },
             onError: (err) => {
               toast.error(err.message);
@@ -110,8 +110,8 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
             {
               onSuccess: async () => {
                 toast.success(`Tenant ${dataRequest.name} updated`);
-                onClose();
                 onRefreshTenants();
+                onClose();
               },
               onError: (err) => {
                 toast.error(err.message);
