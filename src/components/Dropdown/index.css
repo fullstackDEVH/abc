@@ -1,11 +1,23 @@
+.common_text_css {
+  @apply transition-colors text-base font-semibold;
+}
+
 .text_title_css {
-    @apply text-[#475467] group-hover:text-[#058DF4] transition-colors text-base font-semibold;
+  @apply text-[#64748B] group-hover:text-[#493CE7];
+}
+
+.text_title_css_active {
+  @apply text-[#493CE7];
 }
 
 .text_dropdow_css {
-    @apply text-[#475467] group-hover/item:text-[#058DF4] transition-colors text-base font-semibold;
+  @apply text-[#64748B] group-hover/item:text-[#0E2259];
 }
 
+.text_dropdow_css_active {
+    @apply text-[#0E2259];
+  }
+
 .popup_shadow {
-    box-shadow: 0px 12px 16px -4px #10182814;
+  box-shadow: 0px 12px 16px -4px #10182814;
 }

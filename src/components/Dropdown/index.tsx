@@ -1,11 +1,10 @@
 import "./index.css";
 import { twMerge } from "tailwind-merge";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 // icons
-import arrowBottomBlueIcon from "@/assets/logo/arrow/arrow_bottom_blue.svg";
-import arrowBottomGreyIcon from "@/assets/logo/arrow/arrow_bottom_grey.svg";
+import arrow_bottom_blue_fill from "@/assets/logo/arrow/arrow_bottom_blue_fill.svg";
 
 interface IStylesIcon {
   readonly visible?: boolean;
@@ -43,10 +42,10 @@ const PopupItem = ({
   const pathName = useLocation().pathname;
 
   return path ? (
-    <Link to={path} className="p-3 block group/item">
+    <Link to={path} className={`py-[6px] px-1 block group/item rounded ${path === pathName ? "bg-[#f0edff]" : ""}`} >
       <div
         className={twMerge(
-          `text_dropdow_css ${path === pathName ? "text-[#058DF4]" : ""}`,
+          ` ${path === pathName ? "text_dropdow_css_active" : ""}`,
           itemPopupStyles
         )}
       >
@@ -55,8 +54,8 @@ const PopupItem = ({
       {icon ? <img width={20} height={20} src={icon} alt="icon item" /> : null}
     </Link>
   ) : (
-    <div className="p-3 block group/item" onClick={onClick}>
-      <div className={twMerge("text_dropdow_css", itemPopupStyles)}>{name}</div>
+    <div className="py-[6px] px-1 block group/item" onClick={onClick}>
+      <div className={twMerge(itemPopupStyles)}>{name}</div>
       {icon ? <img width={20} height={20} src={icon} alt="icon item" /> : null}
     </div>
   );
@@ -69,20 +68,31 @@ const Dropdown = ({
   popupStyles,
   itemPopupStyles,
 }: IProps) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const pathName = useLocation().pathname;
+  const titleActive = useMemo(() => {
+    for (const menuItem of dataVisible) {
+      if (menuItem?.path && menuItem?.path === pathName) return true;
+    }
+    return false;
+  }, [pathName]);
 
   return (
-    <div
-      className="relative flex_center group cursor-pointer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="flex_center gap-2">
-        <h4 className={twMerge("text_title_css", titleStyles)}>{title}</h4>
+    <div className="relative flex_center group cursor-pointer">
+      <div className="flex_center gap-[6px]">
+        <h4
+          className={twMerge(
+            `common_text_css text_title_css ${
+              titleActive ? "text_title_css_active" : ""
+            }`,
+            titleStyles
+          )}
+        >
+          {title}
+        </h4>
         <img
           width={20}
           height={20}
-          src={isHovered ? arrowBottomBlueIcon : arrowBottomGreyIcon}
+          src={arrow_bottom_blue_fill}
           className={`group-hover:-rotate-90 transition-transform`}
         />
       </div>
@@ -90,19 +100,21 @@ const Dropdown = ({
       {/* This is list show after when hover title */}
       <div
         className={twMerge(
-          "absolute top-full right-0 w-[328px] h-[152px] invisible group-hover:visible opacity-0 group-hover:opacity-100",
+          "absolute top-full right-0 w-[204px] h-[101px] invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all",
           popupStyles
         )}
       >
         <div className="w-full h-full bg-white rounded-xl border border-[#EAECF0] overflow-y-auto">
-          <div className="p-6">
+          <div className="px-2 py-3">
             {dataVisible.map((item) => (
               <PopupItem
                 key={item.name}
                 name={item.name}
                 path={item.path}
                 icon={item.icon}
-                itemPopupStyles={itemPopupStyles ?? ""}
+                itemPopupStyles={
+                  "common_text_css text_dropdow_css " + itemPopupStyles
+                }
               />
             ))}
           </div>

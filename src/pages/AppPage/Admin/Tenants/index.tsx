@@ -1,14 +1,14 @@
 import "./index.css";
+import { Table } from "antd";
 import toast from "react-hot-toast";
 import { Key, useState } from "react";
-import { Link } from "react-router-dom";
-import { Breadcrumb, Button, Input, Table } from "antd";
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { Link, useSearchParams } from "react-router-dom";
 
 // components
 import TenantDetail from "./detail";
 import Loading from "@/components/Loading";
 import fireSwal from "@/components/SweetAlert";
+import HeadingDetail from "@/components/HeadingDetail";
 
 // declarations supports
 import { getColumnsTenant } from "./columns";
@@ -19,7 +19,6 @@ import { Tenant } from "@/models/admin/tenant";
 import { SweetAlertResult } from "sweetalert2";
 
 // hook
-import useDebounce from "@/hooks/useDebound";
 import usePopupMultiple from "@/hooks/useMultiplesPopup";
 
 // services
@@ -31,19 +30,19 @@ const TenantsPage = () => {
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
   const [page, setPage] = useState(1);
   const [pagesize, setPageSize] = useState(10);
-  const [searchVal, setSearchVal] = useState<string>("");
-  const searchValDebounce = useDebounce(searchVal, 500);
+  const [searchParams] = useSearchParams();
+
   const { isOpen, typePopup, openPopup, closePopup } =
     usePopupMultiple<ModalModeType>();
 
   const tenantsData = useGetListTenants({
     page,
     pagesize,
-    searchVal: searchValDebounce,
+    searchVal: searchParams.get("q") ?? "",
   });
 
   const deleteTenantMutation = useDeleteTenantMutation();
-  
+
   const rowSelection = {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
@@ -100,48 +99,22 @@ const TenantsPage = () => {
           onRefreshTenants={tenantsData.refetch}
         />
       ) : null}
-      <div className="p-8 inter_font">
-        <div>
-          <Breadcrumb
-            items={[
-              {
-                title: <Link to="">Tenant management</Link>,
-              },
-              {
-                title: "Tenant list",
-              },
-            ]}
-          />
-        </div>
+      <div className="">
+        <HeadingDetail
+          breadcrumbRoutes={[
+            {
+              title: <Link to={"/admin/tenants"}>Tenant management</Link>,
+            },
+            {
+              title: "Tenant list",
+            },
+          ]}
+          onButtonClick={() => openPopup("create")}
+        />
 
         {/* Main */}
         <div className="mt-6 flex flex-col gap-4">
           <h3 className="roboto_font font-semibold text-xl">Tenant list</h3>
-
-          {/* controller */}
-          <div className="flex items-center justify-between">
-            <div className="w-[360px] h-[40px]">
-              <Input
-                size="large"
-                placeholder="Search tenant"
-                value={searchVal}
-                onChange={(e) => setSearchVal(e.target.value)}
-                prefix={<SearchOutlined />}
-              />
-            </div>
-
-            <Button
-              type="primary"
-              size={"large"}
-              className="bg-[#058DF4] font-semibold text-sm flex_center"
-              icon={<PlusOutlined color="white" className="text-[20px]" />}
-              onClick={() => {
-                openPopup("create");
-              }}
-            >
-              Add tenant
-            </Button>
-          </div>
 
           {/* table */}
           <Table
@@ -149,7 +122,7 @@ const TenantsPage = () => {
             columns={getColumnsTenant(handleEdit, handleDeletes)}
             rowSelection={rowSelection}
             rowKey={"id"}
-            scroll={{ x: 1100 }}
+            scroll={{ x: 1100, y: 504 }}
             pagination={{
               position: ["bottomCenter"],
               total: tenantsData.data?.total || 0,
