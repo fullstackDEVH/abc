@@ -12,5 +12,6 @@ export enum RoutePath {
 
   // admin site
   Tenants = "/admin/tenants",
+  AccountManagement = "/admin/account-management/:tenantId",
   Staff = "/admin/staff",
 }

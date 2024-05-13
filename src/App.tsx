@@ -25,6 +25,9 @@ const AreaPage = lazy(() => import("@/pages/AppPage/AreaPage"));
  */
 const TenantAdminsPage = lazy(() => import("@/pages/AppPage/Admin/Tenants"));
 const StaffAdminPage = lazy(() => import("@/pages/AppPage/Admin/Staff"));
+const AccountManagement = lazy(
+  () => import("@/pages/AppPage/Admin/Tenants/Account-management")
+);
 
 const authRoutes = [
   {
@@ -75,6 +78,10 @@ const adminRoutes = [
   {
     path: RoutePath.Tenants,
     element: <TenantAdminsPage />,
+  },
+  {
+    path: RoutePath.AccountManagement,
+    element: <AccountManagement />,
   },
   {
     path: RoutePath.Staff,

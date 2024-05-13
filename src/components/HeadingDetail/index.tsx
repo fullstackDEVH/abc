@@ -12,12 +12,17 @@ import useDebounce from "@/hooks/useDebound";
 
 import "./index.css";
 
-interface IProps {
-  breadcrumbRoutes: ItemType[];
-  onButtonClick: (e: MouseEvent<any>) => void;
+interface IButtonProps {
+  text: string;
+  onClick: (e: MouseEvent<any>) => void;
 }
 
-const HeadingDetail = ({ breadcrumbRoutes, onButtonClick }: IProps) => {
+interface IProps {
+  breadcrumbRoutes: ItemType[];
+  buttonProps: IButtonProps;
+}
+
+const HeadingDetail = ({ breadcrumbRoutes, buttonProps }: IProps) => {
   const [inputValue, setInputValue] = useState<string>("");
   const debouncedInput = useDebounce(inputValue, 800);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -70,10 +75,10 @@ const HeadingDetail = ({ breadcrumbRoutes, onButtonClick }: IProps) => {
 
         <div
           className="p-3 bg-[#f0edff] hover:bg-[#d5d1eb] transition-colors rounded-lg flex_center gap-2 cursor-pointer"
-          onClick={onButtonClick}
+          onClick={buttonProps.onClick}
         >
           <button className="text-[#493CE7] text-[14px] font-semibold leading-[22.4px]">
-            Add tenant
+            {buttonProps.text}
           </button>
           <img
             src={plusCircleIcon}

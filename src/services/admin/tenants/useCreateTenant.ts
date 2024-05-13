@@ -10,7 +10,7 @@ export const useCreateTenantMutation = () => {
         const value = data[key as keyof CreateTenantRequest] ?? "";
         formData.append(key, value);
       }
-
+      
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/v1/tenants`,
         {

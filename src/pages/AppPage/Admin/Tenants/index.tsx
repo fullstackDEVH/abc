@@ -109,7 +109,7 @@ const TenantsPage = () => {
               title: "Tenant list",
             },
           ]}
-          onButtonClick={() => openPopup("create")}
+          buttonProps={{ text: "Add tenant", onClick: () => openPopup("create") }}
         />
 
         {/* Main */}

@@ -42,7 +42,12 @@ const PopupItem = ({
   const pathName = useLocation().pathname;
 
   return path ? (
-    <Link to={path} className={`py-[6px] px-1 block group/item rounded ${path === pathName ? "bg-[#f0edff]" : ""}`} >
+    <Link
+      to={path}
+      className={`py-[6px] px-1 block group/item rounded ${
+        path === pathName ? "bg-[#f0edff]" : ""
+      }`}
+    >
       <div
         className={twMerge(
           ` ${path === pathName ? "text_dropdow_css_active" : ""}`,
