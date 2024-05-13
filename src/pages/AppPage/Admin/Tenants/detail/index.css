@@ -42,3 +42,7 @@
 .ant-form-item-control-input-content > h5.ant-typography {
   margin-bottom: 8px !important;
 }
+
+.group_input_class_name > .ant-form-item {
+  width: 50%;
+}

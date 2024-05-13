@@ -1,13 +1,13 @@
-import { CreataTenantRequest } from "@/models/admin/tenant";
+import { CreateTenantRequest } from "@/models/admin/tenant";
 import { useMutation } from "@tanstack/react-query";
 
 export const useCreateTenantMutation = () => {
   const mutation = useMutation({
-    mutationFn: async (data: CreataTenantRequest) => {
-      const formData = new URLSearchParams();
+    mutationFn: async (data: CreateTenantRequest) => {
+      const formData = new FormData();
 
       for (const key in data) {
-        const value = data[key as keyof CreataTenantRequest] ?? "";
+        const value = data[key as keyof CreateTenantRequest] ?? "";
         formData.append(key, value);
       }
 
@@ -15,10 +15,7 @@ export const useCreateTenantMutation = () => {
         `${import.meta.env.VITE_API_URL}/api/v1/tenants`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: formData.toString(),
+          body: formData,
         }
       );
 

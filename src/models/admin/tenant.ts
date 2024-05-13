@@ -1,3 +1,5 @@
+import { UploadFile } from "antd";
+
 export type Tenant = {
   id: number;
   name: string;
@@ -14,16 +16,24 @@ export type ListTenantResponse = {
   total: number;
   data: Tenant[];
 };
-export type CreataTenantRequest = {
+
+export type CreateTenantRequest = {
   name: string;
   contact: string;
   email: string;
   phone: string;
-  logo?: string;
-  website?: string;
+  logo: File;
+  website: string;
+};
+
+export type CreateTenantRequestWithLogo = Omit<CreateTenantRequest, "logo"> & {
+  logo: {
+    file: File;
+    fileList: UploadFile[];
+  };
 };
 
 export type UpdateTenantRequest = {
   id: string;
-  body: Tenant;
+  body: CreateTenantRequest;
 };

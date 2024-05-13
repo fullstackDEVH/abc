@@ -1,5 +1,4 @@
 import "./index.css";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import {
   Form,
@@ -8,17 +7,22 @@ import {
   Upload,
   FormProps,
   Typography,
-  UploadFile,
   UploadProps,
 } from "antd";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+
+// icons
 import CloudUploadIcon from "@/assets/logo/cloud-upload.svg";
 
 // components
 import swalFire from "@/components/SweetAlert";
 
 //model
-import { ListTenantResponse, Tenant } from "@/models/admin/tenant";
+import {
+  CreateTenantRequestWithLogo,
+  ListTenantResponse,
+  Tenant,
+} from "@/models/admin/tenant";
 
 // services
 import { useCreateTenantMutation } from "@/services/admin/tenants/useCreateTenant";
@@ -51,16 +55,8 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
   const updateTenantMutation = useUpdateTenantMutation();
   const [form] = Form.useForm();
 
-  const [fileList, setFileList] = useState<UploadFile[]>();
-
   const props: UploadProps = {
     accept: ".png,.jpeg",
-    onRemove: (file) => {
-      const index = (fileList ?? []).indexOf(file);
-      const newFileList = (fileList ?? []).slice();
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
-    },
     beforeUpload: (file) => {
       const allowedFileTypes = ["image/png", "image/jpeg"];
       const isAllowedType = allowedFileTypes.includes(file.type);
@@ -70,12 +66,26 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
       return isAllowedType ? false : Upload.LIST_IGNORE;
     },
     maxCount: 1,
+    defaultFileList: tenant?.logo
+      ? [
+          {
+            thumbUrl: `${import.meta.env.VITE_API_URL}/api/v1/blobs/${
+              tenant.logo
+            }`,
+            uid: "-1",
+            name: "Current logo of tenant",
+          },
+        ]
+      : [],
   };
 
-  const onFinish: FormProps<Tenant>["onFinish"] = (values: Tenant) => {
-    if ("logo" in values) {
-      delete values["logo" as keyof Tenant];
-    }
+  const onFinish: FormProps<CreateTenantRequestWithLogo>["onFinish"] = (
+    values: CreateTenantRequestWithLogo
+  ) => {
+    const { logo, ...validValues } = values;
+
+    const dataRequest = { ...validValues, logo: logo.file };
+    console.log("dataRequest : ", dataRequest);
 
     swalFire({
       title: `Are you sure ${tenant ? "update" : "create"} tenant ?`,
@@ -84,9 +94,9 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
     }).then((result) => {
       if (result.isConfirmed) {
         if (!tenant) {
-          createTenentMutation.mutateAsync(values, {
+          createTenentMutation.mutateAsync(dataRequest, {
             onSuccess: async () => {
-              toast.success(`Tenant ${values.name} created`);
+              toast.success(`Tenant ${dataRequest.name} created`);
               onClose();
               onRefreshTenants();
             },
@@ -96,10 +106,10 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
           });
         } else {
           updateTenantMutation.mutateAsync(
-            { id: `${tenant?.id}` as string, body: values },
+            { id: `${tenant?.id}` as string, body: dataRequest },
             {
               onSuccess: async () => {
-                toast.success(`Tenant ${values.name} updated`);
+                toast.success(`Tenant ${dataRequest.name} updated`);
                 onClose();
                 onRefreshTenants();
               },
@@ -113,10 +123,11 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
     });
   };
 
-  const onFinishFailed: FormProps<Tenant>["onFinishFailed"] = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-    toast.error(`Please revalidate the values of the entered fields?`);
-  };
+  const onFinishFailed: FormProps<CreateTenantRequestWithLogo>["onFinishFailed"] =
+    (errorInfo) => {
+      console.log("Failed:", errorInfo);
+      toast.error(`Please revalidate the values of the entered fields?`);
+    };
 
   return (
     <Modal
@@ -154,37 +165,30 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
         initialValues={{ ...tenant }}
         validateMessages={validateMessages}
       >
-        {!tenant ? (
-          <Form.Item
-            name="logo"
-            className="p-[16px] mb-0"
-            rules={[
-              {
-                required: true,
-                message: "logo is required!",
-              },
-            ]}
-          >
-            <Dragger
-              height={200}
-              multiple={false}
-              listType="picture"
-              {...props}
-            >
-              <div className="flex_center flex-col gap-4">
-                <img
-                  src={CloudUploadIcon}
-                  alt="CloudUploadIcon"
-                  width={56}
-                  height={56}
-                />
-                <p className="text-base leading-[19.36px] text-[#64748B]">
-                  Click or drag file to this area to upload
-                </p>
-              </div>
-            </Dragger>
-          </Form.Item>
-        ) : null}
+        <Form.Item
+          name="logo"
+          className="p-[16px] mb-0"
+          rules={[
+            {
+              required: true,
+              message: "logo is required!",
+            },
+          ]}
+        >
+          <Dragger height={200} multiple={false} listType="picture" {...props}>
+            <div className="flex_center flex-col gap-4">
+              <img
+                src={CloudUploadIcon}
+                alt="CloudUploadIcon"
+                width={56}
+                height={56}
+              />
+              <p className="text-base leading-[19.36px] text-[#64748B]">
+                Click or drag file to this area to upload
+              </p>
+            </div>
+          </Dragger>
+        </Form.Item>
 
         <Form.Item className={`${tenant ? "mt-4" : ""}`}>
           <Typography.Title
@@ -232,25 +236,6 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
             level={5}
             className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
           >
-            Contact Person
-          </Typography.Title>
-          <Form.Item
-            className="mb-0"
-            name="contact"
-            rules={[{ required: true, whitespace: true }]}
-          >
-            <Input
-              placeholder="Enter your contact person"
-              className="rounded-lg inter_font"
-            />
-          </Form.Item>
-        </Form.Item>
-
-        <Form.Item>
-          <Typography.Title
-            level={5}
-            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
-          >
             Email
           </Typography.Title>
           <Form.Item
@@ -265,34 +250,55 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
           </Form.Item>
         </Form.Item>
 
-        <Form.Item>
-          <Typography.Title
-            level={5}
-            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
-          >
-            Phone number
-          </Typography.Title>
-          <Form.Item
-            className="mb-0"
-            name="phone"
-            rules={[
-              {
-                validator: (_, value) => {
-                  const phoneNumberPattern = /^\+?\d{10,}$/;
-                  if (phoneNumberPattern.test(value)) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error("phone number invalid"));
-                },
-              },
-            ]}
-          >
-            <Input
-              placeholder="Enter your phone number"
-              className="rounded-lg inter_font"
-            />
+        <div className="flex_center gap-6 group_input_class_name">
+          <Form.Item>
+            <Typography.Title
+              level={5}
+              className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
+            >
+              Contact Person
+            </Typography.Title>
+            <Form.Item
+              className="mb-0"
+              name="contact"
+              rules={[{ required: true, whitespace: true }]}
+            >
+              <Input
+                placeholder="Enter your contact person"
+                className="rounded-lg inter_font"
+              />
+            </Form.Item>
           </Form.Item>
-        </Form.Item>
+
+          <Form.Item>
+            <Typography.Title
+              level={5}
+              className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"
+            >
+              Phone number
+            </Typography.Title>
+            <Form.Item
+              className="mb-0"
+              name="phone"
+              rules={[
+                {
+                  validator: (_, value) => {
+                    const phoneNumberPattern = /^\+?\d{10,}$/;
+                    if (phoneNumberPattern.test(value)) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error("phone number invalid"));
+                  },
+                },
+              ]}
+            >
+              <Input
+                placeholder="Enter your phone number"
+                className="rounded-lg inter_font"
+              />
+            </Form.Item>
+          </Form.Item>
+        </div>
       </Form>
     </Modal>
   );
