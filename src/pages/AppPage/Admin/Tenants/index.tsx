@@ -31,7 +31,7 @@ const TenantsPage = () => {
   const [page, setPage] = useState(1);
   const [pagesize, setPageSize] = useState(10);
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { isOpen, typePopup, openPopup, closePopup } =
     usePopupMultiple<ModalModeType>();
@@ -110,7 +110,10 @@ const TenantsPage = () => {
               title: "Tenant list",
             },
           ]}
-          buttonProps={{ text: "Add tenant", onClick: () => openPopup("create") }}
+          buttonProps={{
+            text: "Add tenant",
+            onClick: () => openPopup("create"),
+          }}
         />
 
         {/* Main */}
@@ -127,8 +130,10 @@ const TenantsPage = () => {
             onRow={(record) => {
               return {
                 onDoubleClick: () => {
-                  navigate(`/admin/account-management/${record.id}`)
-                }, 
+                  navigate(
+                    `/admin/account-management/${record.id}?tenantName=${record.name}`
+                  );
+                },
               };
             }}
             pagination={{

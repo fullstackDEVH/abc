@@ -48,7 +48,7 @@ const AccountManagement = () => {
     searchVal: searchParams.get("q") ?? "",
   });
   const deleteTenantMutation = useDeleteAccountManagementMutation();
-  
+
   const rowSelection = {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
@@ -128,7 +128,7 @@ const AccountManagement = () => {
               className="font-bold text-[20px] leading-[30px] text-[#0E2259]"
               onClick={handleClosePopup}
             >
-              Tenant id : {tenantId}
+              Tenant {searchParams.get("tenantName")} account list
             </h3>
           </div>
           {/* table */}
