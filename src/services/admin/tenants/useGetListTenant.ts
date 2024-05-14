@@ -6,7 +6,7 @@ const useGetListTenantQuery = (
   page: number,
   pagesize: number,
   searchVal: string
-) => ["getListAreas", page, pagesize, searchVal];
+) => ["getListTenants", page, pagesize, searchVal];
 
 export const useGetListTenants = (
   params: { page: number; pagesize: number; searchVal: string },

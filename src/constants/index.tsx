@@ -40,7 +40,7 @@ export const MenuAdmin = {
     },
     {
       name: "Account management",
-      path: "#",
+      path: "admin/account-management/{tenantId}",
     },
   ],
 
