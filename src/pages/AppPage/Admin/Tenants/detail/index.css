@@ -1,15 +1,48 @@
+/* modal components antd */
+.ant-modal-content {
+  padding: 24px 24px 40px !important;
+}
+
+.ant-modal-content .ant-modal-header {
+  margin-bottom: 0;
+  padding-bottom: 15px !important;
+  border-width: 0 0 2px 0;
+  border-style: solid;
+  border-color: #f1f5f9;
+}
+
 .ant-modal-content .ant-modal-header .ant-modal-title {
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 28px;
-    text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25.2px;
+  letter-spacing: 0.2px;
+  color: #0e2259;
 }
 
-.ant-form-item .css-dev-only-do-not-override-17hpjfn {
-    margin-bottom: 4px !important;
+.ant-form-item .css-17hpjfn {
+  margin-bottom: 0 !important;
 }
 
-:where(.css-dev-only-do-not-override-17hpjfn).ant-form-item {
-    margin-bottom: 0;
+/* upload component antd */
+.ant-upload-wrapper .css-17hpjfn.ant-upload {
+  height: 200px;
+  border: 2px dashed #d5d5d5;
+  border-radius: 8px;
 }
 
+.ant-form-item-control-input-content > input {
+  height: 48px;
+  padding: 12px 16px;
+  color: #64748b;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.ant-form-item-control-input-content > h5.ant-typography {
+  margin-bottom: 8px !important;
+}
+
+.group_input_class_name > .ant-form-item {
+  width: 50%;
+}
