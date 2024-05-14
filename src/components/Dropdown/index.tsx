@@ -79,7 +79,7 @@ const Dropdown = ({
       if (menuItem?.path && menuItem?.path === pathName) return true;
     }
     return false;
-  }, [pathName]);
+  }, [pathName, dataVisible]);
 
   return (
     <div className="relative flex_center group cursor-pointer">

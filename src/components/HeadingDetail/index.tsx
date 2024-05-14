@@ -35,7 +35,7 @@ const HeadingDetail = ({ breadcrumbRoutes, buttonProps }: IProps) => {
       searchParams.delete("q");
       setSearchParams(searchParams);
     }
-  }, [debouncedInput]);
+  }, [debouncedInput, searchParams, setSearchParams, inputValue]);
 
   return (
     <div className="bg-white -mx-8 px-8 py-[14px]">
