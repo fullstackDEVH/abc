@@ -2,7 +2,7 @@ import "./index.css";
 import { Table } from "antd";
 import toast from "react-hot-toast";
 import { Key, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 // components
 import TenantDetail from "./detail";
@@ -31,6 +31,7 @@ const TenantsPage = () => {
   const [page, setPage] = useState(1);
   const [pagesize, setPageSize] = useState(10);
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate()
 
   const { isOpen, typePopup, openPopup, closePopup } =
     usePopupMultiple<ModalModeType>();
@@ -123,6 +124,13 @@ const TenantsPage = () => {
             rowSelection={rowSelection}
             rowKey={"id"}
             scroll={{ x: 1100, y: 504 }}
+            onRow={(record) => {
+              return {
+                onDoubleClick: () => {
+                  navigate(`/admin/account-management/${record.id}`)
+                }, 
+              };
+            }}
             pagination={{
               position: ["bottomCenter"],
               total: tenantsData.data?.total || 0,

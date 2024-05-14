@@ -9,7 +9,12 @@ const useGetListAccountManagementQuery = (
 ) => ["getListAccountManagement", page, pagesize, searchVal];
 
 export const useGetListAccountManagement = (
-  params: { page: number; pagesize: number; searchVal: string },
+  params: {
+    page: number;
+    pagesize: number;
+    searchVal: string;
+    tenantId: string;
+  },
   queryOptions?: UseQueryOptions<ListAccountManagementResponse, Error>
 ) => {
   // TODO: GET Authentication
@@ -23,10 +28,13 @@ export const useGetListAccountManagement = (
     queryKey: getListAccountManagement,
     queryFn: async () => {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/tenants?page=${
+        `${import.meta.env.VITE_API_URL}/api/v1/users?page=${
           params.page
-        }&pagesize=${params.pagesize}&q=${params.searchVal}`
+        }&pagesize=${params.pagesize}&tenant_id=${
+          params.tenantId
+        }&role=MANAGER&role=USER&q=${params.searchVal}`
       );
+
       if (!res.ok) {
         const errMsg = await res.json();
         toast.error(errMsg?.detail || errMsg);

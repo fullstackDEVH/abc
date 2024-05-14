@@ -29,7 +29,7 @@ import { useDeleteAccountManagementMutation } from "@/services/admin/account-man
  */
 const AccountManagement = () => {
   const params = useParams();
-  const tenantId = params.tenantId;
+  const tenantId = params.tenantId ?? "";
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [selectedAccount, setSelectedAccount] =
@@ -44,10 +44,11 @@ const AccountManagement = () => {
   const accountsData = useGetListAccountManagement({
     page,
     pagesize,
+    tenantId,
     searchVal: searchParams.get("q") ?? "",
   });
   const deleteTenantMutation = useDeleteAccountManagementMutation();
-
+  
   const rowSelection = {
     selectedRowKeys,
     onChange: setSelectedRowKeys,

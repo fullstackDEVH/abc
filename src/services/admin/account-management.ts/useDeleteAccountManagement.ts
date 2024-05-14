@@ -4,10 +4,10 @@ export const useDeleteAccountManagementMutation = () => {
   const mutation = useMutation({
     mutationFn: async (ids: string[]) => {
       let params = "";
-      ids.forEach((id) => (params += `account_ids=${id}&`));
+      ids.forEach((id) => (params += `user_ids=${id}&`));
       params = params.slice(0, -1);
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/accounts?${params}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/users?${params}`,
         {
           method: "DELETE",
         }
