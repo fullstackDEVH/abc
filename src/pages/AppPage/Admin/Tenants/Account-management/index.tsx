@@ -54,7 +54,6 @@ const AccountManagement = () => {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
   };
-  console.log("accountsData : ", accountsData);
   
   useEffect(() => {
     if (page !== 1) setPage(1);

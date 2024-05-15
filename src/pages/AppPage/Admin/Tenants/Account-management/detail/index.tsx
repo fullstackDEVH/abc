@@ -59,6 +59,8 @@ const AccountManagemenDetail = ({
 
     values.tenant = +tenantId;
 
+    if (!values.password) values.password = null;
+
     swalFire({
       title: `Are you sure ${
         accountManagement ? "update" : "create"
@@ -198,7 +200,9 @@ const AccountManagemenDetail = ({
           </Typography.Title>
           <Form.Item
             name="password"
-            rules={[{ required: true, whitespace: true }]}
+            rules={[
+              { required: accountManagement ? false : true, whitespace: true },
+            ]}
           >
             <Input
               placeholder="Enter your password"
