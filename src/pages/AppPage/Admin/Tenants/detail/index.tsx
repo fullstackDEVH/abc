@@ -190,7 +190,7 @@ const TenantDetail = ({ tenant, onClose, onRefreshTenants }: IProps) => {
           </Dragger>
         </Form.Item>
 
-        <Form.Item className={`${tenant ? "mt-4" : ""}`}>
+        <Form.Item>
           <Typography.Title
             level={5}
             className="!text-[14px] !font-bold !leading-[22.4px] !text-[#475467]"

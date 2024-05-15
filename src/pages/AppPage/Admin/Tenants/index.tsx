@@ -100,7 +100,7 @@ const TenantsPage = () => {
           onRefreshTenants={tenantsData.refetch}
         />
       ) : null}
-      <div className="">
+      <div>
         <HeadingDetail
           breadcrumbRoutes={[
             {
