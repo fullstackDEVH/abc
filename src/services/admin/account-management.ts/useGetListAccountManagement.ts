@@ -5,8 +5,9 @@ import { ListAccountManagementResponse } from "@/models/admin/account-management
 const useGetListAccountManagementQuery = (
   page: number,
   pagesize: number,
-  searchVal: string
-) => ["getListAccountManagement", page, pagesize, searchVal];
+  searchVal: string,
+  tenantId: string
+) => [`getListAccountManagement-${tenantId}`, page, pagesize, searchVal];
 
 export const useGetListAccountManagement = (
   params: {
@@ -21,7 +22,8 @@ export const useGetListAccountManagement = (
   const getListAccountManagement = useGetListAccountManagementQuery(
     params.page,
     params.pagesize,
-    params.searchVal
+    params.searchVal,
+    params.tenantId
   );
 
   const response = useQuery<ListAccountManagementResponse, Error>({

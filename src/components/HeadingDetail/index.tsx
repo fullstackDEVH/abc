@@ -29,13 +29,13 @@ const HeadingDetail = ({ breadcrumbRoutes, buttonProps }: IProps) => {
 
   useEffect(() => {
     if (debouncedInput) {
-      searchParams.set("q", inputValue);
+      searchParams.set("q", debouncedInput);
       setSearchParams(searchParams);
     } else {
       searchParams.delete("q");
       setSearchParams(searchParams);
     }
-  }, [debouncedInput, searchParams, setSearchParams, inputValue]);
+  }, [debouncedInput, searchParams, setSearchParams]);
 
   return (
     <div className="bg-white -mx-8 px-8 py-[14px]">

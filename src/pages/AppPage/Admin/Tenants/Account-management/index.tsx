@@ -6,6 +6,7 @@ import { Link, useSearchParams, useParams } from "react-router-dom";
 
 // components
 import Loading from "@/components/Loading";
+import AccountManagemenDetail from "./detail";
 import fireSwal from "@/components/SweetAlert";
 import HeadingDetail from "@/components/HeadingDetail";
 
@@ -53,10 +54,10 @@ const AccountManagement = () => {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
   };
-
+  
   useEffect(() => {
     if (page !== 1) setPage(1);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagesize]);
 
   const handleDeletes = (deleteIds: string[]) => {
@@ -97,14 +98,20 @@ const AccountManagement = () => {
 
   const handleClosePopup = () => {
     closePopup();
-    // ignore islintrc when run build
     setSelectedAccount(null);
-    console.log(isOpen, typePopup, selectedAccount);
   };
 
   return (
     <>
       {accountsData.isFetching ? <Loading /> : null}
+      {isOpen && typePopup && ["create", "edit"].includes(typePopup) ? (
+        <AccountManagemenDetail
+          accountManagement={selectedAccount}
+          onClose={() => handleClosePopup()}
+          onRefreshAccounts={accountsData.refetch}
+        />
+      ) : null}
+
       <div className="">
         <HeadingDetail
           breadcrumbRoutes={[

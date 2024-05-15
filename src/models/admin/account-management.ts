@@ -4,6 +4,8 @@ export type CreataAccountManagementRequest = {
   name: string;
   email: string;
   role: ACCOUNT_ROLE;
+  tenant: number;
+  password: string | null;
 };
 
 export type AccountManagementRead = {
