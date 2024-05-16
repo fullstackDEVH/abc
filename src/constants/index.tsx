@@ -47,6 +47,7 @@ export const MenuAdmin = {
   DATA_STAFF: [
     {
       name: "QA Team",
+      path: "/admin/staff",
     },
     {
       name: "Events Checklist",
