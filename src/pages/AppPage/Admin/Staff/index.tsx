@@ -8,12 +8,18 @@ import { Link, useSearchParams } from "react-router-dom";
 import Loading from "@/components/Loading";
 import fireSwal from "@/components/SweetAlert";
 import HeadingDetail from "@/components/HeadingDetail";
+import StaffManagemenDetail from "./detail";
 
 // declarations supports
 import { getColumnsStaffManagement } from "./columns";
 
 // model
+import { ModalModeType } from "@/constants";
 import { SweetAlertResult } from "sweetalert2";
+import { ReadStaffManagement } from "@/models/admin/staff-management";
+
+// hook
+import usePopupMultiple from "@/hooks/useMultiplesPopup";
 
 // services
 import { useGetListStaffManagement } from "@/services/admin/staff-management/useGetListStaffManagement";
@@ -27,6 +33,11 @@ const StaffManagementPage = () => {
   const [page, setPage] = useState(1);
   const [pagesize, setPageSize] = useState(10);
   const [searchParams] = useSearchParams();
+  const [selectedStaff, setSelectedStaff] =
+    useState<ReadStaffManagement | null>(null);
+
+  const { isOpen, typePopup, openPopup, closePopup } =
+    usePopupMultiple<ModalModeType>();
 
   const staffData = useGetListStaffManagement({
     page,
@@ -76,13 +87,26 @@ const StaffManagementPage = () => {
     });
   };
 
-  const handleEdit = () => {
-    alert("edit record");
+  const handleEdit = (record: ReadStaffManagement) => {
+    openPopup("edit");
+    setSelectedStaff(record);
+  };
+
+  const handleClosePopup = () => {
+    setSelectedStaff(null);
+    closePopup();
   };
 
   return (
     <>
       {staffData.isFetching ? <Loading /> : null}
+      {isOpen && typePopup && ["create", "edit"].includes(typePopup) ? (
+        <StaffManagemenDetail
+          staffManagement={selectedStaff}
+          onClose={() => handleClosePopup()}
+          onRefreshStaff={staffData.refetch}
+        />
+      ) : null}
 
       <div>
         <HeadingDetail
@@ -96,7 +120,7 @@ const StaffManagementPage = () => {
           ]}
           buttonProps={{
             text: "Add new",
-            onClick: () => alert("button click"),
+            onClick: () => openPopup("create"),
           }}
         />
 
