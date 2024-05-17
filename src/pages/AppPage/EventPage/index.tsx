@@ -206,7 +206,7 @@ const EventPage = () => {
             maxTagCount="responsive"
             options={listArea.data?.data.map((area) => ({
               label: area.name,
-              value: area._id,
+              value: area.id,
             }))}
             placeholder="Areas ..."
             onChange={(value) => setFilterArea(value as string[])}

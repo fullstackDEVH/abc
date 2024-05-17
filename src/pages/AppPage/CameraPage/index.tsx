@@ -137,7 +137,7 @@ const CameraPage = () => {
             maxTagCount="responsive"
             options={listArea.data?.data?.map((area) => ({
               label: area.name,
-              value: area._id,
+              value: area.id,
             }))}
             placeholder="Areas ..."
             onChange={(value) => setSelectedArea(value as string[])}
@@ -156,7 +156,7 @@ const CameraPage = () => {
       <Table
         className="p-2 px-5"
         dataSource={listCamera?.data?.data || []}
-        rowKey="_id"
+        rowKey="id"
         columns={getColumns(handleView, handleEdit, handleDeletes)}
         rowSelection={rowSelection}
         pagination={{

@@ -1,5 +1,5 @@
 export type Area = {
-    _id: string;
+    id: string;
     name: string;
     address: string;
     updated_at: Date;

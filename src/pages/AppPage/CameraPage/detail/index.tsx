@@ -23,6 +23,7 @@ import swalFire from "@/components/SweetAlert";
 import { useCreateCameraMutation } from "@/services/camera/useCreateCamera";
 import { useUpdateCameraMutation } from "@/services/camera/useUpdateCamera";
 import toast from "react-hot-toast";
+import FlvPlayer from "@/components/FlvPlayer";
 
 type CameraModalProps = {
   toggle: () => void;
@@ -49,29 +50,28 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
     }).then((result) => {
       if (result.isConfirmed) {
         if (mode === "create") {
-          createCameraMutation.mutateAsync(values,
-            {
-              onSuccess: async() => {
-                toast.success(`Camera ${values.name} created`);
-                toggle();
-              },
-              onError: (err) => {
-                toast.error(err.message);
-              }
-            }
-          )
+          createCameraMutation.mutateAsync(values, {
+            onSuccess: async () => {
+              toast.success(`Camera ${values.name} created`);
+              toggle();
+            },
+            onError: (err) => {
+              toast.error(err.message);
+            },
+          });
         } else {
-          updateCameraMutation.mutateAsync({id: camera?._id as string, body: values},
+          updateCameraMutation.mutateAsync(
+            { id: camera?._id as string, body: values },
             {
-              onSuccess: async() => {
+              onSuccess: async () => {
                 toast.success(`Camera ${values.name} updated`);
                 toggle();
               },
               onError: (err) => {
                 toast.error(err.message);
-              }
+              },
             }
-          )
+          );
         }
       }
     });
@@ -81,13 +81,12 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
     ...camera,
     area: camera?.area
       ? {
-          value: (camera?.area as Area)?._id,
+          value: (camera?.area as Area)?.id,
           label: (camera?.area as Area)?.name,
         }
       : "",
   } as Camera;
 
-  
   const getImageURL = (file: File | string) => {
     if (!file) {
       return defaultScreenshot;
@@ -158,7 +157,7 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
                 disabled={mode === "info"}
                 options={areaList.data?.data.map((area) => ({
                   label: area.name,
-                  value: area._id,
+                  value: area.id,
                 }))}
               />
             </Form.Item>
@@ -185,14 +184,19 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
                   form.setFieldValue("screenshot_url", e.file);
                 }}
               >
-                <Image
-                  className={`rounded-lg ${mode === "info" ? "": "image"}`}
-                  preview={false}
-                  src={getImageURL(watchScreenshot)}
-                />
-                {mode !== "info" && <Button className="middle">
-                  <UploadCloud size={25} />
-                </Button>}
+                {mode === "info" && <FlvPlayer url={camera?.url} />}
+                {mode !== "info" && (
+                  <>
+                    <Image
+                      className="rounded-lg image"
+                      preview={false}
+                      src={getImageURL(watchScreenshot)}
+                    />
+                    <Button className="middle">
+                      <UploadCloud size={25} />
+                    </Button>
+                  </>
+                )}
               </Upload>
             </Form.Item>
           </Col>
