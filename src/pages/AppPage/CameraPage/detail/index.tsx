@@ -61,7 +61,7 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
           });
         } else {
           updateCameraMutation.mutateAsync(
-            { id: camera?._id as string, body: values },
+            { id: camera?.id as string, body: values },
             {
               onSuccess: async () => {
                 toast.success(`Camera ${values.name} updated`);

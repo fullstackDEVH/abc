@@ -85,7 +85,7 @@ export const getColumns = (
             size="small"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDeletes([record._id])}
+            onClick={() => handleDeletes([record.id])}
           />
         </div>
       ),

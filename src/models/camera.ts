@@ -3,7 +3,7 @@ import { Area } from "./area";
 import { DefaultOptionType } from "antd/es/select";
 
 export type Camera = {
-    _id: string;
+    id: string;
     name: string;
     url: string;
     screenshot_url: string | File | null;

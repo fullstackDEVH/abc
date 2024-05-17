@@ -118,7 +118,7 @@ const AreaPage = () => {
       <Table
         className="p-2 px-5"
         dataSource={areaData?.data?.data || []}
-        rowKey="_id"
+        rowKey="id"
         columns={getColumns(handleEdit, handleDeletes)}
         rowSelection={rowSelection}
         pagination={{
