@@ -46,7 +46,7 @@ export const getColumns = (handleEdit: AreaActionFn, handleDelete: (ids: string[
             size="small"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDelete([record._id])}
+            onClick={() => handleDelete([record.id])}
           />
         </div>
       ),

@@ -24,7 +24,7 @@ const AsyncSelect = () => {
       filterOption={false}
       options={listArea.data?.data?.map((area) => ({
         label: area.name,
-        value: area._id,
+        value: area.id,
       }))}
       maxTagCount="responsive"
       placeholder="Areas ..."

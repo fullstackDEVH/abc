@@ -43,7 +43,7 @@ const AreaDetailModal: FC<AreaModalProps> = (props) => {
             }
           )
         } else {
-          updateAreaMutation.mutateAsync({id: area?._id as string, body: values},
+          updateAreaMutation.mutateAsync({id: area?.id as string, body: values},
             {
               onSuccess: async() => {
                 toast.success(`Area ${values.name} updated`);
