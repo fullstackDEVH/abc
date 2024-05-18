@@ -1,4 +1,5 @@
 import "./index.css";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import logoLogin from "@/assets/logo_login.svg";
@@ -8,8 +9,11 @@ import { Button, Checkbox, Form, FormProps, Input, Typography } from "antd";
 import { UserLoginRequest, UserLoginResponse } from "@/models/user";
 
 // services
-import { setToken } from "@/utils/sesstionStorage";
 import { useUserLoginMutation } from "@/services/auth/useUserLogin";
+
+// redux
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { setCredentials } from "@/redux/slice/authSlice";
 
 const validateMessages = {
   required: "${label} is required!",
@@ -21,16 +25,17 @@ const validateMessages = {
 const LoginPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { access_token, user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   const userLoginMutation = useUserLoginMutation();
-  
+
   const onFinish: FormProps<UserLoginRequest>["onFinish"] = (
     values: UserLoginRequest
   ) => {
     userLoginMutation.mutateAsync(values, {
       onSuccess: async (data: UserLoginResponse) => {
-        setToken(data.access_token);
-        navigate("/");
+        dispatch(setCredentials(data));
         toast.success(`User login successfully.`);
       },
       onError: (err) => {
@@ -45,6 +50,10 @@ const LoginPage = () => {
     console.log("Failed:", errorInfo);
     toast.error(`Please revalidate the values of the entered fields?`);
   };
+
+  useEffect(() => {
+    if (access_token || user) navigate("/");
+  }, [access_token, user, navigate]);
 
   return (
     <div className="flex_center flex-col w-screen h-screen">

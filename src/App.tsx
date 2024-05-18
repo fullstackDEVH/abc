@@ -1,13 +1,21 @@
-import { ConfigProvider } from "antd";
 import "./App.css";
-import { Suspense, lazy } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { RoutePath } from "@/routes/path";
-import AuthRoute from "@/routes/AuthRoute";
-import AppRoute from "@/routes/AppRoute";
+import { ConfigProvider } from "antd";
+import { Suspense, lazy, useEffect } from "react";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+
 import AppLayout from "@/layout";
 import AdminLayout from "@/layout/Admin";
 
+// redux
+import { useAppDispatch, useAppSelector } from "./redux/hook";
+import { getCurrentUserAsyncThunk } from "./redux/action/authAction";
+
+// routes
+import { RoutePath } from "@/routes/path";
+import AuthRoute from "@/routes/AuthRoute";
+import AppRoute from "@/routes/AppRoute";
+
+// components
 const LoginPage = lazy(() => import("@/pages/AuthPage/LoginPage"));
 const ForgotPassPage = lazy(() => import("@/pages/AuthPage/ForgotPassPage"));
 const RegisterPage = lazy(() => import("@/pages/AuthPage/RegisterPage"));
@@ -90,6 +98,18 @@ const adminRoutes = [
 ];
 
 function App() {
+  const { access_token, user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (access_token && !user) {
+      dispatch(getCurrentUserAsyncThunk(access_token));
+    } else if (!access_token) {
+      navigate("/login");
+    }
+  }, [access_token, user, dispatch, navigate]);
+
   return (
     <ConfigProvider
       theme={{
