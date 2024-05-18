@@ -52,8 +52,6 @@ export const getColumnsStaffManagement = (
       },
       render: (_, { role }) => {
         let convertVisible: { text: string; color: string } | null = null;
-        console.log(role);
-
         switch (role) {
           case "ADMIN":
             convertVisible = { text: "Admin", color: "text-[#2A4CFF]" };

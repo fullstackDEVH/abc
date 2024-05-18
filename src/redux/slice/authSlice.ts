@@ -1,5 +1,5 @@
 import { ReadUserResponse, UserLoginResponse } from "@/models/user";
-import { getToken, setToken } from "@/utils/sesstionStorage";
+import { getToken, removeToken, setToken } from "@/utils/sesstionStorage";
 import { createSlice } from "@reduxjs/toolkit";
 import { getCurrentUserAsyncThunk } from "../action/authAction";
 
@@ -28,16 +28,18 @@ const authSlice = createSlice({
         payload: UserLoginResponse;
       }
     ) => {
+      state.success = true;
       state.user = action.payload.user;
       state.access_token = action.payload.access_token;
       setToken(action.payload.access_token ?? "");
     },
     userLogout: (state) => {
-      state.access_token = null;
       state.user = null;
-      state.success = false;
       state.error = null;
       state.loading = false;
+      state.success = false;
+      state.access_token = null;
+      removeToken();
     },
   },
   extraReducers: (builder) => {
@@ -61,9 +63,12 @@ const authSlice = createSlice({
     builder.addCase(getCurrentUserAsyncThunk.rejected, (state, action) => {
       state.success = false;
       state.error = action.payload as string;
+      state.user = null;
+      state.access_token = null;
+      removeToken();
     });
   },
 });
 
-export const { setCredentials } = authSlice.actions;
+export const { setCredentials, userLogout } = authSlice.actions;
 export default authSlice.reducer;

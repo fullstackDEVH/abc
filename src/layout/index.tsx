@@ -1,5 +1,6 @@
-import { Avatar, Layout, Menu } from "antd";
+import "./index.css";
 import { FC } from "react";
+import { Avatar, Layout, Menu } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import logoIMG from "@/assets/logo.png";
 import {
@@ -9,7 +10,10 @@ import {
   NotificationOutlined,
 } from "@ant-design/icons";
 import { RoutePath } from "@/routes/path";
-import "./index.css";
+
+// redux
+import { useAppDispatch } from "@/redux/hook";
+import { userLogout } from "@/redux/slice/authSlice";
 
 const { Content, Footer, Header } = Layout;
 
@@ -38,6 +42,7 @@ const menus = [
 
 const AppLayout: FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const pathName = window.location.pathname;
 
   return (
@@ -62,7 +67,7 @@ const AppLayout: FC = () => {
             onSelect={(e) => navigate(e.key as string)}
           />
           <span>Admin</span>
-          <div className="px-2">
+          <div className="px-2" onClick={() => dispatch(userLogout())}>
             <Avatar className=" bg-[#fde3cf] text-[#f56a00]">A</Avatar>
           </div>
         </div>

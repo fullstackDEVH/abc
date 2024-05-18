@@ -1,5 +1,7 @@
 import { Tenant } from "./admin/tenant";
 
+export type USER_ROLE = "ADMIN" | "QA_USER" | "MANAGER" | "USER";
+
 export type UserLoginRequest = {
   email: string;
   password: string;
@@ -13,7 +15,7 @@ export type ReadUserResponse = {
   tenant: Tenant;
   assigned_tenants: unknown[];
   assigned_araes: unknown[];
-  role: string;
+  role: USER_ROLE;
   created_at: string;
   updated_at: string;
 };
