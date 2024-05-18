@@ -1,0 +1,19 @@
+.ant-form-item-control-input-content > input {
+  height: 48px;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  border-radius: 12px;
+  border-color: #e2e8f0;
+}
+
+.checkbox_forgot .ant-form-item-control-input {
+  min-height: 22px;
+}
+
+.checkbox_forgot .ant-form-item-control-input-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
