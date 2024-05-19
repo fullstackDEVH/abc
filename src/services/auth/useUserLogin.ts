@@ -1,12 +1,11 @@
+import { UserLoginRequest } from "@/models/user";
 import { useMutation } from "@tanstack/react-query";
-import { CreateStaffManagementRequest } from "@/models/admin/staff-management";
-import { fetchWithAuth } from "@/utils/fetchAuth";
 
-export const useCreateStaffManagementMutation = () => {
+export const useUserLoginMutation = () => {
   const mutation = useMutation({
-    mutationFn: async (data: CreateStaffManagementRequest) => {
-      const res = await fetchWithAuth(
-        `${import.meta.env.VITE_API_URL}/api/v1/users`,
+    mutationFn: async (data: UserLoginRequest) => {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/auth/login`,
         {
           method: "POST",
           headers: {
@@ -15,7 +14,6 @@ export const useCreateStaffManagementMutation = () => {
           body: JSON.stringify(data),
         }
       );
-
       if (!res.ok) {
         const errMsg = await res.json();
         if (errMsg.detail) {
@@ -23,9 +21,10 @@ export const useCreateStaffManagementMutation = () => {
         }
         throw new Error(errMsg);
       }
-      const staff = await res.json();
-      return staff;
+      const user = await res.json();
+      return user;
     },
   });
+  
   return mutation;
 };

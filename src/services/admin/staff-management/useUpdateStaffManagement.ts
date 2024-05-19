@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { UpdateStaffManagementRequest } from "@/models/admin/staff-management";
+import { fetchWithAuth } from "@/utils/fetchAuth";
 
 export const useUpdateStaffManagementMutation = () => {
   const mutation = useMutation({
     mutationFn: async (data: UpdateStaffManagementRequest) => {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${import.meta.env.VITE_API_URL}/api/v1/users/${data.id}`,
         {
           method: "PUT",

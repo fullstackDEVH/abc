@@ -1,4 +1,5 @@
 import { EventStatus, Event } from "@/models/event";
+import { fetchWithAuth } from "@/utils/fetchAuth";
 import { useInfiniteQuery, UseInfiniteQueryOptions } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -45,7 +46,7 @@ export const useGetListEvent = (
                 if (params.last_id) {
                     queryUrl += `&last_id=${params.last_id}`
                 }
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/events?${queryUrl}`)
+                const res = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/v1/events?${queryUrl}`)
                 if (!res.ok) {
                     const errMsg = await res.json();
                     toast.error(errMsg?.detail || errMsg);

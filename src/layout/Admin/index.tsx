@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { Avatar, Layout } from "antd";
+import { Layout } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 
 // components
+import Avatar from "@/components/Avatar";
 import Dropdown from "@/components/Dropdown/index";
 
 // declarations supports
@@ -22,7 +23,7 @@ const AdminLayout: FC = () => {
       <Header className="flex justify-between bg-white h-[77px] px-8 pt-3 pb-2 border-b-2">
         <div
           className="flex items-center cursor-pointer"
-          onClick={() => navigate(RoutePath.Tenants)}
+          onClick={() => navigate(RoutePath.Home)}
         >
           <img className="p-2" src={logoIMG} width={198} height={42} />
         </div>
@@ -39,12 +40,8 @@ const AdminLayout: FC = () => {
             />
           </div>
 
-          <div className="flex">
-            <div className="pl-8 flex_center gap-[16px]">
-              <Avatar className="w-[42px] h-[42px] cursor-pointer bg-[#fde3cf] text-[#f56a00]">
-                A
-              </Avatar>
-            </div>
+          <div className="pl-8 flex_center">
+            <Avatar />
           </div>
         </div>
       </Header>

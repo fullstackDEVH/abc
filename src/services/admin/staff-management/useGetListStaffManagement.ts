@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { ListStaffManagementResponse } from "@/models/admin/staff-management";
+import { fetchWithAuth } from "@/utils/fetchAuth";
 
 const useGetListStaffManagementQuery = (
   page: number,
@@ -26,7 +27,7 @@ export const useGetListStaffManagement = (
   const response = useQuery<ListStaffManagementResponse, Error>({
     queryKey: getListStaffManagement,
     queryFn: async () => {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${import.meta.env.VITE_API_URL}/api/v1/users?page=${
           params.page
         }&pagesize=${params.pagesize}&role=ADMIN&role=QA_USER&q=${

@@ -1,15 +1,22 @@
-import { Avatar, Layout, Menu } from "antd";
+import "./index.css";
 import { FC } from "react";
+import { Layout, Menu } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
-import logoIMG from "@/assets/logo.png";
 import {
   BankOutlined,
   CameraOutlined,
   LaptopOutlined,
   NotificationOutlined,
 } from "@ant-design/icons";
+
+// declarations supports
 import { RoutePath } from "@/routes/path";
-import "./index.css";
+
+// components
+import Avatar from "@/components/Avatar";
+
+import logoIMG from "@/assets/logo.png";
+import { useAppSelector } from "@/redux/hook";
 
 const { Content, Footer, Header } = Layout;
 
@@ -39,6 +46,7 @@ const menus = [
 const AppLayout: FC = () => {
   const navigate = useNavigate();
   const pathName = window.location.pathname;
+  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <Layout className="h-screen">
@@ -47,11 +55,19 @@ const AppLayout: FC = () => {
           className="flex w-1/2 items-center cursor-pointer"
           onClick={() => navigate(RoutePath.Home)}
         >
-          <img className="p-2" src={logoIMG} width={70} />
+          <img
+            className="p-2"
+            src={
+              user?.tenant?.logo
+                ? `${import.meta.env.VITE_API_URL}/api/v1/blobs/${user.tenant.logo}`
+                : logoIMG
+            }
+            width={70}
+          />
           <p className="font-bold text-xl pl-3 truncate">EMagic Eyes</p>
         </div>
 
-        <div className="flex w-full">
+        <div className="flex_center w-full">
           <Menu
             items={menus}
             className="w-full pr-10 justify-end"
@@ -61,9 +77,8 @@ const AppLayout: FC = () => {
             ]}
             onSelect={(e) => navigate(e.key as string)}
           />
-          <span>Admin</span>
           <div className="px-2">
-            <Avatar className=" bg-[#fde3cf] text-[#f56a00]">A</Avatar>
+            <Avatar />
           </div>
         </div>
       </Header>

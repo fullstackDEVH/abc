@@ -1,3 +1,4 @@
+import { fetchWithAuth } from "@/utils/fetchAuth"
 import { useMutation } from "@tanstack/react-query"
 
 export const useDeleteAreaMutation = () => {
@@ -7,7 +8,7 @@ export const useDeleteAreaMutation = () => {
             ids.forEach(id => params += `area_ids=${id}&`)
             console.log(params)
             params = params.slice(0, -1); 
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/areas?${params}`, {
+            const res = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/v1/areas?${params}`, {
                 method: 'DELETE',
                 
             })
