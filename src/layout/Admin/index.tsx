@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { Avatar, Layout } from "antd";
+import { Layout } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 
 // components
+import Avatar from "@/components/Avatar";
 import Dropdown from "@/components/Dropdown/index";
 
 // declarations supports
@@ -11,16 +12,11 @@ import { RoutePath } from "@/routes/path";
 
 // icons
 import logoIMG from "@/assets/logo_emg_admin.svg";
-import { userLogout } from "@/redux/slice/authSlice";
-
-// redux
-import { useAppDispatch } from "@/redux/hook";
 
 const { Content, Footer, Header } = Layout;
 
 const AdminLayout: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   return (
     <Layout className="h-screen inter_font">
@@ -44,15 +40,8 @@ const AdminLayout: FC = () => {
             />
           </div>
 
-          <div className="flex">
-            <div className="pl-8 flex_center gap-[16px]">
-              <Avatar
-                className="w-[42px] h-[42px] cursor-pointer bg-[#fde3cf] text-[#f56a00]"
-                onClick={() => dispatch(userLogout())}
-              >
-                A
-              </Avatar>
-            </div>
+          <div className="pl-8 flex_center">
+            <Avatar />
           </div>
         </div>
       </Header>

@@ -1,19 +1,21 @@
 import "./index.css";
 import { FC } from "react";
-import { Avatar, Layout, Menu } from "antd";
+import { Layout, Menu } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
-import logoIMG from "@/assets/logo.png";
 import {
   BankOutlined,
   CameraOutlined,
   LaptopOutlined,
   NotificationOutlined,
 } from "@ant-design/icons";
+
+// declarations supports
 import { RoutePath } from "@/routes/path";
 
-// redux
-import { useAppDispatch } from "@/redux/hook";
-import { userLogout } from "@/redux/slice/authSlice";
+// components
+import Avatar from "@/components/Avatar";
+
+import logoIMG from "@/assets/logo.png";
 
 const { Content, Footer, Header } = Layout;
 
@@ -42,7 +44,6 @@ const menus = [
 
 const AppLayout: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const pathName = window.location.pathname;
 
   return (
@@ -56,7 +57,7 @@ const AppLayout: FC = () => {
           <p className="font-bold text-xl pl-3 truncate">EMagic Eyes</p>
         </div>
 
-        <div className="flex w-full">
+        <div className="flex_center w-full">
           <Menu
             items={menus}
             className="w-full pr-10 justify-end"
@@ -66,9 +67,8 @@ const AppLayout: FC = () => {
             ]}
             onSelect={(e) => navigate(e.key as string)}
           />
-          <span>Admin</span>
-          <div className="px-2" onClick={() => dispatch(userLogout())}>
-            <Avatar className=" bg-[#fde3cf] text-[#f56a00]">A</Avatar>
+          <div className="px-2">
+            <Avatar />
           </div>
         </div>
       </Header>
