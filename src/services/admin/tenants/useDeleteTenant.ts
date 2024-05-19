@@ -1,3 +1,4 @@
+import { fetchWithAuth } from "@/utils/fetchAuth";
 import { useMutation } from "@tanstack/react-query";
 
 export const useDeleteTenantMutation = () => {
@@ -6,7 +7,7 @@ export const useDeleteTenantMutation = () => {
       let params = "";
       ids.forEach((id) => (params += `tenant_ids=${id}&`));
       params = params.slice(0, -1);
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${import.meta.env.VITE_API_URL}/api/v1/tenants?${params}`,
         {
           method: "DELETE",

@@ -1,4 +1,5 @@
 import { ListTenantResponse } from "@/models/admin/tenant";
+import { fetchWithAuth } from "@/utils/fetchAuth";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -21,7 +22,7 @@ export const useGetListTenants = (
   const response = useQuery<ListTenantResponse, Error>({
     queryKey: getListTenantKey,
     queryFn: async () => {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${import.meta.env.VITE_API_URL}/api/v1/tenants?page=${
           params.page
         }&pagesize=${params.pagesize}&q=${params.searchVal}`

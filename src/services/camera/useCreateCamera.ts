@@ -1,10 +1,11 @@
 import { Camera } from "@/models/camera"
+import { fetchWithAuth } from "@/utils/fetchAuth"
 import { useMutation } from "@tanstack/react-query"
 
 export const useCreateCameraMutation = () => {
     const mutation = useMutation({
         mutationFn: async (data: Camera) => {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/cameras`, {
+            const res = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/v1/cameras`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

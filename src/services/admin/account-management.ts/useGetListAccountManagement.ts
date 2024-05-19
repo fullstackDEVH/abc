@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { ListAccountManagementResponse } from "@/models/admin/account-management";
+import { fetchWithAuth } from "@/utils/fetchAuth";
 
 const useGetListAccountManagementQuery = (
   page: number,
@@ -29,7 +30,7 @@ export const useGetListAccountManagement = (
   const response = useQuery<ListAccountManagementResponse, Error>({
     queryKey: getListAccountManagement,
     queryFn: async () => {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${import.meta.env.VITE_API_URL}/api/v1/users?page=${
           params.page
         }&pagesize=${params.pagesize}&tenant_id=${

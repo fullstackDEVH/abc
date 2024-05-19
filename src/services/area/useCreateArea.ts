@@ -1,10 +1,11 @@
 import { CreataAreaRequest } from "@/models/area"
+import { fetchWithAuth } from "@/utils/fetchAuth"
 import { useMutation } from "@tanstack/react-query"
 
 export const useCreateAreaMutation = () => {
     const mutation = useMutation({
         mutationFn: async (data: CreataAreaRequest) => {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/areas`, {
+            const res = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/v1/areas`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

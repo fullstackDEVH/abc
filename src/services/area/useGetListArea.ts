@@ -1,4 +1,5 @@
 import { ListAreaResponse } from "@/models/area";
+import { fetchWithAuth } from "@/utils/fetchAuth";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -14,7 +15,7 @@ export const useGetListArea = (
         {
             queryKey: getListAreaKey,
             queryFn: async () => {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/areas?page=${params.page}&pagesize=${params.pagesize}&q=${params.searchVal}`)
+                const res = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/v1/areas?page=${params.page}&pagesize=${params.pagesize}&q=${params.searchVal}`)
                 if (!res.ok) {
                     const errMsg = await res.json();
                     toast.error(errMsg?.detail || errMsg);
