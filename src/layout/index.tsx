@@ -16,6 +16,7 @@ import { RoutePath } from "@/routes/path";
 import Avatar from "@/components/Avatar";
 
 import logoIMG from "@/assets/logo.png";
+import { useAppSelector } from "@/redux/hook";
 
 const { Content, Footer, Header } = Layout;
 
@@ -45,6 +46,7 @@ const menus = [
 const AppLayout: FC = () => {
   const navigate = useNavigate();
   const pathName = window.location.pathname;
+  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <Layout className="h-screen">
@@ -53,7 +55,15 @@ const AppLayout: FC = () => {
           className="flex w-1/2 items-center cursor-pointer"
           onClick={() => navigate(RoutePath.Home)}
         >
-          <img className="p-2" src={logoIMG} width={70} />
+          <img
+            className="p-2"
+            src={
+              user?.tenant?.logo
+                ? `${import.meta.env.VITE_API_URL}/api/v1/blobs/${user.tenant.logo}`
+                : logoIMG
+            }
+            width={70}
+          />
           <p className="font-bold text-xl pl-3 truncate">EMagic Eyes</p>
         </div>
 

@@ -13,6 +13,7 @@ export type ReadUserResponse = {
   phone: string;
   name: string;
   tenant: Tenant;
+  avatar?: string;
   assigned_tenants: unknown[];
   assigned_araes: unknown[];
   role: USER_ROLE;

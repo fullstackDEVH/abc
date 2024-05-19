@@ -11,9 +11,9 @@ const Avatar = () => {
       <div className="flex_center overflow-hidden w-11 h-11">
         <img
           src={
-            user?.tenant?.logo
+            user?.avatar
               ? `${import.meta.env.VITE_API_URL}/api/v1/blobs/${
-                  user.tenant.logo
+                  user.avatar
                 }`
               : avatarDefault
           }
