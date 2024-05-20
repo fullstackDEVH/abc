@@ -2,7 +2,9 @@ import FlvJs from "flv.js";
 import { FC, useEffect, useRef } from "react";
 
 type FlvPlayerProp = {
+  type?: string;
   url?: string;
+  className?: string;
 };
 const FlvPlayer: FC<FlvPlayerProp> = (props) => {
   const ref = useRef<HTMLVideoElement>(null);
@@ -10,7 +12,7 @@ const FlvPlayer: FC<FlvPlayerProp> = (props) => {
     if (ref.current === null || props.url === null) return;
     const flvPlayer = FlvJs.createPlayer(
       {
-        type: "flv",
+        type: props.type || "flv",
         isLive: true,
         url: props.url,
       },
@@ -32,8 +34,8 @@ const FlvPlayer: FC<FlvPlayerProp> = (props) => {
     flvPlayer.load();
     flvPlayer.play();
     console.log(flvPlayer);
-  }, [props.url]);
-  return <video ref={ref} controls />;
+  }, [props]);
+  return <video className={props.className} ref={ref} controls />;
 };
 
 export default FlvPlayer;
