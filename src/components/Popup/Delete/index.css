@@ -1,0 +1,3 @@
+.btn_styles {
+  @apply text-[16px] font-semibold rounded-lg p-[10px] shadow-[0px_1px_2px_0px_#1018280D];
+}

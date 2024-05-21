@@ -6,8 +6,6 @@ import { useSearchParams } from "react-router-dom";
 
 // components
 import Loading from "@/components//Loading";
-import { SweetAlertResult } from "sweetalert2";
-import fireSwal from "@/components/SweetAlert";
 import StaffCustomerManagemenDetail from "./detail";
 import Heading from "@/components/HeadingDetail/User/Heading";
 import { ReadStaffManagement } from "@/models/admin/staff-management";
@@ -25,6 +23,7 @@ import { useDeleteStaffManagementMutation } from "@/services/admin/staff-managem
 import { getColumnsStaff } from "./columns";
 import { ModalModeType } from "@/constants";
 import usePopupMultiple from "@/hooks/useMultiplesPopup";
+import PopupDelete from "@/components/Popup/Delete";
 
 const StaffManager = () => {
   const [page, setPage] = useState(1);
@@ -54,35 +53,32 @@ const StaffManager = () => {
     onChange: setSelectedRowKeys,
   };
 
-  const handleDeletes = (deleteIds: string[]) => {
+  const handleDeletes = (deleteIds: string[]): void => {
+    console.log(deleteIds);
     if (deleteIds.length == 0) {
       return;
     }
 
-    fireSwal({
-      title: "Are you sure?",
-      text: `Delete ${deleteIds.length} item${
-        deleteIds.length > 1 ? "s" : ""
-      }?`,
-      icon: "warning",
-    }).then((result: SweetAlertResult) => {
-      if (result.isConfirmed) {
-        deleteStaffMutation.mutateAsync(deleteIds, {
-          onSuccess: () => {
-            setSelectedRowKeys([]);
-            staffData.refetch();
-            toast.success(
-              `${deleteIds.length} item${
-                deleteIds.length > 1 ? "s" : ""
-              } has been deleted.`
-            );
-          },
-          onError: (err) => {
-            toast.error(err.message);
-          },
-        });
-      }
-    });
+    if (typePopup === "delete" && isOpen) {
+      deleteStaffMutation.mutateAsync(deleteIds, {
+        onSuccess: () => {
+          setSelectedRowKeys([]);
+          staffData.refetch();
+          closePopup();
+          toast.success(
+            `${deleteIds.length} item${
+              deleteIds.length > 1 ? "s" : ""
+            } has been deleted.`
+          );
+        },
+        onError: (err) => {
+          toast.error(err.message);
+        },
+      });
+    } else {
+      setSelectedRowKeys((pre) => [...pre, ...deleteIds]);
+      openPopup("delete");
+    }
   };
 
   const handleEdit = (record: ReadStaffManagement) => {
@@ -127,6 +123,21 @@ const StaffManager = () => {
           staffManagement={selectedStaff}
           onClose={() => handleClosePopup()}
           onRefreshStaff={staffData.refetch}
+        />
+      ) : null}
+
+      {isOpen && typePopup && ["delete"].includes(typePopup) ? (
+        <PopupDelete
+          propButtonCancel={{
+            onClick: () => {
+              closePopup();
+            },
+          }}
+          propButtonOK={{
+            onClick: () => {
+              handleDeletes(selectedRowKeys as string[]);
+            },
+          }}
         />
       ) : null}
       <div>
