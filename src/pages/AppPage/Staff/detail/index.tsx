@@ -33,7 +33,7 @@ const validateMessages = {
   },
 };
 
-const StaffManagemenDetail = ({
+const StaffCustomerManagemenDetail = ({
   staffManagement,
   onClose,
   onRefreshStaff,
@@ -92,9 +92,9 @@ const StaffManagemenDetail = ({
   return (
     <Modal
       className="inter_font"
-      title={staffManagement ? "Update QA members" : `Add QA members`}
+      title={staffManagement ? "Update account" : `Create account`}
       open={true}
-      width="615px"
+      width="457px"
       onOk={form.submit}
       maskClosable={false}
       onCancel={() => onClose()}
@@ -114,7 +114,7 @@ const StaffManagemenDetail = ({
         className:
           "w-full h-[48px] font-semibold text-base text-white bg-[#493CE7]",
       }}
-      okText="SUBMIT"
+      okText="OKE"
       cancelText="CANCEL"
     >
       <Form
@@ -124,9 +124,8 @@ const StaffManagemenDetail = ({
         onFinishFailed={onFinishFailed}
         initialValues={{ ...staffManagement }}
         validateMessages={validateMessages}
-        className="grid grid-cols-2 gap-6 my-6"
       >
-        <Form.Item className="mb-0">
+        <Form.Item className="mb-0 mt-6">
           <Typography.Title
             level={5}
             className="!text-[14px] !font-bold !leading-[22.4px] !text-[#0C1D46]"
@@ -140,7 +139,6 @@ const StaffManagemenDetail = ({
             />
           </Form.Item>
         </Form.Item>
-
         <Form.Item className="mb-0">
           <Typography.Title
             level={5}
@@ -193,8 +191,8 @@ const StaffManagemenDetail = ({
               placeholder="Choose role"
               value={staffManagement?.role}
               options={[
-                { label: "QA", value: "QA_USER" },
-                { label: "Admin", value: "ADMIN" },
+                { label: "MANAGER", value: "MANAGER" },
+                { label: "USER", value: "USER" },
               ]}
             />
           </Form.Item>
@@ -204,4 +202,4 @@ const StaffManagemenDetail = ({
   );
 };
 
-export default StaffManagemenDetail;
+export default StaffCustomerManagemenDetail;

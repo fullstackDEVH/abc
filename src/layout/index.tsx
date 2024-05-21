@@ -1,14 +1,7 @@
 import "./index.css";
 import { FC } from "react";
-import { Layout, Menu } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
-import {
-  AuditOutlined,
-  BankOutlined,
-  CameraOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-} from "@ant-design/icons";
+import { Layout } from "antd";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 // declarations supports
 import { RoutePath } from "@/routes/path";
@@ -16,8 +9,7 @@ import { RoutePath } from "@/routes/path";
 // components
 import Avatar from "@/components/Avatar";
 
-import logoIMG from "@/assets/logo.png";
-import { useAppSelector } from "@/redux/hook";
+import logoIMG from "@/assets/logo_customer.svg";
 
 const { Content, Footer, Header } = Layout;
 
@@ -25,71 +17,60 @@ const menus = [
   {
     label: "Dashboard",
     key: RoutePath.Dashboard,
-    icon: <LaptopOutlined />,
   },
   {
     label: "Events",
     key: RoutePath.Events,
-    icon: <NotificationOutlined />,
   },
   {
     label: "Cameras",
     key: RoutePath.Cameras,
-    icon: <CameraOutlined />,
   },
   {
     label: "Areas",
     key: RoutePath.Areas,
-    icon: <BankOutlined />,
-  },
-  {
-    label: "Areas",
-    key: RoutePath.Areas,
-    icon: <BankOutlined />,
   },
   {
     label: "Staff",
     key: RoutePath.ManagerStaff,
-    icon: <AuditOutlined />,
   },
 ];
 
 const AppLayout: FC = () => {
   const navigate = useNavigate();
   const pathName = window.location.pathname;
-  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <Layout className="h-screen">
-      <Header className="flex justify-between px-1 bg-white">
+      <Header className="flex justify-between bg-white h-[77px] px-[30px] pt-3 pb-2 border-b-2">
+        {/* logo */}
         <div
-          className="flex w-1/2 items-center cursor-pointer"
+          className="flex_center gap-[14px] cursor-pointer"
           onClick={() => navigate(RoutePath.Home)}
         >
-          <img
-            className="p-2"
-            src={
-              user?.tenant?.logo
-                ? `${import.meta.env.VITE_API_URL}/api/v1/blobs/${
-                    user.tenant.logo
-                  }`
-                : logoIMG
-            }
-            width={70}
-          />
-          <p className="font-bold text-xl pl-3 truncate">EMagic Eyes</p>
+          <img src={logoIMG} width={38} height={39} />
+          <p className="text-[#0F172A] text-[23.2px] leading-[29px] tracking-[-0.29px] font-extrabold">
+            Customer’s logo
+          </p>
         </div>
 
-        <div className="flex_center w-full">
-          <Menu
-            items={menus}
-            className="w-full pr-10 justify-end"
-            mode="horizontal"
-            selectedKeys={[
-              menus.find((menu) => pathName.includes(menu.key))?.key as string,
-            ]}
-            onSelect={(e) => navigate(e.key as string)}
-          />
+        {/* menu */}
+        <div className="flex justify-between items-center min-w-[60%]">
+          <div className="flex_center gap-5 px-9">
+            {menus.map((menu, index) => (
+              <Link
+                to={menu.key}
+                key={index}
+                className={`block ${
+                  pathName === menu.key
+                    ? "text-[#493CE7]"
+                    : "text-[#64748B] hover:text-[#493CE7]"
+                } text-[16px] leading-[19.36px] font-semibold transition-all p-[10px]`}
+              >
+                {menu.label}
+              </Link>
+            ))}
+          </div>
           <div className="px-2">
             <Avatar />
           </div>

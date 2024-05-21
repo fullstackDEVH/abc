@@ -1,15 +1,17 @@
 import "./index.css";
+import toast from "react-hot-toast";
 import { Key, useCallback, useState } from "react";
 import { Pagination, Select, Table } from "antd";
 import { useSearchParams } from "react-router-dom";
 
 // components
-import fireSwal from "@/components/SweetAlert";
-import Loading from "@/components//Loading";
-import { ReadStaffManagement } from "@/models/admin/staff-management";
-import { getColumnsStaff } from "./columns";
-import { useGetListStaffManagement } from "@/services/admin/staff-management/useGetListStaffManagement";
 import Heading from "./Heading";
+import Loading from "@/components//Loading";
+import { SweetAlertResult } from "sweetalert2";
+import fireSwal from "@/components/SweetAlert";
+import StaffCustomerManagemenDetail from "./detail";
+import { ReadStaffManagement } from "@/models/admin/staff-management";
+import { useGetListStaffManagement } from "@/services/admin/staff-management/useGetListStaffManagement";
 import MultipleSelect, {
   IItemFilterType,
 } from "@/components/Filter/MultipleSelect";
@@ -17,9 +19,12 @@ import MultipleSelect, {
 // icons
 import personGreyIcon from "@/assets/logo/person/person_grey.svg";
 import targetGreyIcon from "@/assets/logo/target/target_grey.svg";
-import toast from "react-hot-toast";
-import { SweetAlertResult } from "sweetalert2";
 import { useDeleteStaffManagementMutation } from "@/services/admin/staff-management/useDeleteStaffManagement";
+
+// supports decrations
+import { getColumnsStaff } from "./columns";
+import { ModalModeType } from "@/constants";
+import usePopupMultiple from "@/hooks/useMultiplesPopup";
 
 const StaffManager = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
@@ -28,6 +33,9 @@ const StaffManager = () => {
   const [searchParams] = useSearchParams();
   const [selectedStaff, setSelectedStaff] =
     useState<ReadStaffManagement | null>(null);
+
+  const { isOpen, typePopup, openPopup, closePopup } =
+    usePopupMultiple<ModalModeType>();
 
   const [selectedRecords, setSelectedRecords] = useState<ReadStaffManagement[]>(
     []
@@ -78,7 +86,7 @@ const StaffManager = () => {
   };
 
   const handleEdit = (record: ReadStaffManagement) => {
-    console.log(selectedStaff);
+    openPopup("edit");
     setSelectedStaff(record);
   };
 
@@ -105,10 +113,22 @@ const StaffManager = () => {
     setSelectedRecords([]);
   }, []);
 
+  const handleClosePopup = () => {
+    setSelectedStaff(null);
+    closePopup();
+  };
+
   return (
     <>
       {staffData.isFetching ? <Loading /> : null}
 
+      {isOpen && typePopup && ["create", "edit"].includes(typePopup) ? (
+        <StaffCustomerManagemenDetail
+          staffManagement={selectedStaff}
+          onClose={() => handleClosePopup()}
+          onRefreshStaff={staffData.refetch}
+        />
+      ) : null}
       <div>
         <Heading
           title="Tenant"
@@ -116,7 +136,7 @@ const StaffManager = () => {
           buttonProps={{
             text: "Add account",
             onClick: () => {
-              alert("create");
+              openPopup("create");
             },
           }}
         />
