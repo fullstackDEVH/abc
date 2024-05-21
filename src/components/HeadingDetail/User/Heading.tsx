@@ -11,7 +11,7 @@ interface IButtonProps {
 interface IProps {
   title: string;
   desc: string;
-  buttonProps: IButtonProps;
+  buttonProps?: IButtonProps;
 }
 
 const Heading = ({ title, desc, buttonProps }: IProps) => {
@@ -37,20 +37,22 @@ const Heading = ({ title, desc, buttonProps }: IProps) => {
             </div>
 
             {/* button */}
-            <div
-              className="p-3 bg-[#f0edff] hover:bg-[#d5d1eb] transition-colors rounded-lg flex_center gap-2 cursor-pointer"
-              onClick={buttonProps.onClick}
-            >
-              <button className="text-[#493CE7] text-[14px] font-semibold leading-[22.4px]">
-                {buttonProps.text}
-              </button>
-              <img
-                src={plusCircleIcon}
-                alt="plusCircleIcon"
-                width={24}
-                height={24}
-              />
-            </div>
+            {buttonProps ? (
+              <div
+                className="p-3 bg-[#f0edff] hover:bg-[#d5d1eb] transition-colors rounded-lg flex_center gap-2 cursor-pointer"
+                onClick={buttonProps.onClick}
+              >
+                <button className="text-[#493CE7] text-[14px] font-semibold leading-[22.4px]">
+                  {buttonProps.text}
+                </button>
+                <img
+                  src={plusCircleIcon}
+                  alt="plusCircleIcon"
+                  width={24}
+                  height={24}
+                />
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

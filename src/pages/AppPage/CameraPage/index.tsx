@@ -1,13 +1,7 @@
 import { useGetListArea } from "@/services/area/useGetListArea";
 import { useGetListCamera } from "@/services/camera/useGetListCamera";
-import {
-  DeleteOutlined,
-  DownloadOutlined,
-  PlusOutlined,
-  SearchOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
-import { Button, Input, Table, Typography, Select } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Input, Table, Select } from "antd";
 import { Key, useState } from "react";
 import fireSwal from "@/components/SweetAlert";
 import { getColumns } from "./columns";
@@ -18,6 +12,7 @@ import { ModalModeType } from "@/constants";
 import useDebounce from "@/hooks/useDebound";
 import { useDeleteCameraMutation } from "@/services/camera/useDeleteCamera";
 import toast from "react-hot-toast";
+import Heading from "@/components/HeadingDetail/User/Heading";
 
 const CameraPage = () => {
   const listArea = useGetListArea({ page: 1, pagesize: 10, searchVal: "" });
@@ -57,30 +52,32 @@ const CameraPage = () => {
           onSuccess: () => {
             setSelectedRowKeys([]);
             listCamera.refetch();
-            toast.success(`${deleteIds.length} item${
-              deleteIds.length > 1 ? "s" : ""
-            } has been deleted.`);
+            toast.success(
+              `${deleteIds.length} item${
+                deleteIds.length > 1 ? "s" : ""
+              } has been deleted.`
+            );
           },
           onError: (err) => {
             toast.error(err.message);
-          }
+          },
         });
       }
     });
   };
 
   const handleEdit = (record: Camera) => {
-    setModeModal('edit');
+    setModeModal("edit");
     setSelectedCamera(record);
   };
 
   const handleView = (record: Camera) => {
-    setModeModal('info');
+    setModeModal("info");
     setSelectedCamera(record);
   };
 
   const openCreateModal = () => {
-    setModeModal('create');
+    setModeModal("create");
     setSelectedCamera(null);
   };
 
@@ -93,39 +90,22 @@ const CameraPage = () => {
   return (
     <div>
       {modeModal && (
-        <CameraDetailModal camera={selectedCamera} mode={modeModal} toggle={handleCloseModal} />
+        <CameraDetailModal
+          camera={selectedCamera}
+          mode={modeModal}
+          toggle={handleCloseModal}
+        />
       )}
-      <div className="flex justify-between bg-white p-0 ">
-        <Typography.Title className="p-3 px-5" level={3}>
-          Camera Management
-        </Typography.Title>
-        <div className="content-center p-2 px-6 space-x-1">
-          {selectedRowKeys.length > 0 && (
-            <Button
-              type="primary"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => handleDeletes(selectedRowKeys as string[])}
-            >
-              Delete {selectedRowKeys.length} item
-              {selectedRowKeys.length > 1 ? "s" : ""}
-            </Button>
-          )}
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={openCreateModal}
-          >
-            Add
-          </Button>
-          <Button type="primary" icon={<UploadOutlined />}>
-            Import
-          </Button>
-          <Button type="primary" icon={<DownloadOutlined />}>
-            Export
-          </Button>
-        </div>
-      </div>
+      <Heading
+        title="Camera"
+        desc="Camera Management"
+        buttonProps={{
+          text: "Add camera",
+          onClick: () => {
+            openCreateModal();
+          },
+        }}
+      />
       <div className="p-2 px-5">
         <div className="flex justify-end w-full space-x-2">
           <Select
@@ -166,8 +146,8 @@ const CameraPage = () => {
           pageSizeOptions: ["10", "20", "50"],
           showSizeChanger: false,
           onChange(page, pageSize) {
-              setPage(page);
-              setPageSize(pageSize);
+            setPage(page);
+            setPageSize(pageSize);
           },
         }}
       />

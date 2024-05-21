@@ -28,7 +28,7 @@ const Avatar = () => {
         </div>
       </div>
 
-      <div className="absolute right-0 top-full min-w-[130px] transition-all origin-top-right opacity-0 scale-0 group-hover/avatar:opacity-100 group-hover/avatar:scale-100">
+      <div className="absolute z-40 right-0 top-full min-w-[130px] transition-all origin-top-right opacity-0 scale-0 group-hover/avatar:opacity-100 group-hover/avatar:scale-100">
         <div className="p-2 bg-white rounded-xl shadow-lg border border-[#EAECF0] overflow-hidden ">
           <div
             className="p-2 hover:bg-slate-200 transition-colors"

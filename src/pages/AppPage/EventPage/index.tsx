@@ -1,9 +1,4 @@
-import {
-  DeleteOutlined,
-  DownloadOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons";
-import { Typography, Button, Table, Select, DatePicker } from "antd";
+import { Table, Select, DatePicker } from "antd";
 import { Key, useEffect, useMemo, useState } from "react";
 import { SweetAlertResult } from "sweetalert2";
 import fireSwal from "@/components/SweetAlert";
@@ -15,6 +10,7 @@ import { getColumns } from "./columns";
 import { useGetListArea } from "@/services/area/useGetListArea";
 import EventGallery from "./gallery";
 import useEventSocket from "@/services/event/useEventSocket";
+import Heading from "@/components/HeadingDetail/User/Heading";
 
 const { RangePicker } = DatePicker;
 const EventPage = () => {
@@ -63,7 +59,7 @@ const EventPage = () => {
   const handleSocketEvent = (data: string) => {
     const event = JSON.parse(data);
     setSocketEvent(event);
-  }
+  };
 
   useMemo(() => {
     if (eventData?.data?.pages) {
@@ -74,9 +70,11 @@ const EventPage = () => {
 
   useMemo(() => {
     if (socketEvent) {
-      const newListEvent = [socketEvent, ...listEvent]
+      const newListEvent = [socketEvent, ...listEvent];
       if (selectedEvent) {
-        setSelectedEvent(newListEvent.find((event) => event._id === selectedEvent._id) || null);
+        setSelectedEvent(
+          newListEvent.find((event) => event._id === selectedEvent._id) || null
+        );
       }
       setListEvent(newListEvent);
       setSocketEvent(null);
@@ -91,31 +89,6 @@ const EventPage = () => {
   const handleEdit = (record: Event) => {
     setModeModal("edit");
     setSelectedEvent(record);
-  };
-
-  const handleDeletes = () => {
-    if (selectedRowKeys.length == 0) {
-      return;
-    }
-    fireSwal({
-      title: "Are you sure?",
-      text: `Delete ${selectedRowKeys.length} item${
-        selectedRowKeys.length > 1 ? "s" : ""
-      }?`,
-      icon: "warning",
-    }).then((result: SweetAlertResult) => {
-      if (result.isConfirmed) {
-        setSelectedRowKeys([]);
-        fireSwal({
-          title: "Deleted!",
-          showCancelButton: false,
-          text: `${selectedRowKeys.length} item${
-            selectedRowKeys.length > 1 ? "s" : ""
-          } has been deleted.`,
-          icon: "success",
-        });
-      }
-    });
   };
 
   const handleDelete = (record: Event) => {
@@ -151,36 +124,7 @@ const EventPage = () => {
           }}
         />
       )}
-      <div className="flex justify-between bg-white p-0 ">
-        <Typography.Title className="p-3 px-6" level={3}>
-          Events Management
-        </Typography.Title>
-        <div className="content-center p-2 px-6 space-x-1">
-          {selectedRowKeys.length > 0 && (
-            <Button
-              type="primary"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={handleDeletes}
-            >
-              Delete {selectedRowKeys.length} item
-              {selectedRowKeys.length > 1 ? "s" : ""}
-            </Button>
-          )}
-
-          <Button
-            type="primary"
-            icon={<ReloadOutlined />}
-            onClick={() => eventData.refetch()}
-          >
-            Refresh
-          </Button>
-
-          <Button type="primary" icon={<DownloadOutlined />}>
-            Export
-          </Button>
-        </div>
-      </div>
+      <Heading title="Event" desc="Event Management" />
       <div className="p-2 px-5">
         <div className="flex justify-end w-full space-x-2">
           <Select
