@@ -52,7 +52,6 @@ export const getColumnsStaff = (
           </div>
         );
       },
-
       dataIndex: "email",
       key: "email",
       width: "28%",

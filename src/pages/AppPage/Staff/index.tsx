@@ -5,11 +5,11 @@ import { Pagination, Select, Table } from "antd";
 import { useSearchParams } from "react-router-dom";
 
 // components
-import Heading from "./Heading";
 import Loading from "@/components//Loading";
 import { SweetAlertResult } from "sweetalert2";
 import fireSwal from "@/components/SweetAlert";
 import StaffCustomerManagemenDetail from "./detail";
+import Heading from "@/components/HeadingDetail/User/Heading";
 import { ReadStaffManagement } from "@/models/admin/staff-management";
 import { useGetListStaffManagement } from "@/services/admin/staff-management/useGetListStaffManagement";
 import MultipleSelect, {
@@ -27,12 +27,12 @@ import { ModalModeType } from "@/constants";
 import usePopupMultiple from "@/hooks/useMultiplesPopup";
 
 const StaffManager = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [page, setPage] = useState(1);
   const [pagesize, setPageSize] = useState(10);
   const [searchParams] = useSearchParams();
   const [selectedStaff, setSelectedStaff] =
     useState<ReadStaffManagement | null>(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
 
   const { isOpen, typePopup, openPopup, closePopup } =
     usePopupMultiple<ModalModeType>();
