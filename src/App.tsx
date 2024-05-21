@@ -25,6 +25,7 @@ const DashboardPage = lazy(() => import("@/pages/AppPage/DashboardPage"));
 const CameraPage = lazy(() => import("@/pages/AppPage/CameraPage"));
 const EventPage = lazy(() => import("@/pages/AppPage/EventPage"));
 const AreaPage = lazy(() => import("@/pages/AppPage/AreaPage"));
+const StaffManager = lazy(() => import("@/pages/AppPage/Staff"));
 
 const ProtectedRoute = lazy(() => import("@/components/Protected-router"));
 const RediectRouterByRole = lazy(() => import("@/components/Redirect-router"));
@@ -104,6 +105,15 @@ const appRoutes: RouteObject = {
         <ProtectedRoute element={<AreaPage />} roles={["USER", "MANAGER"]} />
       ),
     },
+    {
+      path: RoutePath.ManagerStaff,
+      element: (
+        <ProtectedRoute
+          element={<StaffManager />}
+          roles={["USER", "MANAGER"]}
+        />
+      ),
+    },
   ],
 };
 
@@ -127,7 +137,7 @@ const adminRoutes: RouteObject = {
       ),
     },
     {
-      path: RoutePath.Staff,
+      path: RoutePath.AdminStaff,
       element: (
         <ProtectedRoute element={<StaffAdminPage />} roles={["ADMIN"]} />
       ),

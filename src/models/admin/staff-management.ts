@@ -1,9 +1,9 @@
-type STAFF_ROLE = "QA_USER" | "ADMIN";
+import { USER_ROLE } from "../user";
 
 export type CreateStaffManagementRequest = {
   name: string;
   email: string;
-  role: STAFF_ROLE;
+  role: USER_ROLE;
   password: string | null;
 };
 

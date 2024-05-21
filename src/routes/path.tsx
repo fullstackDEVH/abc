@@ -7,12 +7,13 @@ export enum RoutePath {
   Events = "/events",
   Cameras = "/cameras",
   Areas = "/areas",
+  ManagerStaff = "/staff",
   NotFound = "/404",
   Forbidden = "/403",
 
   // admin site
   Tenants = "/admin/tenants",
   AccountManagement = "/admin/account-management/:tenantId",
-  Staff = "/admin/staff",
+  AdminStaff = "/admin/staff",
   EventsAdmin = "/admin/events",
 }

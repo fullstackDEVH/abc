@@ -7,7 +7,7 @@ import { Link, useSearchParams } from "react-router-dom";
 // components
 import Loading from "@/components/Loading";
 import fireSwal from "@/components/SweetAlert";
-import HeadingDetail from "@/components/HeadingDetail";
+import HeadingDetail from "@/components/HeadingDetail/Admin";
 import StaffManagemenDetail from "./detail";
 
 // declarations supports
@@ -43,6 +43,7 @@ const StaffManagementPage = () => {
     page,
     pagesize,
     searchVal: searchParams.get("q") ?? "",
+    roles: ["ADMIN", "QA_USER"],
   });
   const deleteStaffMutation = useDeleteStaffManagementMutation();
 

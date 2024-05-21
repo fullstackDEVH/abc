@@ -8,7 +8,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import TenantDetail from "./detail";
 import Loading from "@/components/Loading";
 import fireSwal from "@/components/SweetAlert";
-import HeadingDetail from "@/components/HeadingDetail";
+import HeadingDetail from "@/components/HeadingDetail/Admin";
 
 // declarations supports
 import { getColumnsTenant } from "./columns";

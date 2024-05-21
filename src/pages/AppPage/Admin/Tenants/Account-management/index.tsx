@@ -8,7 +8,7 @@ import { Link, useSearchParams, useParams } from "react-router-dom";
 import Loading from "@/components/Loading";
 import AccountManagemenDetail from "./detail";
 import fireSwal from "@/components/SweetAlert";
-import HeadingDetail from "@/components/HeadingDetail";
+import HeadingDetail from "@/components/HeadingDetail/Admin";
 
 // declarations supports
 import { ModalModeType } from "@/constants";

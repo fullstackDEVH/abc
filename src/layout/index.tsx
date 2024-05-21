@@ -3,6 +3,7 @@ import { FC } from "react";
 import { Layout, Menu } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import {
+  AuditOutlined,
   BankOutlined,
   CameraOutlined,
   LaptopOutlined,
@@ -41,6 +42,16 @@ const menus = [
     key: RoutePath.Areas,
     icon: <BankOutlined />,
   },
+  {
+    label: "Areas",
+    key: RoutePath.Areas,
+    icon: <BankOutlined />,
+  },
+  {
+    label: "Staff",
+    key: RoutePath.ManagerStaff,
+    icon: <AuditOutlined />,
+  },
 ];
 
 const AppLayout: FC = () => {
@@ -59,7 +70,9 @@ const AppLayout: FC = () => {
             className="p-2"
             src={
               user?.tenant?.logo
-                ? `${import.meta.env.VITE_API_URL}/api/v1/blobs/${user.tenant.logo}`
+                ? `${import.meta.env.VITE_API_URL}/api/v1/blobs/${
+                    user.tenant.logo
+                  }`
                 : logoIMG
             }
             width={70}
@@ -83,7 +96,7 @@ const AppLayout: FC = () => {
         </div>
       </Header>
       <Layout>
-        <Content className="h-full p-2 overflow-auto">
+        <Content className="h-full overflow-auto">
           <Outlet />
         </Content>
         <Footer className="text-right p-2 artice-font">
