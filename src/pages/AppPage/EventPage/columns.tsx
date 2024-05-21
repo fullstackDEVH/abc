@@ -1,5 +1,4 @@
 import { Area } from "@/models/area";
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, Image, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
@@ -7,6 +6,9 @@ import defaultScreenshot from "@/assets/images/screenshot.jpeg";
 import { Event } from "@/models/event";
 import { Camera } from "@/models/camera";
 import noImage from "@/assets/images/no_image.jpeg";
+
+import helpGreyIcon from "@/assets/logo/help/help_grey.svg";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 
 type EventActionFn = (record: Event) => void;
 
@@ -17,7 +19,20 @@ export const getColumns = (
 ): ColumnsType<Event> => {
   return [
     {
-      title: "",
+      title: "No",
+      dataIndex: "id",
+      width: "8%",
+      fixed: "left",
+      align: "left",
+      ellipsis: {
+        showTitle: true,
+      },
+      render: (_, __, index) => (
+        <div className="text-[#64748B] font-medium text-base">{index + 1}</div>
+      ),
+    },
+    {
+      title: "Image/video",
       dataIndex: "processed_image_url",
       align: "center",
       key: "processed_image_url",
@@ -36,30 +51,63 @@ export const getColumns = (
     {
       title: "Event type",
       dataIndex: "event_type",
+      align: "center",
       key: "event_type",
       width: "15%",
-      render: (event_type: string) => (<Tag color="blue">{event_type}</Tag>)
+      render: (event_type: string) => <Tag color="blue">{event_type}</Tag>,
     },
-    
+
     {
-      title: "Camera",
+      title: () => {
+        return (
+          <div className="flex_center gap-1">
+            Camera
+            <img src={helpGreyIcon} alt="helpGreyIcon" width={16} height={16} />
+          </div>
+        );
+      },
+      align: "center",
       dataIndex: "camera",
       key: "camera",
-      width: "30%",
-      render: (camera: Camera) => `${camera.name} - ${(camera.area as Area).name}`,
+      width: "25%",
+      render: (camera: Camera) =>
+        `${camera.name} - ${(camera.area as Area).name}`,
     },
     {
-        title: "Event Time",
-        dataIndex: "event_time",
-        key: "event_time",
-        width: "17%",
-        render: (date: Date) => dayjs(date).format("DD MMM YYYY HH:mm"),
+      title: () => {
+        return (
+          <div className="flex_center gap-1">
+            Area
+            <img src={helpGreyIcon} alt="helpGreyIcon" width={16} height={16} />
+          </div>
+        );
+      },
+      dataIndex: "email",
+      key: "email",
+      width: "28%",
+      align: "center",
+      ellipsis: {
+        showTitle: true,
+      },
+      render: (_, { camera }) => (
+        <div className="text-[#475467] text-sm">
+          {(camera.area as Area).name}
+        </div>
+      ),
     },
     {
-      title: "",
+      title: "Event Time",
+      dataIndex: "event_time",
+      key: "event_time",
+      align: "center",
+      width: "17%",
+      render: (date: Date) => dayjs(date).format("DD MMM YYYY HH:mm"),
+    },
+    {
+      title: "Action",
       dataIndex: "id",
       key: "id",
-      width: "12%",
+      width: "19.5%",
       align: "center",
       render: (_, record, index) => (
         <div className="space-x-2" key={index}>
@@ -75,7 +123,7 @@ export const getColumns = (
             icon={<EditOutlined />}
             onClick={(e) => {
               e.stopPropagation();
-              handleEdit(record)
+              handleEdit(record);
             }}
           />
           <Button
@@ -85,7 +133,7 @@ export const getColumns = (
             icon={<DeleteOutlined />}
             onClick={(e) => {
               e.stopPropagation();
-              handleDelete(record)
+              handleDelete(record);
             }}
           />
         </div>

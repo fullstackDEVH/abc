@@ -1,0 +1,36 @@
+/* table antd */
+.ant-table-thead tr {
+  border-top: 1px solid #eaecf0;
+  border-bottom: 1px solid #eaecf0;
+  border-collapse: collapse;
+}
+
+.ant-table-thead tr .ant-table-cell {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  line-height: 18px !important;
+  color: #475467 !important;
+  background-color: #f0edff !important;
+}
+
+.ant-table-tbody tr .ant-table-cell {
+  border-top: 1px solid #eaecf0;
+  border-bottom: 1px solid #eaecf0;
+  border-collapse: collapse;
+}
+
+.ant-table-row {
+  padding-left: 24px !important;
+}
+
+.ant-table-footer {
+  background: white !important;
+}
+
+/* select antd */
+.ant-select-selector > .ant-select-selection-item {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 22.4px !important;
+  letter-spacing: 0.20000000298023224px !important;
+}

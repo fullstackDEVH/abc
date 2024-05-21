@@ -1,8 +1,6 @@
-import { Area } from "@/models/area";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, Image, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
-import dayjs from "dayjs";
 import defaultScreenshot from "@/assets/images/screenshot.jpeg";
 import { Camera } from "@/models/camera";
 import { defaultImage } from "@/constants";
@@ -13,58 +11,70 @@ type CameraActionFn = (record: Camera) => void;
 export const getColumns = (
   handleView: CameraActionFn,
   handleEdit: CameraActionFn,
-  handleDeletes: (ids: string[]) => void,
+  handleDeletes: (ids: string[]) => void
 ): ColumnsType<Camera> => {
   return [
     {
-      title: "",
+      title: "No",
+      dataIndex: "id",
+      width: "8.5%",
+      fixed: "left",
+      align: "left",
+      ellipsis: {
+        showTitle: true,
+      },
+      render: (_, __, index) => (
+        <div className="text-[#64748B] font-medium text-base">{index + 1}</div>
+      ),
+    },
+    {
+      title: "Image/video",
       dataIndex: "screenshot_url",
       key: "screenshot_url",
-      width: "12%",
-      
+      width: "15%",
+      align: "center",
       render: (screenshot_url: string) => (
         <Image
           fallback={noImage}
-          src={screenshot_url && screenshot_url !== defaultImage ? screenshot_url : defaultScreenshot}
+          src={
+            screenshot_url && screenshot_url !== defaultImage
+              ? screenshot_url
+              : defaultScreenshot
+          }
           alt="screenshot"
           className="shadow-2xl w-full rounded-lg"
         />
       ),
     },
     {
-      title: "Name",
+      title: "Camera name",
       dataIndex: "name",
+      align: "center",
       key: "name",
-      width: "25%",
+      width: "19%",
+    },
+    {
+      title: "URL",
+      dataIndex: "url",
+      key: "url",
+      align: "center",
+      width: "22%",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: "15%",
+      align: "center",
+      width: "18%",
       render: (status: string) => (
         <Tag color={status === "ONLINE" ? "green" : "red"}>{status}</Tag>
       ),
     },
     {
-      title: "Area",
-      dataIndex: "area",
-      key: "area",
-      width: "15%",
-      render: (area: Area) => area.name,
-    },
-    {
-      title: "Created Time",
-      dataIndex: "created_at",
-      key: "created_at",
-      width: "15%",
-      render: (date: Date) => dayjs(date).format("DD MMM YYYY HH:mm"),
-    },
-    {
       title: "",
       dataIndex: "id",
       key: "id",
-      width: "12%",
+      width: "15%",
       align: "center",
       render: (_, record, index) => (
         <div className="space-x-2" key={index}>

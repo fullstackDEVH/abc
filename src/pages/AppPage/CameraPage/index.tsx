@@ -133,24 +133,35 @@ const CameraPage = () => {
           />
         </div>
       </div>
-      <Table
-        className="p-2 px-5"
-        dataSource={listCamera?.data?.data || []}
-        rowKey="id"
-        columns={getColumns(handleView, handleEdit, handleDeletes)}
-        rowSelection={rowSelection}
-        pagination={{
-          total: listCamera?.data?.total || 0,
-          pageSize: pagesize,
-          current: page,
-          pageSizeOptions: ["10", "20", "50"],
-          showSizeChanger: false,
-          onChange(page, pageSize) {
-            setPage(page);
-            setPageSize(pageSize);
-          },
-        }}
-      />
+      <div className="flex flex-col gap-4 bg-white border border-[#EAECF0] shadow-[0px_1px_2px_0px_#1018280D] mx-[33.5px] mb-[61px] rounded-xl">
+        {/* title table */}
+        <div className="">
+          <div className="flex justify-between items-center pt-5 pl-5">
+            <h3 className="font-bold text-[20px] leading-[30px] text-[#0E2259]">
+              Camera list
+            </h3>
+          </div>
+
+          <Table
+            className="p-2 px-5"
+            dataSource={listCamera?.data?.data || []}
+            rowKey="id"
+            columns={getColumns(handleView, handleEdit, handleDeletes)}
+            rowSelection={rowSelection}
+            pagination={{
+              total: listCamera?.data?.total || 0,
+              pageSize: pagesize,
+              current: page,
+              pageSizeOptions: ["10", "20", "50"],
+              showSizeChanger: false,
+              onChange(page, pageSize) {
+                setPage(page);
+                setPageSize(pageSize);
+              },
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };
