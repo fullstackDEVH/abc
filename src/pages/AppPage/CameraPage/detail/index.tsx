@@ -89,49 +89,79 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
       >
         <Row>
           <Col span={10} className="p-2">
-            <Form.Item
-              name="name"
-              label="Name"
-              rules={[{ required: true, message: "Camera name is required!" }]}
-            >
-              <Input placeholder="Camera name" disabled={mode === "info"} />
-            </Form.Item>
-            <Form.Item
-              name="status"
-              label="Status"
-              rules={[{ required: true, message: "Status is required!" }]}
-            >
-              <Select
-                placeholder="Status"
-                disabled={mode === "info"}
-                options={[
-                  { label: "ONLINE", value: "ONLINE" },
-                  { label: "OFFLINE", value: "OFFLINE" },
-                ]}
-                optionRender={(item) => (
-                  <Tag color={item.value === "ONLINE" ? "green" : "red"}>
-                    {item.label}
-                  </Tag>
-                )}
-                labelRender={(item) => (
-                  <Tag color={item.value === "ONLINE" ? "green" : "red"}>
-                    {item.label}
-                  </Tag>
-                )}
-                className="h-12"
-              />
+            <Form.Item className="mb-0">
+              <Typography.Title
+                level={5}
+                className="!text-[14px] !font-bold !leading-[22.4px] !text-[#0C1D46]"
+              >
+                Name <span className="text-red-800">*</span>
+              </Typography.Title>
+              <Form.Item
+                name="name"
+                rules={[{ required: true, whitespace: true }]}
+              >
+                <Input
+                  placeholder="Enter your name"
+                  className="rounded-lg inter_font"
+                />
+              </Form.Item>
             </Form.Item>
 
-            <Form.Item
-              name="url"
-              label="Stream URL"
-              rules={[{ required: true, message: "Stream URL is required!" }]}
-            >
-              <Input placeholder="rtsp://" disabled={mode === "info"} />
+            <Form.Item className="mb-0">
+              <Typography.Title
+                level={5}
+                className="!text-[14px] !font-bold !leading-[22.4px] !text-[#0C1D46]"
+              >
+                Status <span className="text-red-800">*</span>
+              </Typography.Title>
+              <Form.Item
+                name="status"
+                rules={[{ required: true, whitespace: true }]}
+              >
+                <Select
+                  placeholder="Status"
+                  disabled={mode === "info"}
+                  options={[
+                    { label: "ONLINE", value: "ONLINE" },
+                    { label: "OFFLINE", value: "OFFLINE" },
+                  ]}
+                  optionRender={(item) => (
+                    <Tag color={item.value === "ONLINE" ? "green" : "red"}>
+                      {item.label}
+                    </Tag>
+                  )}
+                  labelRender={(item) => (
+                    <Tag color={item.value === "ONLINE" ? "green" : "red"}>
+                      {item.label}
+                    </Tag>
+                  )}
+                  className="h-12"
+                />
+              </Form.Item>
+            </Form.Item>
+
+            <Form.Item className="mb-0">
+              <Typography.Title
+                level={5}
+                className="!text-[14px] !font-bold !leading-[22.4px] !text-[#0C1D46]"
+              >
+                Camera URL <span className="text-red-800">*</span>
+              </Typography.Title>
+              <Form.Item
+                name="url"
+                rules={[{ required: true, whitespace: true }]}
+              >
+                <Input placeholder="rtsp://" disabled={mode === "info"} />
+              </Form.Item>
             </Form.Item>
           </Col>
           <Col span={14} className="p-2 w-full">
-            <Typography.Title level={5}>Camera Preview</Typography.Title>
+            <Typography.Title
+              className="!font-semibold !text-lg !text-[#101828]"
+              level={5}
+            >
+              Camera Preview
+            </Typography.Title>
             <Form.Item name="screenshot_url" className="mb-0">
               <Image
                 className="rounded-lg image"
