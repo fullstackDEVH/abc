@@ -11,7 +11,7 @@ import Avatar from "@/components/Avatar";
 
 import logoIMG from "@/assets/logo_customer.svg";
 
-const { Content, Footer, Header } = Layout;
+const { Content, Header } = Layout;
 
 const menus = [
   {
@@ -77,12 +77,9 @@ const AppLayout: FC = () => {
         </div>
       </Header>
       <Layout>
-        <Content className="h-full overflow-auto">
+        <Content className="h-full overflow-auto flex flex-col">
           <Outlet />
         </Content>
-        <Footer className="text-right p-2 artice-font">
-          E-MagicEyes &copy; {new Date().getFullYear()} Created by Rye
-        </Footer>
       </Layout>
     </Layout>
   );

@@ -21,8 +21,8 @@ export const getColumns = (
     {
       title: "No",
       dataIndex: "id",
-      width: "8%",
-      fixed: "left",
+      width: "6%",
+      // fixed: "left",
       align: "left",
       ellipsis: {
         showTitle: true,
@@ -36,15 +36,16 @@ export const getColumns = (
       dataIndex: "processed_image_url",
       align: "center",
       key: "processed_image_url",
-      width: "20%",
+      width: "15.5%",
       render: (processed_image_url: string) => (
         <Image
           preview={false}
-          height={100}
+          width={120}
+          height={60}
           fallback={noImage}
           src={processed_image_url ? processed_image_url : defaultScreenshot}
           alt="image_url"
-          className="shadow-2xl w-full rounded-lg"
+          className="rounded-lg"
         />
       ),
     },
@@ -53,7 +54,7 @@ export const getColumns = (
       dataIndex: "event_type",
       align: "center",
       key: "event_type",
-      width: "15%",
+      width: "14%",
       render: (event_type: string) => <Tag color="blue">{event_type}</Tag>,
     },
 
@@ -69,9 +70,8 @@ export const getColumns = (
       align: "center",
       dataIndex: "camera",
       key: "camera",
-      width: "25%",
-      render: (camera: Camera) =>
-        `${camera.name} - ${(camera.area as Area).name}`,
+      width: "14%",
+      render: (camera: Camera) => `${camera.name}`,
     },
     {
       title: () => {
@@ -82,9 +82,9 @@ export const getColumns = (
           </div>
         );
       },
-      dataIndex: "email",
-      key: "email",
-      width: "28%",
+      dataIndex: "area",
+      key: "area",
+      width: "14%",
       align: "center",
       ellipsis: {
         showTitle: true,
@@ -100,14 +100,14 @@ export const getColumns = (
       dataIndex: "event_time",
       key: "event_time",
       align: "center",
-      width: "17%",
+      width: "15%",
       render: (date: Date) => dayjs(date).format("DD MMM YYYY HH:mm"),
     },
     {
-      title: "Action",
+      title: "Assignee",
       dataIndex: "id",
       key: "id",
-      width: "19.5%",
+      width: "18%",
       align: "center",
       render: (_, record, index) => (
         <div className="space-x-2" key={index}>

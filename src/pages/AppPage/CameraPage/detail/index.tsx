@@ -1,7 +1,6 @@
 import { ModalModeType, defaultImage } from "@/constants";
 import { Area } from "@/models/area";
 import { Camera } from "@/models/camera";
-import { useGetListArea } from "@/services/area/useGetListArea";
 import { UploadCloud } from "react-feather";
 import defaultScreenshot from "@/assets/images/screenshot.jpeg";
 import "./index.css";
@@ -19,9 +18,6 @@ import {
   Upload,
 } from "antd";
 import { FC } from "react";
-import swalFire from "@/components/SweetAlert";
-import { useCreateCameraMutation } from "@/services/camera/useCreateCamera";
-import { useUpdateCameraMutation } from "@/services/camera/useUpdateCamera";
 import toast from "react-hot-toast";
 import FlvPlayer from "@/components/FlvPlayer";
 
@@ -30,51 +26,74 @@ type CameraModalProps = {
   mode: ModalModeType;
   camera: Camera | null;
 };
+
+const areaData = {
+  total: 3,
+  data: [
+    {
+      id: 7198643381730451,
+      name: "area5",
+      address: "area5 qng",
+      tenant: {
+        id: 7197873089592599,
+        name: "RAINSCALE",
+        logo: "logo/2fe89f29-11c1-45a5-9a38-a7f690ab3d21-logo.jpg",
+        contact: "Admin Rainscale",
+        phone: "0000000000",
+        website: "https://rainscale.com.vn",
+        email: "admin1@rainscale.com.vn",
+        created_at: "2024-05-19T08:17:54.574980+00:00",
+        updated_at: "2024-05-19T08:17:54.575001+00:00",
+      },
+      created_at: "2024-05-21T11:18:46.531347+00:00",
+      updated_at: "2024-05-21T11:18:46.531358+00:00",
+    },
+    {
+      id: 7198640659119645,
+      name: "DN Area3",
+      address: "QNG",
+      tenant: {
+        id: 7197873089592599,
+        name: "RAINSCALE",
+        logo: "logo/2fe89f29-11c1-45a5-9a38-a7f690ab3d21-logo.jpg",
+        contact: "Admin Rainscale",
+        phone: "0000000000",
+        website: "https://rainscale.com.vn",
+        email: "admin1@rainscale.com.vn",
+        created_at: "2024-05-19T08:17:54.574980+00:00",
+        updated_at: "2024-05-19T08:17:54.575001+00:00",
+      },
+      created_at: "2024-05-21T11:07:57.410475+00:00",
+      updated_at: "2024-05-21T11:07:57.410486+00:00",
+    },
+    {
+      id: 7197875081807307,
+      name: "RS Area 2",
+      address: "Address of area 1",
+      tenant: {
+        id: 7197873089592599,
+        name: "RAINSCALE",
+        logo: "logo/2fe89f29-11c1-45a5-9a38-a7f690ab3d21-logo.jpg",
+        contact: "Admin Rainscale",
+        phone: "0000000000",
+        website: "https://rainscale.com.vn",
+        email: "admin1@rainscale.com.vn",
+        created_at: "2024-05-19T08:17:54.574980+00:00",
+        updated_at: "2024-05-19T08:17:54.575001+00:00",
+      },
+      created_at: "2024-05-19T08:25:49.555895+00:00",
+      updated_at: "2024-05-21T09:44:38.831735+00:00",
+    },
+  ],
+};
+
 const CameraDetailModal: FC<CameraModalProps> = (props) => {
   const { toggle, camera, mode } = props;
   const [form] = Form.useForm();
-  const areaList = useGetListArea({ page: 1, pagesize: 10, searchVal: "" });
-  const watchScreenshot = Form.useWatch("screenshot_url", form);
-  const createCameraMutation = useCreateCameraMutation();
-  const updateCameraMutation = useUpdateCameraMutation();
+  const watchScreenshot = Form.useWatch("screenshot", form);
 
-  const onFinish = (values: Camera) => {
-    let mode: ModalModeType = "create";
-    if (camera) {
-      mode = "edit";
-    }
-    swalFire({
-      title: "Are you sure?",
-      text: `${mode === "create" ? "Create" : "Update"} ${values.name}?`,
-      icon: "warning",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (mode === "create") {
-          createCameraMutation.mutateAsync(values, {
-            onSuccess: async () => {
-              toast.success(`Camera ${values.name} created`);
-              toggle();
-            },
-            onError: (err) => {
-              toast.error(err.message);
-            },
-          });
-        } else {
-          updateCameraMutation.mutateAsync(
-            { id: camera?.id as string, body: values },
-            {
-              onSuccess: async () => {
-                toast.success(`Camera ${values.name} updated`);
-                toggle();
-              },
-              onError: (err) => {
-                toast.error(err.message);
-              },
-            }
-          );
-        }
-      }
-    });
+  const onFinish = () => {
+    toast.success("click");
   };
 
   const initValue: Camera = {
@@ -155,7 +174,7 @@ const CameraDetailModal: FC<CameraModalProps> = (props) => {
               <Select
                 placeholder="Area"
                 disabled={mode === "info"}
-                options={areaList.data?.data.map((area) => ({
+                options={areaData.data.map((area) => ({
                   label: area.name,
                   value: area.id,
                 }))}

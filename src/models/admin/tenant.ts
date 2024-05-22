@@ -8,8 +8,8 @@ export type Tenant = {
   logo: string;
   email: string;
   phone: string;
-  updated_at: Date;
-  created_at: Date;
+  updated_at: string;
+  created_at: string;
 };
 
 export type ListTenantResponse = {

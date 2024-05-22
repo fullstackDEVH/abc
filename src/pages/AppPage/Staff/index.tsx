@@ -2,14 +2,11 @@ import "./index.css";
 import toast from "react-hot-toast";
 import { Key, useCallback, useState } from "react";
 import { Pagination, Select, Table } from "antd";
-import { useSearchParams } from "react-router-dom";
 
 // components
-import Loading from "@/components//Loading";
 import StaffCustomerManagemenDetail from "./detail";
 import Heading from "@/components/HeadingDetail/User/Heading";
 import { ReadStaffManagement } from "@/models/admin/staff-management";
-import { useGetListStaffManagement } from "@/services/admin/staff-management/useGetListStaffManagement";
 import MultipleSelect, {
   IItemFilterType,
 } from "@/components/Filter/MultipleSelect";
@@ -17,36 +14,94 @@ import MultipleSelect, {
 // icons
 import personGreyIcon from "@/assets/logo/person/person_grey.svg";
 import targetGreyIcon from "@/assets/logo/target/target_grey.svg";
-import { useDeleteStaffManagementMutation } from "@/services/admin/staff-management/useDeleteStaffManagement";
 
 // supports decrations
 import { getColumnsStaff } from "./columns";
 import { ModalModeType } from "@/constants";
 import usePopupMultiple from "@/hooks/useMultiplesPopup";
 import PopupDelete from "@/components/Popup/Delete";
+import StaffAssingerPage from "./assigner";
+
+const staffData: { total: number; data: ReadStaffManagement[] } = {
+  total: 3,
+  data: [
+    {
+      id: 7198887589678588,
+      email: "manager2@gmail.com",
+      phone: "0385151582",
+      name: "manager2",
+      tenant: {
+        id: 7197873089592599,
+        name: "RAINSCALE",
+        logo: "logo/2fe89f29-11c1-45a5-9a38-a7f690ab3d21-logo.jpg",
+        contact: "Admin Rainscale",
+        phone: "0000000000",
+        website: "https://rainscale.com.vn",
+        email: "admin1@rainscale.com.vn",
+        created_at: "2024-05-19T08:17:54.574980+00:00",
+        updated_at: "2024-05-19T08:17:54.575001+00:00",
+      },
+      role: "MANAGER",
+      created_at: "2024-05-22T03:29:10.487749+00:00",
+      updated_at: "2024-05-22T03:29:10.487768+00:00",
+    },
+    {
+      id: 7197939640496726,
+      email: "mrthuy_user@rainscale.com",
+      phone: "0000000000",
+      name: "MrThuy",
+      tenant: {
+        id: 7197873089592599,
+        name: "RAINSCALE",
+        logo: "logo/2fe89f29-11c1-45a5-9a38-a7f690ab3d21-logo.jpg",
+        contact: "Admin Rainscale",
+        phone: "0000000000",
+        website: "https://rainscale.com.vn",
+        email: "admin1@rainscale.com.vn",
+        created_at: "2024-05-19T08:17:54.574980+00:00",
+        updated_at: "2024-05-19T08:17:54.575001+00:00",
+      },
+      role: "MANAGER",
+      created_at: "2024-05-19T12:42:21.790238+00:00",
+      updated_at: "2024-05-19T12:42:21.790255+00:00",
+    },
+    {
+      id: 7197873253443084,
+      email: "manager1@rainscale.com.vn",
+      phone: "0000000000",
+      name: "RS Manager 1",
+      tenant: {
+        id: 7197873089592599,
+        name: "RAINSCALE",
+        logo: "logo/2fe89f29-11c1-45a5-9a38-a7f690ab3d21-logo.jpg",
+        contact: "Admin Rainscale",
+        phone: "0000000000",
+        website: "https://rainscale.com.vn",
+        email: "admin1@rainscale.com.vn",
+        created_at: "2024-05-19T08:17:54.574980+00:00",
+        updated_at: "2024-05-19T08:17:54.575001+00:00",
+      },
+      role: "MANAGER",
+      created_at: "2024-05-19T08:18:34.050138+00:00",
+      updated_at: "2024-05-19T08:18:34.050175+00:00",
+    },
+  ],
+};
 
 const StaffManager = () => {
   const [page, setPage] = useState(1);
   const [pagesize, setPageSize] = useState(10);
-  const [searchParams] = useSearchParams();
   const [selectedStaff, setSelectedStaff] =
     useState<ReadStaffManagement | null>(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
 
-  const { isOpen, typePopup, openPopup, closePopup } =
-    usePopupMultiple<ModalModeType>();
+  const { isOpen, typePopup, openPopup, closePopup } = usePopupMultiple<
+    ModalModeType | "assigner"
+  >();
 
   const [selectedRecords, setSelectedRecords] = useState<ReadStaffManagement[]>(
     []
   );
-
-  const staffData = useGetListStaffManagement({
-    page,
-    pagesize,
-    searchVal: searchParams.get("q") ?? "",
-    roles: ["MANAGER", "USER"],
-  });
-  const deleteStaffMutation = useDeleteStaffManagementMutation();
 
   const rowSelection = {
     selectedRowKeys,
@@ -54,27 +109,16 @@ const StaffManager = () => {
   };
 
   const handleDeletes = (deleteIds: string[]): void => {
-    console.log(deleteIds);
     if (deleteIds.length == 0) {
       return;
     }
 
     if (typePopup === "delete" && isOpen) {
-      deleteStaffMutation.mutateAsync(deleteIds, {
-        onSuccess: () => {
-          setSelectedRowKeys([]);
-          staffData.refetch();
-          closePopup();
-          toast.success(
-            `${deleteIds.length} item${
-              deleteIds.length > 1 ? "s" : ""
-            } has been deleted.`
-          );
-        },
-        onError: (err) => {
-          toast.error(err.message);
-        },
-      });
+      toast.success(
+        `${deleteIds.length} item${
+          deleteIds.length > 1 ? "s" : ""
+        } has been deleted.`
+      );
     } else {
       setSelectedRowKeys((pre) => [...pre, ...deleteIds]);
       openPopup("delete");
@@ -116,13 +160,13 @@ const StaffManager = () => {
 
   return (
     <>
-      {staffData.isFetching ? <Loading /> : null}
-
+      {isOpen && typePopup && ["assigner"].includes(typePopup) ? (
+        <StaffAssingerPage onClose={() => handleClosePopup()} />
+      ) : null}
       {isOpen && typePopup && ["create", "edit"].includes(typePopup) ? (
         <StaffCustomerManagemenDetail
           staffManagement={selectedStaff}
           onClose={() => handleClosePopup()}
-          onRefreshStaff={staffData.refetch}
         />
       ) : null}
 
@@ -177,7 +221,7 @@ const StaffManager = () => {
                   <div className="z-50 relative transition-all invisible opacity-0 group-hover/filter:opacity-100 group-hover/filter:visible">
                     <MultipleSelect<ReadStaffManagement>
                       title={`Name (${selectedRecords.length})`}
-                      records={staffData.data?.data || []}
+                      records={staffData.data || []}
                       itemChoose={renderItemFilter}
                       selectedRecords={selectedRecords}
                       handleChooseRecord={handleChooseRecord}
@@ -200,7 +244,7 @@ const StaffManager = () => {
                   <div className="z-50 relative transition-all invisible opacity-0 group-hover/filter:opacity-100 group-hover/filter:visible">
                     <MultipleSelect<ReadStaffManagement>
                       title={`Role (${selectedRecords.length})`}
-                      records={staffData.data?.data || []}
+                      records={staffData.data || []}
                       itemChoose={renderItemFilter}
                       selectedRecords={selectedRecords}
                       handleChooseRecord={handleChooseRecord}
@@ -213,8 +257,10 @@ const StaffManager = () => {
 
             {/* table */}
             <Table
-              dataSource={staffData.data?.data || []}
-              columns={getColumnsStaff(handleEdit, handleDeletes)}
+              dataSource={staffData.data || []}
+              columns={getColumnsStaff(handleEdit, handleDeletes, () =>
+                openPopup("assigner")
+              )}
               rowSelection={rowSelection}
               rowKey={"id"}
               scroll={{ x: 1100, y: 504 }}
@@ -241,7 +287,7 @@ const StaffManager = () => {
                   <Pagination
                     current={page}
                     pageSize={pagesize}
-                    total={staffData.data?.total || 0}
+                    total={staffData.total || 0}
                     onChange={(page) => setPage(page)}
                   />
                 </div>

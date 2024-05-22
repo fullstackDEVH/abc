@@ -8,9 +8,9 @@ export type Event = {
     image_url: string;
     video_url: string;
     camera: Camera;
-    event_time: Date;
-    updated_at: Date;
-    created_at: Date;
+    event_time: string;
+    updated_at: string;
+    created_at: string;
 }
 
 export type ListEventResponse = {

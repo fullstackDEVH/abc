@@ -12,7 +12,8 @@ type StaffActionFn = (record: ReadStaffManagement) => void;
 
 export const getColumnsStaff = (
   handleEdit: StaffActionFn,
-  handleDelete: (ids: string[]) => void
+  handleDelete: (ids: string[]) => void,
+  handleAssigner : ()=>void
 ): ColumnsType<ReadStaffManagement> => {
   return [
     {
@@ -122,7 +123,7 @@ export const getColumnsStaff = (
       align: "center",
       render: (_, record, index) => (
         <div className="flex_center gap-1" key={index}>
-          <Button className="flex_center rounded-lg text-sm font-semibold text-[#6941C6] w-[80px] h-10 border-[#D6BBFB] shadow-[0px_1px_2px_0px_#1018280D]">
+          <Button onClick={handleAssigner} className="flex_center rounded-lg text-sm font-semibold text-[#6941C6] w-[80px] h-10 border-[#D6BBFB] shadow-[0px_1px_2px_0px_#1018280D]">
             Assign
           </Button>
           <div

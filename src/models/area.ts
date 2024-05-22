@@ -1,9 +1,12 @@
+import { Tenant } from "./admin/tenant";
+
 export type Area = {
-  id: string;
+  id: number;
   name: string;
   address: string;
-  updated_at: Date;
-  created_at: Date;
+  tenant : Tenant
+  updated_at: string;
+  created_at: string;
 };
 
 export type ListAreaResponse = {

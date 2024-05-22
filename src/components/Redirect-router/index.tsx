@@ -20,7 +20,7 @@ const RediectRouterByRole = () => {
         return <Navigate to="/events" replace={true} />;
 
       default:
-        return <Navigate to="/404" replace={true} />;
+        return <Navigate to="/events" replace={true} />;
     }
   };
   return user ? redirectToDefaultPage(user) : null;

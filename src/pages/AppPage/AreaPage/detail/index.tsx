@@ -1,24 +1,13 @@
 import "./index.css";
 import toast from "react-hot-toast";
 import { Form, FormProps, Input, Modal, Typography } from "antd";
-import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
-
-// components
-import swalFire from "@/components/SweetAlert";
 
 // models
-import { Area, CreataAreaRequest, ListAreaResponse } from "@/models/area";
-
-// services
-import { useCreateAreaMutation } from "@/services/area/useCreateArea";
-import { useUpdateAreaMutation } from "@/services/area/useUpdateArea";
+import { Area, CreataAreaRequest } from "@/models/area";
 
 interface IProps {
   onClose: () => void;
   AreaDetail: Area | null;
-  onRefreshStaff: (
-    options?: RefetchOptions | undefined
-  ) => Promise<QueryObserverResult<ListAreaResponse, Error>>;
 }
 
 const validateMessages = {
@@ -29,48 +18,11 @@ const validateMessages = {
   },
 };
 
-const AreaDetailModal = ({ AreaDetail, onClose, onRefreshStaff }: IProps) => {
-  const createAreaMutation = useCreateAreaMutation();
-  const updateAreaMutation = useUpdateAreaMutation();
+const AreaDetailModal = ({ AreaDetail, onClose }: IProps) => {
   const [form] = Form.useForm();
 
-  const onFinish: FormProps<CreataAreaRequest>["onFinish"] = (
-    values: CreataAreaRequest
-  ) => {
-    swalFire({
-      title: `Are you sure ${AreaDetail ? "update" : "create"} staff ?`,
-      text: `${AreaDetail ? "Update" : "Create"} ${values.name}?`,
-      icon: "warning",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (!AreaDetail) {
-          createAreaMutation.mutateAsync(values, {
-            onSuccess: async () => {
-              toast.success(`Area ${values.name} created`);
-              onRefreshStaff();
-              onClose();
-            },
-            onError: (err) => {
-              toast.error(err.message);
-            },
-          });
-        } else {
-          updateAreaMutation.mutateAsync(
-            { id: `${AreaDetail?.id}` as string, body: values },
-            {
-              onSuccess: async () => {
-                toast.success(`Area ${values.name} updated`);
-                onRefreshStaff();
-                onClose();
-              },
-              onError: (err) => {
-                toast.error(err.message);
-              },
-            }
-          );
-        }
-      }
-    });
+  const onFinish: FormProps<CreataAreaRequest>["onFinish"] = () => {
+    alert(`Are you sure ${AreaDetail ? "update" : "create"} staff ?`);
   };
 
   const onFinishFailed: FormProps<CreataAreaRequest>["onFinishFailed"] = (

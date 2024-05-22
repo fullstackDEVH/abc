@@ -1,14 +1,9 @@
 import "./index.css";
-import toast from "react-hot-toast";
 import { Key, useCallback, useState } from "react";
 import { Pagination, Select, Table } from "antd";
-import { useSearchParams } from "react-router-dom";
 
 // components
 import Heading from "../../../components/HeadingDetail/User/Heading";
-import Loading from "@/components//Loading";
-import { SweetAlertResult } from "sweetalert2";
-import fireSwal from "@/components/SweetAlert";
 import MultipleSelect, {
   IItemFilterType,
 } from "@/components/Filter/MultipleSelect";
@@ -19,35 +14,83 @@ import locationGreyIcon from "@/assets/logo/location/location_grey.svg";
 import cameraGreyIcon from "@/assets/logo/camera/camera_grey.svg";
 
 // models
-import { Area } from "@/models/area";
-
-// services
-import { useGetListArea } from "@/services/area/useGetListArea";
-import { useDeleteAreaMutation } from "@/services/area/useDeleteArea";
+import { Area, ListAreaResponse } from "@/models/area";
 
 // supports decrations
 import { getColumns } from "./columns";
 import { ModalModeType } from "@/constants";
 import usePopupMultiple from "@/hooks/useMultiplesPopup";
 
+const areaData: ListAreaResponse = {
+  total: 3,
+  data: [
+    {
+      id: 7198643381730451,
+      name: "area5",
+      address: "area5 qng",
+      tenant: {
+        id: 7197873089592599,
+        name: "RAINSCALE",
+        logo: "logo/2fe89f29-11c1-45a5-9a38-a7f690ab3d21-logo.jpg",
+        contact: "Admin Rainscale",
+        phone: "0000000000",
+        website: "https://rainscale.com.vn",
+        email: "admin1@rainscale.com.vn",
+        created_at: "2024-05-19T08:17:54.574980+00:00",
+        updated_at: "2024-05-19T08:17:54.575001+00:00",
+      },
+      created_at: "2024-05-21T11:18:46.531347+00:00",
+      updated_at: "2024-05-21T11:18:46.531358+00:00",
+    },
+    {
+      id: 7198640659119645,
+      name: "DN Area3",
+      address: "QNG",
+      tenant: {
+        id: 7197873089592599,
+        name: "RAINSCALE",
+        logo: "logo/2fe89f29-11c1-45a5-9a38-a7f690ab3d21-logo.jpg",
+        contact: "Admin Rainscale",
+        phone: "0000000000",
+        website: "https://rainscale.com.vn",
+        email: "admin1@rainscale.com.vn",
+        created_at: "2024-05-19T08:17:54.574980+00:00",
+        updated_at: "2024-05-19T08:17:54.575001+00:00",
+      },
+      created_at: "2024-05-21T11:07:57.410475+00:00",
+      updated_at: "2024-05-21T11:07:57.410486+00:00",
+    },
+    {
+      id: 7197875081807307,
+      name: "RS Area 2",
+      address: "Address of area 1",
+      tenant: {
+        id: 7197873089592599,
+        name: "RAINSCALE",
+        logo: "logo/2fe89f29-11c1-45a5-9a38-a7f690ab3d21-logo.jpg",
+        contact: "Admin Rainscale",
+        phone: "0000000000",
+        website: "https://rainscale.com.vn",
+        email: "admin1@rainscale.com.vn",
+        created_at: "2024-05-19T08:17:54.574980+00:00",
+        updated_at: "2024-05-19T08:17:54.575001+00:00",
+      },
+      created_at: "2024-05-19T08:25:49.555895+00:00",
+      updated_at: "2024-05-21T09:44:38.831735+00:00",
+    },
+  ],
+};
+
 const AreaPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [page, setPage] = useState(1);
   const [pagesize, setPageSize] = useState(10);
-  const [searchParams] = useSearchParams();
   const [selectedStaff, setSelectedStaff] = useState<Area | null>(null);
 
   const { isOpen, typePopup, openPopup, closePopup } =
     usePopupMultiple<ModalModeType>();
 
   const [selectedRecords, setSelectedRecords] = useState<Area[]>([]);
-
-  const areaData = useGetListArea({
-    page,
-    pagesize,
-    searchVal: searchParams.get("q") ?? "",
-  });
-  const deleteAreaMutation = useDeleteAreaMutation();
 
   const rowSelection = {
     selectedRowKeys,
@@ -59,30 +102,7 @@ const AreaPage = () => {
       return;
     }
 
-    fireSwal({
-      title: "Are you sure?",
-      text: `Delete ${deleteIds.length} item${
-        deleteIds.length > 1 ? "s" : ""
-      }?`,
-      icon: "warning",
-    }).then((result: SweetAlertResult) => {
-      if (result.isConfirmed) {
-        deleteAreaMutation.mutateAsync(deleteIds, {
-          onSuccess: () => {
-            setSelectedRowKeys([]);
-            areaData.refetch();
-            toast.success(
-              `${deleteIds.length} item${
-                deleteIds.length > 1 ? "s" : ""
-              } has been deleted.`
-            );
-          },
-          onError: (err) => {
-            toast.error(err.message);
-          },
-        });
-      }
-    });
+    alert("delete")
   };
 
   const handleEdit = (record: Area) => {
@@ -120,13 +140,10 @@ const AreaPage = () => {
 
   return (
     <>
-      {areaData.isFetching ? <Loading /> : null}
-
       {isOpen && typePopup && ["create", "edit"].includes(typePopup) ? (
         <AreaDetailModal
           AreaDetail={selectedStaff}
           onClose={() => handleClosePopup()}
-          onRefreshStaff={areaData.refetch}
         />
       ) : null}
       <div>
@@ -168,7 +185,7 @@ const AreaPage = () => {
                   <div className="z-50 relative transition-all invisible opacity-0 group-hover/filter:opacity-100 group-hover/filter:visible">
                     <MultipleSelect<Area>
                       title={`Camera (${selectedRecords.length})`}
-                      records={areaData.data?.data || []}
+                      records={areaData.data || []}
                       itemChoose={renderItemFilter}
                       selectedRecords={selectedRecords}
                       handleChooseRecord={handleChooseRecord}
@@ -193,7 +210,7 @@ const AreaPage = () => {
                   <div className="z-50 relative transition-all invisible opacity-0 group-hover/filter:opacity-100 group-hover/filter:visible">
                     <MultipleSelect<Area>
                       title={`Address (${selectedRecords.length})`}
-                      records={areaData.data?.data || []}
+                      records={areaData.data || []}
                       itemChoose={renderItemFilter}
                       selectedRecords={selectedRecords}
                       handleChooseRecord={handleChooseRecord}
@@ -206,7 +223,7 @@ const AreaPage = () => {
 
             {/* table */}
             <Table
-              dataSource={areaData.data?.data || []}
+              dataSource={areaData.data || []}
               columns={getColumns(handleEdit, handleDeletes)}
               rowSelection={rowSelection}
               rowKey={"id"}
@@ -234,7 +251,7 @@ const AreaPage = () => {
                   <Pagination
                     current={page}
                     pageSize={pagesize}
-                    total={areaData.data?.total || 0}
+                    total={areaData.total || 0}
                     onChange={(page) => setPage(page)}
                   />
                 </div>

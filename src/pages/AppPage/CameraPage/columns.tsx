@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Image, Tag } from "antd";
+import { Button, Image } from "antd";
 import { ColumnsType } from "antd/es/table";
 import defaultScreenshot from "@/assets/images/screenshot.jpeg";
 import { Camera } from "@/models/camera";
@@ -42,7 +42,9 @@ export const getColumns = (
               : defaultScreenshot
           }
           alt="screenshot"
-          className="shadow-2xl w-full rounded-lg"
+          width={120}
+          height={60}
+          className="rounded-lg"
         />
       ),
     },
@@ -66,9 +68,40 @@ export const getColumns = (
       key: "status",
       align: "center",
       width: "18%",
-      render: (status: string) => (
-        <Tag color={status === "ONLINE" ? "green" : "red"}>{status}</Tag>
-      ),
+      render: (status: string) => {
+        const renderTextAndStylesByRole = () => {
+          switch (status) {
+            case "ONLINE":
+              return {
+                text: "Online",
+                styles:
+                  "text-[#0DB670] bg-[#EEF4FF] border-[#C7D7FE] font-medium",
+              };
+            case "OFFLINE":
+              return {
+                text: "Offline",
+                styles:
+                  "text-[#64748B] bg-[#F9F5FF] border-[#E9D7FE] font-medium",
+              };
+            default:
+              return {
+                text: "None",
+                styles: "text-[#475467] font-medium",
+              };
+          }
+        };
+        const { styles, text } = renderTextAndStylesByRole();
+
+        return (
+          <div className={`flex_center`}>
+            <div
+              className={`text-sm ${styles} border px-[18px] rounded-full py-1`}
+            >
+              {text}
+            </div>
+          </div>
+        );
+      },
     },
     {
       title: "",
@@ -95,7 +128,7 @@ export const getColumns = (
             size="small"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDeletes([record.id])}
+            onClick={() => handleDeletes([`${record.id}`])}
           />
         </div>
       ),

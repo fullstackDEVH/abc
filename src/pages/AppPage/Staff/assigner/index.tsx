@@ -5,34 +5,26 @@ import { Form, FormProps, Input, Modal, Select, Typography } from "antd";
 // components
 
 // models
-import {
-  CreateStaffManagementRequest,
-  ReadStaffManagement,
-} from "@/models/admin/staff-management";
+import { CreateStaffManagementRequest } from "@/models/admin/staff-management";
 
 // services
 
 interface IProps {
   onClose: () => void;
-  staffManagement: ReadStaffManagement | null;
 }
 
 const validateMessages = {
   required: "${label} is required!",
   types: {
     email: "${label} is not a valid email!",
-    number: "${label} is not a valid number!",
   },
 };
 
-const StaffCustomerManagemenDetail = ({ staffManagement, onClose }: IProps) => {
+const StaffAssingerPage = ({ onClose }: IProps) => {
   const [form] = Form.useForm();
 
-  const onFinish: FormProps<CreateStaffManagementRequest>["onFinish"] = (
-    values: CreateStaffManagementRequest
-  ) => {
-    if (!values.password) values.password = null;
-    toast("delete");
+  const onFinish: FormProps<CreateStaffManagementRequest>["onFinish"] = () => {
+    toast.success("delete");
   };
 
   const onFinishFailed: FormProps<CreateStaffManagementRequest>["onFinishFailed"] =
@@ -44,9 +36,9 @@ const StaffCustomerManagemenDetail = ({ staffManagement, onClose }: IProps) => {
   return (
     <Modal
       className="inter_font"
-      title={staffManagement ? "Update account" : `Create account`}
+      title={"Assign staff"}
       open={true}
-      width="457px"
+      width="457PX"
       onOk={form.submit}
       maskClosable={false}
       onCancel={() => onClose()}
@@ -66,7 +58,7 @@ const StaffCustomerManagemenDetail = ({ staffManagement, onClose }: IProps) => {
         className:
           "w-full h-[48px] font-semibold text-base text-white bg-[#493CE7]",
       }}
-      okText="OKE"
+      okText="SUBMIT"
       cancelText="CANCEL"
     >
       <Form
@@ -74,7 +66,6 @@ const StaffCustomerManagemenDetail = ({ staffManagement, onClose }: IProps) => {
         layout="horizontal"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        initialValues={{ ...staffManagement }}
         validateMessages={validateMessages}
       >
         <Form.Item className="mb-0 mt-6">
@@ -82,21 +73,41 @@ const StaffCustomerManagemenDetail = ({ staffManagement, onClose }: IProps) => {
             level={5}
             className="!text-[14px] !font-bold !leading-[22.4px] !text-[#0C1D46]"
           >
-            Name
+            Account
           </Typography.Title>
           <Form.Item name="name" rules={[{ required: true, whitespace: true }]}>
             <Input
-              placeholder="Enter your name"
+              placeholder="Enter your account"
               className="rounded-lg inter_font"
             />
           </Form.Item>
         </Form.Item>
+
         <Form.Item className="mb-0">
           <Typography.Title
             level={5}
             className="!text-[14px] !font-bold !leading-[22.4px] !text-[#0C1D46]"
           >
-            Email
+            Area name <span className="text-red-700">*</span>
+          </Typography.Title>
+          <Form.Item name="role" rules={[{ required: true, whitespace: true }]}>
+            <Select
+              className="h-12"
+              placeholder="Choose area"
+              options={[
+                { label: "Area 1", value: "1" },
+                { label: "Area 2", value: "2" },
+              ]}
+            />
+          </Form.Item>
+        </Form.Item>
+
+        <Form.Item className="mb-0">
+          <Typography.Title
+            level={5}
+            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#0C1D46]"
+          >
+            Area address <span className="text-red-700">*</span>
           </Typography.Title>
           <Form.Item
             name="email"
@@ -108,50 +119,9 @@ const StaffCustomerManagemenDetail = ({ staffManagement, onClose }: IProps) => {
             />
           </Form.Item>
         </Form.Item>
-
-        <Form.Item className="mb-0">
-          <Typography.Title
-            level={5}
-            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#0C1D46]"
-          >
-            Set up password
-          </Typography.Title>
-          <Form.Item
-            name="password"
-            rules={[
-              { required: staffManagement ? false : true, whitespace: true },
-            ]}
-          >
-            <Input
-              placeholder="Enter your password"
-              className="rounded-lg inter_font"
-              type="password"
-            />
-          </Form.Item>
-        </Form.Item>
-
-        <Form.Item className="mb-0">
-          <Typography.Title
-            level={5}
-            className="!text-[14px] !font-bold !leading-[22.4px] !text-[#0C1D46]"
-          >
-            Role
-          </Typography.Title>
-          <Form.Item name="role" rules={[{ required: true, whitespace: true }]}>
-            <Select
-              className="h-12"
-              placeholder="Choose role"
-              value={staffManagement?.role}
-              options={[
-                { label: "MANAGER", value: "MANAGER" },
-                { label: "USER", value: "USER" },
-              ]}
-            />
-          </Form.Item>
-        </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-export default StaffCustomerManagemenDetail;
+export default StaffAssingerPage;

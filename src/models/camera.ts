@@ -3,15 +3,14 @@ import { Area } from "./area";
 import { DefaultOptionType } from "antd/es/select";
 
 export type Camera = {
-    id: string;
+    id: number;
     name: string;
     url: string;
-    screenshot_url: string | File | null;
+    screenshot: string | File | null;
     status: CameraStatus;
-    roi_list: Array<string>;
     area: Area | string | DefaultOptionType;
-    updated_at: Date;
-    created_at: Date;
+    updated_at: string;
+    created_at: string;
 };
 
 export type ListCameraResponse = {
