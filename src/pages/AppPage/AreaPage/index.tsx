@@ -20,12 +20,14 @@ import { Area, ListAreaResponse } from "@/models/area";
 import { getColumns } from "./columns";
 import { ModalModeType } from "@/constants";
 import usePopupMultiple from "@/hooks/useMultiplesPopup";
+import PopupDelete from "@/components/Popup/Delete";
+import toast from "react-hot-toast";
 
 const areaData: ListAreaResponse = {
   total: 3,
   data: [
     {
-      id: 7198643381730451,
+      id: 7198643385730451,
       name: "area5",
       address: "area5 qng",
       tenant: {
@@ -43,7 +45,7 @@ const areaData: ListAreaResponse = {
       updated_at: "2024-05-21T11:18:46.531358+00:00",
     },
     {
-      id: 7198640659119645,
+      id: 7198940659119645,
       name: "DN Area3",
       address: "QNG",
       tenant: {
@@ -61,7 +63,7 @@ const areaData: ListAreaResponse = {
       updated_at: "2024-05-21T11:07:57.410486+00:00",
     },
     {
-      id: 7197875081807307,
+      id: 7197875081807707,
       name: "RS Area 2",
       address: "Address of area 1",
       tenant: {
@@ -102,7 +104,16 @@ const AreaPage = () => {
       return;
     }
 
-    alert("delete")
+    if (typePopup === "delete" && isOpen) {
+      toast.success(
+        `${deleteIds.length} item${
+          deleteIds.length > 1 ? "s" : ""
+        } has been deleted.`
+      );
+    } else {
+      setSelectedRowKeys((pre) => [...pre, ...deleteIds]);
+      openPopup("delete");
+    }
   };
 
   const handleEdit = (record: Area) => {
@@ -140,6 +151,20 @@ const AreaPage = () => {
 
   return (
     <>
+      {isOpen && typePopup && ["delete"].includes(typePopup) ? (
+        <PopupDelete
+          propButtonCancel={{
+            onClick: () => {
+              closePopup();
+            },
+          }}
+          propButtonOK={{
+            onClick: () => {
+              handleDeletes(selectedRowKeys as string[]);
+            },
+          }}
+        />
+      ) : null}
       {isOpen && typePopup && ["create", "edit"].includes(typePopup) ? (
         <AreaDetailModal
           AreaDetail={selectedStaff}

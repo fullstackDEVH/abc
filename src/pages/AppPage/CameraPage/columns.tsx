@@ -5,6 +5,7 @@ import defaultScreenshot from "@/assets/images/screenshot.jpeg";
 import { Camera } from "@/models/camera";
 import { defaultImage } from "@/constants";
 import noImage from "@/assets/images/no_image.jpeg";
+import helpGreyIcon from "@/assets/logo/help/help_grey.svg";
 
 type CameraActionFn = (record: Camera) => void;
 
@@ -56,14 +57,28 @@ export const getColumns = (
       width: "19%",
     },
     {
-      title: "URL",
+      title: () => {
+        return (
+          <div className="flex_center gap-1">
+            URL
+            <img src={helpGreyIcon} alt="helpGreyIcon" width={16} height={16} />
+          </div>
+        );
+      },
       dataIndex: "url",
       key: "url",
       align: "center",
       width: "22%",
     },
     {
-      title: "Status",
+      title: () => {
+        return (
+          <div className="flex_center gap-1">
+            Status
+            <img src={helpGreyIcon} alt="helpGreyIcon" width={16} height={16} />
+          </div>
+        );
+      },
       dataIndex: "status",
       key: "status",
       align: "center",
@@ -104,7 +119,7 @@ export const getColumns = (
       },
     },
     {
-      title: "",
+      title: "Action",
       dataIndex: "id",
       key: "id",
       width: "15%",

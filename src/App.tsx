@@ -1,14 +1,12 @@
 import "./App.css";
 import { ConfigProvider } from "antd";
-import { Suspense, lazy, useEffect } from "react";
-import { RouteObject, useNavigate, useRoutes } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { RouteObject, useRoutes } from "react-router-dom";
 
 import AppLayout from "@/layout";
 import AdminLayout from "@/layout/Admin";
 
 // redux
-import { useAppDispatch, useAppSelector } from "./redux/hook";
-import { getCurrentUserAsyncThunk } from "./redux/action/authAction";
 
 // routes
 import { RoutePath } from "@/routes/path";
@@ -152,18 +150,18 @@ const adminRoutes: RouteObject = {
 };
 
 function App() {
-  const { access_token, user } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const { access_token, user } = useAppSelector((state) => state.auth);
+  // const dispatch = useAppDispatch();
+  // const navigate = useNavigate();
   const routes = useRoutes([authRoutes, appRoutes, adminRoutes]);
 
-  useEffect(() => {
-    if (access_token && !user) {
-      dispatch(getCurrentUserAsyncThunk(access_token));
-    } else if (!access_token) {
-      navigate("/login");
-    }
-  }, [access_token, user, dispatch, navigate]);
+  // useEffect(() => {
+  //   if (access_token && !user) {
+  //     dispatch(getCurrentUserAsyncThunk(access_token));
+  //   } else if (!access_token) {
+  //     navigate("/login");
+  //   }
+  // }, [access_token, user, dispatch, navigate]);
 
   return (
     <ConfigProvider

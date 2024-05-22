@@ -1,5 +1,5 @@
 import { Area } from "@/models/area";
-import { Button, Image, Tag } from "antd";
+import { Image, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import defaultScreenshot from "@/assets/images/screenshot.jpeg";
@@ -8,15 +8,9 @@ import { Camera } from "@/models/camera";
 import noImage from "@/assets/images/no_image.jpeg";
 
 import helpGreyIcon from "@/assets/logo/help/help_grey.svg";
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import plusIcon from "@/assets/logo/plus/plus_blue.svg";
 
-type EventActionFn = (record: Event) => void;
-
-export const getColumns = (
-  handleView: EventActionFn,
-  handleEdit: EventActionFn,
-  handleDelete: EventActionFn
-): ColumnsType<Event> => {
+export const getColumns = (assignClick: () => void): ColumnsType<Event> => {
   return [
     {
       title: "No",
@@ -109,33 +103,9 @@ export const getColumns = (
       key: "id",
       width: "18%",
       align: "center",
-      render: (_, record, index) => (
-        <div className="space-x-2" key={index}>
-          <Button
-            type="primary"
-            size="small"
-            icon={<EyeOutlined />}
-            onClick={() => handleView(record)}
-          />
-          <Button
-            type="primary"
-            size="small"
-            icon={<EditOutlined />}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEdit(record);
-            }}
-          />
-          <Button
-            type="primary"
-            size="small"
-            danger
-            icon={<DeleteOutlined />}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(record);
-            }}
-          />
+      render: () => (
+        <div className="flex_center cursor-pointer" onClick={assignClick}>
+          <img src={plusIcon} alt="helpGreyIcon" width={24} height={24} />
         </div>
       ),
     },

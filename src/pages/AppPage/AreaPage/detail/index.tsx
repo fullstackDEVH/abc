@@ -22,7 +22,7 @@ const AreaDetailModal = ({ AreaDetail, onClose }: IProps) => {
   const [form] = Form.useForm();
 
   const onFinish: FormProps<CreataAreaRequest>["onFinish"] = () => {
-    alert(`Are you sure ${AreaDetail ? "update" : "create"} staff ?`);
+    toast.success(`Are you sure ${AreaDetail ? "update" : "create"} staff ?`);
   };
 
   const onFinishFailed: FormProps<CreataAreaRequest>["onFinishFailed"] = (

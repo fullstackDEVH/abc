@@ -6,9 +6,9 @@ const RediectRouterByRole = () => {
   const { user } = useAppSelector((state) => state.auth);
 
   const redirectToDefaultPage = (
-    userInfor: ReadUserResponse
+    userInfor: ReadUserResponse | null
   ): React.ReactNode => {
-    switch (userInfor.role) {
+    switch (userInfor?.role) {
       case "ADMIN":
         return <Navigate to="/admin/tenants" replace={true} />;
 
@@ -23,7 +23,7 @@ const RediectRouterByRole = () => {
         return <Navigate to="/events" replace={true} />;
     }
   };
-  return user ? redirectToDefaultPage(user) : null;
+  return  redirectToDefaultPage(user ?? null) ;
 };
 
 export default RediectRouterByRole;

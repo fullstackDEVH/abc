@@ -2,12 +2,9 @@ import "./index.css";
 
 import { Select, Table } from "antd";
 import { Key, useState } from "react";
-import { SweetAlertResult } from "sweetalert2";
-import fireSwal from "@/components/SweetAlert";
 import { Event } from "@/models/event";
-import { ModalModeType } from "@/constants";
 import { getColumns } from "./columns";
-import EventGallery from "./gallery";
+import EventAssingerPage from "./assigner";
 
 const eventData: {
   total: number;
@@ -254,58 +251,19 @@ const eventData: {
 
 const EventPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [pagesize, setPageSize] = useState(10);
-  const [modeModal, setModeModal] = useState<ModalModeType>(null);
+  const [openPopup, setOpenPopup] = useState<"assigner" | null>(null);
 
   const rowSelection = {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
   };
 
-  const handleView = (record: Event) => {
-    setModeModal("info");
-    setSelectedEvent(record);
-  };
-
-  const handleEdit = (record: Event) => {
-    setModeModal("edit");
-    setSelectedEvent(record);
-  };
-
-  const handleDelete = (record: Event) => {
-    fireSwal({
-      title: "Are you sure?",
-      text: `Delete ${record.event_type}?`,
-      icon: "warning",
-    }).then((result: SweetAlertResult) => {
-      if (result.isConfirmed) {
-        fireSwal({
-          title: "Deleted!",
-          showCancelButton: false,
-          text: `${record.event_type} has been deleted.`,
-          icon: "success",
-        });
-      }
-    });
-  };
-
   return (
     <div>
-      {selectedEvent && modeModal === "info" && (
-        <EventGallery
-          events={eventData.data}
-          toggle={() => {
-            setSelectedEvent(null);
-          }}
-          currentEvent={selectedEvent}
-          setCurrentEvent={setSelectedEvent}
-          loadMore={(event: Event) => {
-            setSelectedEvent(event);
-          }}
-        />
-      )}
-
+      {openPopup === "assigner" ? (
+        <EventAssingerPage onClose={() => setOpenPopup(null)} />
+      ) : null}
       <div className="px-8 pt-[16px] flex-1">
         <div className="flex flex-col">
           <h2 className="text-[#64748B] text-[20px] leading-[25px] tracking-[0.2px] font-semibold">
@@ -343,13 +301,10 @@ const EventPage = () => {
               className="p-2 px-5 flex-1"
               dataSource={eventData.data}
               rowKey="_id"
-              columns={getColumns(handleView, handleEdit, handleDelete)}
+              columns={getColumns(() => {
+                setOpenPopup("assigner");
+              })}
               rowSelection={rowSelection}
-              onRow={(record) => {
-                return {
-                  onClick: () => handleView(record),
-                };
-              }}
               scroll={{ y: "calc(100vh - 300px)" }}
               pagination={false}
             />
